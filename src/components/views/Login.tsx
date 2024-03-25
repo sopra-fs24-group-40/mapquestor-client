@@ -5,7 +5,7 @@ function Login(props) {
   return (
     <div className="row">
       <div className="col justify-content-center">
-        <h1 className="text-center">You need to login in order to see game</h1>
+        <h1 className="text-center">You need to login in order to see gamje</h1>
 
       </div>
 
