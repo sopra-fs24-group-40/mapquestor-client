@@ -33,5 +33,5 @@ export const LoginGuard = () => {
   //   return null;
   // }
 
-  return !isAuthenticated ? <Outlet /> : <Navigate to="/game" replace />;
+  return <Outlet />;
 };
