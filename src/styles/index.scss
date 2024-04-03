@@ -1,1 +1,11 @@
 @import "_theme.scss";
+
+
+#app {
+  background-image: url('../assets/world_background.png'); /* Pfad zum Bild anpassen */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  font-family: "Mansalva", sans-serif;
+}
