@@ -82,7 +82,7 @@ function Register(props) {
   return (
     <div className="row justify-content-center">
       <div className="col-md-6 justify-content-center login-container">
-        <h1 className="text-center mt-3">Register Form</h1>
+        <h1 className="text-center mt-3 fw-bolder">Register</h1>
 
         <form onSubmit={handleSubmit}>
           <div className="form-group mb-3">
