@@ -1,6 +1,6 @@
 @import "../theme";
 
-.btn-green {
+.individual-button {
   background-color: green;
   color: white; /* Text color */
   padding: 20px 40px; /* Adjust padding to increase button size */
@@ -10,7 +10,7 @@
 
 }
 
-
-.btn-green:hover {
+.individual-button:hover {
   background-color: darkgreen; /* Change color on hover if desired */
 }
+

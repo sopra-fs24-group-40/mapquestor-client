@@ -1,6 +1,7 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import "../../styles/views/game.scss";
+import "../../styles/views/game2.scss";
 import logo from "../../assets/logo.png";
 import avatar from "../../assets/avatar.png";
 
