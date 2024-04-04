@@ -4,3 +4,24 @@
   filter: blur(0px);
   background-color: rgb(216, 216, 216);
 }
+
+.instructions {
+  display: flex;
+  color: red;
+  font-weight: bold;
+}
+
+.offscreen {
+  display: none;
+}
+
+.error {
+  color: red;
+  font-weight: bold;
+  text-align: center;
+}
+
+.errmsg {
+  color: red;
+  font-weight: bold;
+}
