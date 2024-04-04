@@ -1,19 +1,34 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import "../../styles/views/game.scss";
-import image from "../../assets/logo.png";
+import logo from "../../assets/logo.png";
+import avatar from "../../assets/avatar.png";
 
 function GameLayout(props) {
   return (
     <div className="container-fluid">
-      <div className="row justify-content-center">
-        <div className="col-md-0">
+      <div className="container-header row justify-content-center">
+        <div className="col">
           <div className="row align-items-center">
             <div className="col-auto">
-              <img src={image} width={100}/>
+              <img src={logo} width={100}/>
             </div>
             <div className="container-mapquestor col-6">
             <h1>MapQuestor</h1>
+            </div>
+            <div className="container-search-bar col-auto">
+              <p>Search other Users</p>
+              <label htmlFor="site-search"></label>
+              <input type="search" id="site-search" name="q"/>
+              <button>Search</button>
+            </div>
+            <div className="col-auto">
+              <figure className="container-avatar">
+                <img src={avatar} width={50}/></figure>
+              <button>My Profile</button>
+            </div>
+            <div className="col-auto float-end">
+              <button className="btn btn-danger">Logout</button>
             </div>
           </div>
         </div>

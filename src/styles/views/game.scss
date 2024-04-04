@@ -12,3 +12,19 @@
     align-items: center;
     padding-right: 100px;
   }
+
+.container-header{
+    background-color: rgb(138, 163, 144, 0.5);
+}
+
+.container-search-bar{
+    font-size: larger;
+}
+
+.container-avatar{
+    text-align: center; /* Aligns text horizontally */
+    /* Optional: If you want to center vertically as well */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
