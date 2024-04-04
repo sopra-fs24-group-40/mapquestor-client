@@ -1,0 +1,14 @@
+@import "../theme";
+
+.transparent-row {
+    background-color: transparent;
+}
+
+.container-mapquestor{
+    text-align: center; /* Aligns text horizontally */
+    /* Optional: If you want to center vertically as well */
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    padding-right: 100px;
+  }
