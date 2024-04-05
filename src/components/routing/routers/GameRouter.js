@@ -5,6 +5,7 @@ import GameLayout from "../../layouts/GameLayout";
 import Game from "../../views/Game/Game";
 import CreateGame from "../../views/Game/CreateGame";
 import Lobby from "../../views/Game/Lobby";
+import Users from "../../views/Game/Users";
 
 const GameRouter = () => {
   return (
@@ -13,6 +14,7 @@ const GameRouter = () => {
         <Route path="" element={<GameLayout />}>
           <Route index element={<Game />} />
           <Route path="create" element={<CreateGame />} />
+          <Route path="users" element={<Users />} />
           <Route path=":id" element={<Lobby />} />
         </Route>
       </Routes>
