@@ -2,10 +2,10 @@ import React from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import PropTypes from "prop-types";
 import GameLayout from "../../layouts/GameLayout";
-import Game from "../../views/Game/Game";
-import CreateGame from "../../views/Game/CreateGame";
-import Lobby from "../../views/Game/Lobby";
-import Users from "../../views/Game/Users";
+import Game from "../../views/game/Game";
+import CreateGame from "../../views/game/CreateGame";
+import Lobby from "../../views/game/gameparts/Lobby";
+import Users from "../../views/game/Users";
 
 const GameRouter = () => {
   return (
