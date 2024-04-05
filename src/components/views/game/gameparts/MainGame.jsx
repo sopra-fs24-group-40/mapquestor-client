@@ -14,7 +14,7 @@ export default function Game() {
   const location = useLocation();
 
   useEffect(() => {
-    const socket = new SockJS("http://localhost:8080/ws");
+    const socket = new SockJS("https://sopra-fs24-group-40-server.oa.r.appspot.com/ws");
     const localStompClient = Stomp.over(socket);
 
     localStompClient.connect({}, function(frame) {
