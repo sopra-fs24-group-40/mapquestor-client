@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import GameLayout from "../../layouts/GameLayout";
 import Game from "../../views/game/Game";
 import CreateGame from "../../views/game/CreateGame";
-import Lobby from "../../views/game/gameparts/Lobby";
+import MainGame from "../../views/game/gameparts/MainGame";
 import Users from "../../views/game/Users";
 
 const GameRouter = () => {
@@ -15,7 +15,7 @@ const GameRouter = () => {
           <Route index element={<Game />} />
           <Route path="create" element={<CreateGame />} />
           <Route path="users" element={<Users />} />
-          <Route path=":id" element={<Lobby />} />
+          <Route path=":id" element={<MainGame />} />
         </Route>
       </Routes>
     </div>
