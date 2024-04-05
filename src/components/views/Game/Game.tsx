@@ -15,16 +15,16 @@ const Game = () => {
               </div>
               <div className="ladder-search">
                 <input type="text" id="search-leaderboard" className="live-search-box"
-                       placeholder="Search Team, Player..." />
+                  placeholder="Search Team, Player..." />
               </div>
             </nav>
             <table id="rankings" className="leaderboard-results" width="100%">
               <thead>
-              <tr>
-                <th>Rank</th>
-                <th>Name</th>
-                <th>Total</th>
-              </tr>
+                <tr>
+                  <th>Rank</th>
+                  <th>Name</th>
+                  <th>Total</th>
+                </tr>
               </thead>
             </table>
           </section>
