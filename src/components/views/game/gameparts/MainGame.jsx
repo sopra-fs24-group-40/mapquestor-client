@@ -70,6 +70,7 @@ export default function Game() {
       } else if (payload.type === "LEAVE") {
         const updatedUsers = prevUsers.filter(user => user !== payload.from);
         console.log(updatedUsers);
+
         return updatedUsers;
       } else {
         return prevUsers;

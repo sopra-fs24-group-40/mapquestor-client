@@ -24,7 +24,7 @@
         "no-multiple-empty-lines": "warn",
         "indent": "off",
         "quotes": ["warn", "double"],
-        "newline-before-return": "warn",
+        "newline-before-return": "off",
         "padding-line-between-statements": [
             "warn",
             { "blankLine": "always", "prev": "*", "next": "export" }
