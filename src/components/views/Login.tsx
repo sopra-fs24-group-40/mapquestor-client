@@ -81,8 +81,7 @@ function Login(props) {
             </button>
           </div>
         </div>
-        <p className="text-danger mt-3">{error}</p>
-
+        {error && <p className="text-danger" style={{marginTop: error ? "1rem" : "0", marginBottom: "0"}}>{error}</p>}
       </div>
     </div>
   );
