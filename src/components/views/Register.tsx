@@ -136,11 +136,18 @@ function Register(props) {
             />
           </div>
           <p id="confirmnote" className={matchFocus && matchPwd && !validMatch ? "instructions" : "offscreen"}>
-            Passwords dont match!
+            Passwords don&apos;t match!
           </p>
           <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
           <hr />
-          <button className="btn btn-danger mb-3" disabled={!validName || !validPwd || !validMatch}>Register</button>
+          <div className="row">
+            <div className="col-6">
+              <button className="btn btn-danger mb-3" disabled={!validName || !validPwd || !validMatch}>Register</button>
+            </div>
+            <div className="col-6 d-flex justify-content-end">
+              <button className="btn btn-danger mb-3" onClick={() => navigate("/login")}>Back to Login</button>
+              </div>
+          </div>
         </form>
 
       </div>

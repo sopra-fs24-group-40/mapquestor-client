@@ -68,9 +68,19 @@ function Login(props) {
             required
           />
         </div>
-        <button
-          className="btn btn-danger mt-3" disabled={!username || !password} onClick={() => doLogin()}>Login
-        </button>
+        <hr />
+        <div className="row">
+          <div className="col-6">
+            <button
+              className="btn btn-danger" disabled={!username || !password} onClick={() => doLogin()}>Login
+            </button>
+            </div>
+          <div className="col-6 d-flex justify-content-end">
+            <button
+              className="btn btn-danger" onClick={() => navigate("/register")}>Register
+            </button>
+          </div>
+        </div>
         <p className="text-danger mt-3">{error}</p>
 
       </div>
