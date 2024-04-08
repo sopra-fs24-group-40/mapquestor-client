@@ -1,11 +1,23 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
+import {Outlet} from "react-router-dom";
 import "../../styles/views/gameLayout.scss";
 import "../../styles/views/game.scss";
 import logo from "../../assets/logo.png";
 import avatar from "../../assets/avatar.png";
 
 function GameLayout(props) {
+
+  const logout = async () => {
+    const fullUser = localStorage.getItem("userId")
+    //We first get the logged in user with his token, then we log him out
+    //with a get request to the backend
+    api.get("/logout/" + fullUser);
+    //the token is removed from the localstorage and therefore logged out
+    localStorage.removeItem("token");
+    navigate("/login");
+    //history push used to redirect to the login page
+  }
+
   return (
     <div className="container-fluid">
       <div className="container-header row justify-content-center">
@@ -32,12 +44,12 @@ function GameLayout(props) {
             <button>My Profile</button>
           </div>
           <div className="col-auto">
-            <button className="btn btn-danger">Logout</button>
+            <button className="btn btn-danger" onClick={() => logout()}>Logout</button>
           </div>
         </div>
       </div>
       <div className="container">
-        <Outlet />
+        <Outlet/>
       </div>
     </div>
   );

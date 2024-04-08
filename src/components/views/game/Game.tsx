@@ -1,7 +1,10 @@
 import React from "react";
 import "../../../styles/views/game.scss";
+import {useNavigate} from "react-router-dom";
 
 const Game = () => {
+
+  const navigate = useNavigate();
 
   return (
     <div className="row">
@@ -42,13 +45,13 @@ const Game = () => {
 
       <div className="col-md-6 bg-transparent text-center mt-5">
         <div className="button-wrapper justify-content-center">
-          <button className="individual-button">All Users</button>
+          <button className="individual-button" onClick={() => navigate("/game/users")}>All Users</button>
         </div>
         <div className="button-wrapper">
           <button className="individual-button">Join Lobby</button>
         </div>
         <div className="button-wrapper">
-          <button className="individual-button">Create Game</button>
+          <button className="individual-button" onClick={() => navigate("/game/create")}>Create Game</button>
         </div>
       </div>
     </div>
