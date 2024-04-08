@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 function CreateGame() {
   const [maxPlayers, setMaxPlayers] = useState(2);
   const [roundCount, setRoundCount] = useState(2);
+  const [creator, setCreator] = useState(localStorage.getItem("token"));
 
   const navigate = useNavigate();
 
@@ -16,6 +17,7 @@ function CreateGame() {
       const response = await api.post("/games", {
         maxPlayers,
         roundCount,
+        creator
       });
       console.log("Spiel erfolgreich erstellt:", response.data);
       navigate(`/game/${response.data.gameCode}`);

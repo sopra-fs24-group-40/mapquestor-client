@@ -3,18 +3,51 @@ import Lobby from "./Lobby";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
 import { useLocation, useParams } from "react-router-dom";
+import { api } from "../../../../helpers/api";
+import Ingame from "./Ingame";
 
 export default function Game() {
   const [gamePhase, setGamePhase] = useState("LOBBY");
   const [messages, setMessages] = useState([]);
   const [users, setUsers] = useState([]);
   const [stompClient, setStompClient] = useState(null);
+  const [game, setGame] = useState({});
 
   let { id } = useParams();
-  const location = useLocation();
 
   useEffect(() => {
-    const socket = new SockJS("https://sopra-fs24-group-40-server.oa.r.appspot.com/ws");
+    const fetchUsers = async () => {
+      try {
+        const response = await api.get(`/games/${id}/users`);
+        const users = await response.data;
+        setUsers(users);
+      } catch (error) {
+        console.error("Fehler beim Abrufen der Benutzer: ", error);
+      }
+    };
+
+    fetchUsers();
+  }, [id]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await api.get(`/games/${id}/`);
+        const game = await response.data;
+        setGame(game);
+        console.log("Game:");
+        console.log(game);
+      } catch (error) {
+        console.error("Fehler beim Abrufen der Benutzer: ", error);
+      }
+    };
+
+    fetchUsers();
+  }, [id]);
+
+
+  useEffect(() => {
+    const socket = new SockJS("http://localhost:8080/ws");
     const localStompClient = Stomp.over(socket);
 
     localStompClient.connect({}, function(frame) {
@@ -22,44 +55,42 @@ export default function Game() {
 
       localStompClient.subscribe(`/topic/${id}/chat`, (message) => {
         const payload = JSON.parse(message.body);
+        console.log(payload);
         if (payload.type === "JOIN" || payload.type === "LEAVE") {
           updateUsersList(payload);
         }
+
         setMessages(prevMessages => [...prevMessages, payload]);
       });
 
       localStompClient.subscribe(`/topic/${id}/gameState`, (message) => {
         const gameState = JSON.parse(message.body);
-        setGamePhase(gameState.phase);
+        setGamePhase(gameState.status);
       });
 
-      let message = { from: localStorage.getItem("username"), text: "Joined the game!", type: "JOIN" };
+      let message = { from: localStorage.getItem("token"), text: "Joined the game!", type: "JOIN" };
       localStompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message));
     });
 
     setStompClient(localStompClient);
 
 
-    const handleUnload = (event) => {
-      sendChatMessage(localStorage.getItem("username"), "Left the game!", "LEAVE", localStompClient);
-      localStompClient.disconnect();
-    };
-
-    window.addEventListener("beforeunload", handleUnload);
-
     return () => {
-      // Clean up the event listener and disconnect when the component unmounts
-      window.removeEventListener("beforeunload", handleUnload);
-      if (localStompClient) {
-        sendChatMessage(localStorage.getItem("username"), "Left the game!", "LEAVE", localStompClient);
+      if (stompClient) {
+
         localStompClient.disconnect();
       }
     };
-  }, [id, location.pathname]);
+  }, [id]);
 
   const sendChatMessage = (from, text, type) => {
     const message = { from, text, type };
     stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message));
+  };
+
+  const startGame = () => {
+    let message = { status: "INGAME"};
+    stompClient.send(`/app/${id}/gameState`, {}, JSON.stringify(message));
   };
 
 
@@ -80,7 +111,9 @@ export default function Game() {
 
   switch (gamePhase) {
     case "LOBBY":
-      return <Lobby onSendChat={sendChatMessage} messages={messages} users={users} />;
+      return <Lobby startGame={startGame} onSendChat={sendChatMessage} messages={messages} users={users} game={game} />;
+    case "INGAME":
+      return <Ingame />;
     default:
       return <div>Lade...</div>;
   }
