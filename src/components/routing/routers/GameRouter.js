@@ -6,6 +6,7 @@ import Game from "../../views/game/Game";
 import CreateGame from "../../views/game/CreateGame";
 import MainGame from "../../views/game/gameparts/MainGame";
 import Users from "../../views/game/Users";
+import JoinLobby from "../../views/game/JoinLobby";
 
 const GameRouter = () => {
   return (
@@ -15,6 +16,7 @@ const GameRouter = () => {
           <Route index element={<Game />} />
           <Route path="create" element={<CreateGame />} />
           <Route path="users" element={<Users />} />
+          <Route path="joinlobby" element={<JoinLobby />} />
           <Route path=":id" element={<MainGame />} />
         </Route>
       </Routes>

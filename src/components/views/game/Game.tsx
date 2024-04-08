@@ -48,7 +48,7 @@ const Game = () => {
           <button className="individual-button" onClick={() => navigate("/game/users")}>All Users</button>
         </div>
         <div className="button-wrapper">
-          <button className="individual-button">Join Lobby</button>
+          <button className="individual-button" onClick={() => navigate("/game/joinlobby")}>Join Lobby</button>
         </div>
         <div className="button-wrapper">
           <button className="individual-button" onClick={() => navigate("/game/create")}>Create Game</button>

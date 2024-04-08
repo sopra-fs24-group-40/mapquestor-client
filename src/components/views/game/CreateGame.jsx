@@ -53,7 +53,16 @@ function CreateGame() {
               max="20"
             />
           </div>
-          <button onClick={handleSubmit} type="submit" className="btn btn-primary">Create Game</button>
+          <div className="row">
+            <div className="col-6">
+              <button onClick={handleSubmit} type="submit" className="btn btn-primary">Create Game</button>
+            </div>
+            <div className="col-6 d-flex justify-content-end">
+              <button
+                className="btn btn-danger" onClick={() => navigate("/game")}>Back
+              </button>
+            </div>
+          </div>
         </form>
       </div>
     </div>
