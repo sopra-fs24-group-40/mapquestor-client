@@ -12,6 +12,8 @@ export default function Game() {
   const [users, setUsers] = useState([]);
   const [stompClient, setStompClient] = useState(null);
   const [game, setGame] = useState({});
+  const [countdownDuration, setCountdownDuration] = useState(null);
+
 
   let { id } = useParams();
 
@@ -60,6 +62,10 @@ export default function Game() {
           updateUsersList(payload);
         }
 
+        if (payload.type === "START_COUNTDOWN") {
+          setCountdownDuration(10);
+        }
+
         setMessages(prevMessages => [...prevMessages, payload]);
       });
 
@@ -89,7 +95,7 @@ export default function Game() {
   };
 
   const startGame = () => {
-    let message = { status: "INGAME"};
+    let message = { status: "INGAME" };
     stompClient.send(`/app/${id}/gameState`, {}, JSON.stringify(message));
   };
 
@@ -111,7 +117,8 @@ export default function Game() {
 
   switch (gamePhase) {
     case "LOBBY":
-      return <Lobby startGame={startGame} onSendChat={sendChatMessage} messages={messages} users={users} game={game} />;
+      return <Lobby startGame={startGame} onSendChat={sendChatMessage} messages={messages} users={users} game={game}
+                    countdownDuration={countdownDuration} />;
     case "INGAME":
       return <Ingame />;
     default:

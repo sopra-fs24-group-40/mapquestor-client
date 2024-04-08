@@ -1,14 +1,54 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import countdowns from "../../../../assets/countdowns.mp3"
 
-function Lobby({ startGame, onSendChat, messages, users, game }) {
+
+function Lobby({ startGame, onSendChat, messages, users, game, countdownDuration }) {
   const [currentMessage, setCurrentMessage] = useState("");
   const [creator, setCreator] = useState(false);
+  const [countdown, setCountdown] = useState(null);
+  const [soundPlayed, setSoundPlayed] = useState(false); // Zustand um zu verfolgen, ob der Sound bereits abgespielt wurde
+
 
   useEffect(() => {
     const isCreator = localStorage.getItem("token") === game.creator;
     setCreator(isCreator);
   }, [game.creator]);
+
+  useEffect(() => {
+
+    if (countdownDuration > 0) {
+      setCountdown(countdownDuration);
+    }
+  }, [countdownDuration]);
+
+  useEffect(() => {
+    if (countdown === 3 && !soundPlayed) {
+      const countdownSound = new Audio(countdowns);
+      countdownSound.play()
+        .then(() => setSoundPlayed(true))
+        .catch(error => console.error("Fehler beim Abspielen des Sounds:", error));
+    }
+
+    if (countdownDuration > 0 && countdown === countdownDuration) {
+      setSoundPlayed(false);
+    }
+  }, [countdown, countdownDuration, soundPlayed]);
+
+
+  useEffect(() => {
+    let intervalId;
+    if (countdown > 0) {
+      intervalId = setInterval(() => {
+        setCountdown(countdown - 1);
+      }, 1000);
+    } else if (countdown === 0) {
+      clearInterval(intervalId);
+      startGame();
+      setCountdown(null);
+    }
+    return () => clearInterval(intervalId);
+  }, [countdown, startGame]);
 
   const handleSendMessage = () => {
     if (!currentMessage.trim()) return;
@@ -20,8 +60,13 @@ function Lobby({ startGame, onSendChat, messages, users, game }) {
     console.log("Spiel verlassen (Logik noch zu implementieren)");
   };
 
+  const handleStartCountdown = () => {
+    onSendChat(localStorage.getItem("token"), "Has started the countdown!", "START_COUNTDOWN");
+  };
+
   return (
     <div className="row justify-content-center">
+
       <div className="col-md-3">
         <div className="card">
           <div className="card-header">Users in game:</div>
@@ -62,8 +107,16 @@ function Lobby({ startGame, onSendChat, messages, users, game }) {
                 />
                 <button className="btn btn-primary" onClick={handleSendMessage}>Senden</button>
               </div>
-              {creator && (
-                <button onClick={startGame} className="btn btn-success mt-3">Spiel starten</button>
+              {countdown !== null ? (
+                <div className="alert alert-info mt-5" role="alert">
+                  Game starts in: {countdown} Seconds...
+                </div>
+              ) : (
+                creator && (
+                  <button onClick={handleStartCountdown} className="btn btn-success mt-3">
+                    Countdown starten
+                  </button>
+                )
               )}
               <button className="btn btn-secondary mt-3" onClick={handleLeaveGame}>Spiel verlassen</button>
             </div>
@@ -77,11 +130,12 @@ function Lobby({ startGame, onSendChat, messages, users, game }) {
 Lobby.propTypes = {
   onSendChat: PropTypes.func.isRequired,
   startGame: PropTypes.func.isRequired,
+  countdownDuration: PropTypes.any.isRequired,
   messages: PropTypes.arrayOf(
     PropTypes.shape({
       from: PropTypes.string.isRequired,
       text: PropTypes.string.isRequired,
-    })
+    }),
   ).isRequired,
   users: PropTypes.arrayOf(PropTypes.string).isRequired,
   game: PropTypes.shape({

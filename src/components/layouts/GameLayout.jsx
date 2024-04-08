@@ -9,13 +9,9 @@ function GameLayout(props) {
 
   const logout = async () => {
     const fullUser = localStorage.getItem("userId")
-    //We first get the logged in user with his token, then we log him out
-    //with a get request to the backend
     api.get("/logout/" + fullUser);
-    //the token is removed from the localstorage and therefore logged out
     localStorage.removeItem("token");
     navigate("/login");
-    //history push used to redirect to the login page
   }
 
   return (
