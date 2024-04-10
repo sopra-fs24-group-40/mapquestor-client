@@ -7,7 +7,7 @@ function Lobby({ startGame, onSendChat, messages, users, game, countdownDuration
   const [currentMessage, setCurrentMessage] = useState("");
   const [creator, setCreator] = useState(false);
   const [countdown, setCountdown] = useState(null);
-  const [soundPlayed, setSoundPlayed] = useState(false); // Zustand um zu verfolgen, ob der Sound bereits abgespielt wurde
+  const [soundPlayed, setSoundPlayed] = useState(false);
 
 
   useEffect(() => {

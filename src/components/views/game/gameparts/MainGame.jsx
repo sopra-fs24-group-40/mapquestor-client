@@ -13,90 +13,61 @@ export default function Game() {
   const [stompClient, setStompClient] = useState(null);
   const [game, setGame] = useState({});
   const [countdownDuration, setCountdownDuration] = useState(null);
-
-
-  let { id } = useParams();
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await api.get(`/games/${id}/users`);
-        const users = await response.data;
-        setUsers(users);
-      } catch (error) {
-        console.error("Fehler beim Abrufen der Benutzer: ", error);
-      }
-    };
-
-    fetchUsers();
-  }, [id]);
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await api.get(`/games/${id}/`);
-        const game = await response.data;
-        setGame(game);
-        console.log("Game:");
-        console.log(game);
-      } catch (error) {
-        console.error("Fehler beim Abrufen der Benutzer: ", error);
-      }
-    };
-
-    fetchUsers();
-  }, [id]);
+  const { id } = useParams();
 
 
   useEffect(() => {
-    const socket = new SockJS("https://sopra-fs24-group-40-server1.oa.r.appspot.com/ws");
-    const localStompClient = Stomp.over(socket);
+    const fetchGameDataAndSetupWebSocket = async () => {
 
-    localStompClient.connect({}, function(frame) {
-      console.log("Connected: " + frame);
+      const socket = new SockJS("http://localhost:8080/ws");
+      const localStompClient = Stomp.over(socket);
+      localStompClient.connect({}, function(frame) {
+        console.log("Connected: " + frame);
 
-      localStompClient.subscribe(`/topic/${id}/chat`, (message) => {
-        const payload = JSON.parse(message.body);
-        console.log(payload);
-        if (payload.type === "JOIN" || payload.type === "LEAVE") {
-          updateUsersList(payload);
-        }
+        localStompClient.subscribe(`/topic/${id}/chat`, (message) => {
+          const payload = JSON.parse(message.body);
 
-        if (payload.type === "START_COUNTDOWN") {
-          setCountdownDuration(10);
-        }
+          if (payload.type === "JOIN" || payload.type === "LEAVE") {
+            updateUsersList(payload);
+          }
 
-        setMessages(prevMessages => [...prevMessages, payload]);
+          if (payload.type === "START_COUNTDOWN") {
+            setCountdownDuration(10);
+          }
+
+          setMessages(prevMessages => [...prevMessages, payload]);
+        });
+
+        localStompClient.subscribe(`/topic/${id}/gameState`, (message) => {
+          const gameState = JSON.parse(message.body);
+          setGamePhase(gameState.status);
+        });
+
+        let joinMessage = { from: localStorage.getItem("token"), text: "Joined the game!", type: "JOIN" };
+        localStompClient.send(`/app/${id}/chat`, {}, JSON.stringify(joinMessage));
       });
 
-      localStompClient.subscribe(`/topic/${id}/gameState`, (message) => {
-        const gameState = JSON.parse(message.body);
-        setGamePhase(gameState.status);
-      });
+      setStompClient(localStompClient);
 
-      let message = { from: localStorage.getItem("token"), text: "Joined the game!", type: "JOIN" };
-      localStompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message));
-    });
-
-    setStompClient(localStompClient);
-
-
-    return () => {
-      if (stompClient) {
-
-        localStompClient.disconnect();
-      }
+      return () => {
+        if (stompClient) {
+          stompClient.disconnect();
+        }
+      };
     };
+
+    fetchGameDataAndSetupWebSocket();
   }, [id]);
+
 
   const sendChatMessage = (from, text, type) => {
     const message = { from, text, type };
-    stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message));
+    stompClient && stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message));
   };
 
   const startGame = () => {
     let message = { status: "INGAME" };
-    stompClient.send(`/app/${id}/gameState`, {}, JSON.stringify(message));
+    stompClient && stompClient.send(`/app/${id}/gameState`, {}, JSON.stringify(message));
   };
 
 
