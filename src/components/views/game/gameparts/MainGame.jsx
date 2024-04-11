@@ -5,6 +5,8 @@ import Stomp from "stompjs";
 import { useLocation, useParams } from "react-router-dom";
 import { api } from "../../../../helpers/api";
 import Ingame from "./Ingame";
+import { getDomain } from "../../../../helpers/getDomain";
+
 
 export default function Game() {
   const [gamePhase, setGamePhase] = useState("LOBBY");
@@ -28,7 +30,7 @@ export default function Game() {
         console.log(game);
         console.log(players);
 
-        const socket = new SockJS("http://localhost:8080/ws");
+        const socket = new SockJS(getDomain);
         const localStompClient = Stomp.over(socket);
         localStompClient.connect({}, function(frame) {
           console.log("Connected: " + frame);
