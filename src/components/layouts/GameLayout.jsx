@@ -46,7 +46,7 @@ function GameLayout(props) {
           <div className="col-auto p-3">
             <figure className="container-avatar">
               <img src={avatar} width={50}/></figure>
-            <button>My Profile</button>
+            <button onClick={() => navigate("/game/edit")}>My Profile</button>
           </div>
           <div className="col-auto">
             <button className="btn btn-danger" onClick={() => logout()}>Logout</button>
