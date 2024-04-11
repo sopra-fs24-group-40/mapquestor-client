@@ -30,7 +30,7 @@ export default function Game() {
         console.log(game);
         console.log(players);
 
-        const socket = new SockJS(getDomain);
+        const socket = new SockJS(getDomain());
         const localStompClient = Stomp.over(socket);
         localStompClient.connect({}, function(frame) {
           console.log("Connected: " + frame);
