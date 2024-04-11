@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { api } from "helpers/api";
 import { useNavigate } from "react-router-dom";
+import User from "models/User";
+const Player = ({ user }: { user: User }) => (
+  <div className="player container">
+    <div className="player username">username: {user.username}</div>
+    <div className="player id">id: {user.id}</div>
+  </div>
+);
 
 function Users() {
   const [users, setUsers] = useState([]);
@@ -12,6 +19,7 @@ function Users() {
         const response = await api.get("/users");
         await new Promise((resolve) => setTimeout(resolve, 1000));
         setUsers(response.data);
+        console.log(response.data);
       } catch (error) {
         console.error(error);
       }
@@ -27,6 +35,13 @@ function Users() {
     <div className="row">
       <div className="col bg-light mt-3 border rounded">
         <h1 className="text-center p-2">All Users</h1>
+        <ul>
+          {users.map((user: User) => (
+            <li key={user.id}>
+              <Player user={user} />
+            </li>
+          ))}
+        </ul>
         <button
         className="btn btn-danger mb-3" onClick={() => navigate("/game")}>Back
       </button>
