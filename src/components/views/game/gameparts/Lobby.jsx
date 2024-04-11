@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import countdowns from "../../../../assets/countdowns.mp3"
 
 
-function Lobby({ startGame, onSendChat, messages, users, game, countdownDuration }) {
+function Lobby({ startGame, onSendChat, messages, players, game, countdownDuration }) {
   const [currentMessage, setCurrentMessage] = useState("");
   const [creator, setCreator] = useState(false);
   const [countdown, setCountdown] = useState(null);
@@ -52,7 +52,7 @@ function Lobby({ startGame, onSendChat, messages, users, game, countdownDuration
 
   const handleSendMessage = () => {
     if (!currentMessage.trim()) return;
-    onSendChat(localStorage.getItem("token"), currentMessage, "CHAT");
+    onSendChat(localStorage.getItem("username"), currentMessage, "CHAT");
     setCurrentMessage("");
   };
 
@@ -71,13 +71,13 @@ function Lobby({ startGame, onSendChat, messages, users, game, countdownDuration
         <div className="card">
           <div className="card-header">Users in game:</div>
           <ul className="list-group list-group-flush">
-            {users.map((user, index) => (
+            {players.map((player, index) => (
               <li
                 key={index}
                 className="list-group-item"
                 style={{ color: creator ? "red" : "inherit" }}
               >
-                {user}
+                {player.username}
               </li>
             ))}
           </ul>
@@ -88,12 +88,12 @@ function Lobby({ startGame, onSendChat, messages, users, game, countdownDuration
           <div className="card-body">
             <h2 className="card-title">Lobby Chat</h2>
             <hr />
-            <h4>Players: {users.length} / {game.maxPlayers}</h4>
+            <h4>Players: {players.length} / {game.maxPlayers}</h4>
             <div className="chat-container">
               <ul className="list-unstyled">
                 {messages.map((msg, index) => (
                   <li key={index}>
-                    <strong>{msg.from}</strong>: {msg.text}
+                    <strong>{msg.from}</strong>: {msg.content}
                   </li>
                 ))}
               </ul>
@@ -137,7 +137,13 @@ Lobby.propTypes = {
       text: PropTypes.string.isRequired,
     }),
   ).isRequired,
-  users: PropTypes.arrayOf(PropTypes.string).isRequired,
+  players: PropTypes.arrayOf(
+    PropTypes.shape({
+      username: PropTypes.string.isRequired,
+      token: PropTypes.string.isRequired,
+      points: PropTypes.number.isRequired,
+    })
+  ).isRequired,
   game: PropTypes.shape({
     creator: PropTypes.string.isRequired,
     maxPlayers: PropTypes.number.isRequired,

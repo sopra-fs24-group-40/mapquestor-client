@@ -1,12 +1,12 @@
 import React from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import PropTypes from "prop-types";
 import GameLayout from "../../layouts/GameLayout";
 import Game from "../../views/game/Game";
 import CreateGame from "../../views/game/CreateGame";
 import MainGame from "../../views/game/gameparts/MainGame";
 import Users from "../../views/game/Users";
-import JoinLobby from "../../views/game/JoinLobby";
+import JoinGame from "../../views/game/JoinGame";
 
 const GameRouter = () => {
   return (
@@ -16,7 +16,7 @@ const GameRouter = () => {
           <Route index element={<Game />} />
           <Route path="create" element={<CreateGame />} />
           <Route path="users" element={<Users />} />
-          <Route path="joinlobby" element={<JoinLobby />} />
+          <Route path="join" element={<JoinGame />} />
           <Route path=":id" element={<MainGame />} />
         </Route>
       </Routes>
