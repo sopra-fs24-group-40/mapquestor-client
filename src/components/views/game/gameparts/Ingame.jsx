@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Loader } from '@googlemaps/js-api-loader';
+//import { Loader } from "@googlemaps/js-api-loader";
 
 const InGame = () => {
   const navigate = useNavigate();
@@ -21,14 +21,14 @@ const InGame = () => {
         }
       );
     }).catch(error => {
-      console.error('Error loading Google Maps API:', error);
+      console.error("Error loading Google Maps API:", error);
     });
   }, []);
 
   return (
     <div>
       <h1>In Game</h1>
-      <div id="street-view" style={{ width: '100%', height: '400px' }}></div>
+      <div id="street-view" style={{ width: "100%", height: "400px" }}></div>
     </div>
   );
 }

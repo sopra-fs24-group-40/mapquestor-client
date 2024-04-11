@@ -144,5 +144,6 @@ function EditPage(props) {
       </div>
   
     );
-  }  
+  }
+    
   export default EditPage;

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { api } from "helpers/api";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import User from "models/User";
+
 const Player = ({ user }: { user: User }) => (
   <div className="player container">
     <div className="player username">username: {user.username}</div>
@@ -38,7 +39,7 @@ function Users() {
         <ul>
           {users.map((user: User) => (
             <li key={user.id}>
-              <Player user={user} />
+              <Link to = {`/game/users/${user.id}`}><Player user={user} /></Link>
             </li>
           ))}
         </ul>
