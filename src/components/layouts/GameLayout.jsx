@@ -1,18 +1,27 @@
 import React from "react";
-import {Outlet} from "react-router-dom";
+import {Outlet, useNavigate} from "react-router-dom";
 import "../../styles/views/gameLayout.scss";
 import "../../styles/views/game.scss";
 import logo from "../../assets/logo.png";
 import avatar from "../../assets/avatar.png";
+import { api, handleError } from "helpers/api";
 
 function GameLayout(props) {
+  const navigate = useNavigate();
 
   const logout = async () => {
-    const fullUser = localStorage.getItem("userId")
-    api.get("/logout/" + fullUser);
     localStorage.removeItem("token");
+    localStorage.removeItem("id");
+    try {
+      const requestBody = JSON.stringify({ "username": localStorage.getItem("username") });
+      console.log(requestBody);
+      await api.post("/logout", requestBody);
+    } catch (error) {
+      console.log(`Something went wrong during the logout: \n${handleError(error)}`);
+    }
+    localStorage.removeItem("username");
     navigate("/login");
-  }
+  };
 
   return (
     <div className="container-fluid">
