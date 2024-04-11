@@ -62,9 +62,10 @@ function JoinGame(props) {
         <hr />
         <div className="row">
           <div className="col-6">
-            <button
-              className="btn btn-danger" onClick={() => doJoinGame()}>Join Game
-            </button>
+            <button className="btn btn-danger" onClick={() => doJoinGame()}>Join Game</button>
+          </div>
+          <div className="col-6 d-flex justify-content-end"> {/* This line aligns the "Back" button to the right */}
+            <button className="btn btn-danger" onClick={() => navigate("/game")}>Back</button>
           </div>
         </div>
       </div>
