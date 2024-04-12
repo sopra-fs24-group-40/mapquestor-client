@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-//import { Loader } from "@googlemaps/js-api-loader";
+import { Loader } from "@googlemaps/js-api-loader";
 
 const InGame = () => {
   const navigate = useNavigate();
@@ -26,11 +26,47 @@ const InGame = () => {
   }, []);
 
   return (
-    <div>
+    <div className="row">
+      <div className="col-md-6 text-center mt-5">
+        <div className="container-wrap">
+          <section id="leaderboard">
+            <nav className="ladder-nav" >
+              <div className="ladder-title">
+                <h1>Leaderboard</h1>
+              </div>
+            </nav>
+            <table id="rankings" className="leaderboard-results" width="100%">
+              <thead>
+              <tr>
+                <th>Name</th>
+                <th>Points</th>
+              </tr>
+              </thead>
+            </table>
+          </section>
+        </div>
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
       <h1>In Game</h1>
-      <div id="street-view" style={{ width: "100%", height: "400px" }}></div>
+      <div id="street-view" style={{ width: "50%", height: "350px" }}></div>
+      <div className="button-wrapper">
+          <button className="individual-button" >Delay Joker</button>
+          <button className="individual-button" >Hint remove Joker</button>
+        </div>
+    </div>
     </div>
   );
-}
+};
+//     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+//       <h1>In Game</h1>
+//       <div id="street-view" style={{ width: "50%", height: "350px" }}></div>
+//       <div className="button-wrapper">
+//           <button className="individual-button" >Delay Joker</button>
+//           <button className="individual-button" >Hint remove Joker</button>
+//         </div>
+//     </div>
+//   );
+  
+// }
 
 export default InGame;
