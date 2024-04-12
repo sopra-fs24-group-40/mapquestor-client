@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { api } from "helpers/api";
 import { useNavigate } from "react-router-dom";
+import avatar from "../../../assets/avatar.png";
 
 
 const USER_REGEX = /^.{4,}$/;
@@ -76,7 +77,8 @@ function EditPage(props) {
       <div className="row justify-content-center">
         <div className="col-md-6 justify-content-center rounded-4 login-container">
           <h1 className="text-center mt-3 fw-bolder">Edit</h1>
-  
+          <figure className="container-avatar">
+          <img src={avatar} width={200} /></figure>
           <form onSubmit={handleSubmit}>
             <div className="form-group mb-3">
               <label htmlFor="username">Username</label>
@@ -135,15 +137,18 @@ function EditPage(props) {
             <hr />
             <div className="row">
               <div className="col-6">
-                <button className="btn btn-danger mb-3" disabled={!validName || !validPwd || !validMatch}>Edit</button>
-            </div>
+                <button className="btn btn-danger mb-3 float-start" disabled={!validName || !validPwd || !validMatch}>Edit</button>
+              </div>
+              <div className="col-6">
+                <button className="btn btn-danger mb-3 float-end" onClick={() => navigate("/game")}>Back</button>
+              </div>
             </div>
           </form>
-  
         </div>
       </div>
-  
     );
+    
+    
   }
     
   export default EditPage;
