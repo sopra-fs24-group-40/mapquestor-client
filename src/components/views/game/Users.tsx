@@ -18,7 +18,6 @@ function Users() {
     async function fetchUsers() {
       try {
         const response = await api.get("/users");
-        await new Promise((resolve) => setTimeout(resolve, 1000));
         setUsers(response.data);
         console.log(response.data);
       } catch (error) {
