@@ -103,7 +103,7 @@ function Lobby({startGame, onSendChat, messages, players, game, countdownDuratio
                   value={currentMessage}
                   onChange={(e) => setCurrentMessage(e.target.value)}
                   onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
+                    if (e.key === "Enter") {
                       e.preventDefault(); // Prevent the default behavior of the Enter key (submitting the form)
                       handleSendMessage();
                     }
