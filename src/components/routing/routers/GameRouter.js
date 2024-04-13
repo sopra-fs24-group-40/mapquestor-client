@@ -9,6 +9,7 @@ import Users from "../../views/game/Users";
 import JoinGame from "../../views/game/JoinGame";
 import EditPage from "../../views/game/EditPage";
 import ProfilePage from "../../views/user/ProfilePage";
+import Endgame from "../../views/game/gameparts/Endgame";
 
 const GameRouter = () => {
   return (
@@ -20,8 +21,9 @@ const GameRouter = () => {
           <Route path="users" element={<Users />} />
           <Route path="users/:id" element={<ProfilePage />} />
           <Route path="join" element={<JoinGame />} />
-          <Route path=":id" element={<MainGame />} />
           <Route path="edit" element={<EditPage />} />
+          <Route path="test" element={<Endgame />} />
+          <Route path=":id" element={<MainGame />} />
         </Route>
       </Routes>
     </div>
