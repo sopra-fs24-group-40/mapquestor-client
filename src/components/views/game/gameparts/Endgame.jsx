@@ -2,7 +2,9 @@ import React from "react";
 
 function Endgame(props) {
   return (
-    <div>Endgame</div>
+    <div>
+      <h1>Hallo</h1>Endgame
+    </div>
   );
 }
 
