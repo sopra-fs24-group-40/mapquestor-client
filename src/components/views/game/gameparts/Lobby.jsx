@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import PropTypes from "prop-types";
 import countdowns from "../../../../assets/countdowns.mp3"
 
 
-function Lobby({ startGame, onSendChat, messages, players, game, countdownDuration }) {
+function Lobby({startGame, onSendChat, messages, players, game, countdownDuration}) {
   const [currentMessage, setCurrentMessage] = useState("");
   const [creator, setCreator] = useState(false);
   const [countdown, setCountdown] = useState(null);
@@ -65,8 +65,7 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
   };
 
   return (
-    <div className="row justify-content-center">
-
+    <div className="row justify-content-center margin-top-5">
       <div className="col-md-3">
         <div className="card">
           <div className="card-header">Users in game:</div>
@@ -75,7 +74,7 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
               <li
                 key={index}
                 className="list-group-item"
-                style={{ color: creator ? "red" : "inherit" }}
+                style={{color: creator ? "red" : "inherit"}}
               >
                 {player.username}
               </li>
@@ -87,7 +86,7 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
         <div className="card">
           <div className="card-body">
             <h2 className="card-title">Lobby Chat</h2>
-            <hr />
+            <hr/>
             <h4>Players: {players.length} / {game.maxPlayers}</h4>
             <div className="chat-container">
               <ul className="list-unstyled">
