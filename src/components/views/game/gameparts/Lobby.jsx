@@ -65,7 +65,7 @@ function Lobby({startGame, onSendChat, messages, players, game, countdownDuratio
   };
 
   return (
-    <div className="row justify-content-center margin-top-5">
+    <div className="row justify-content-center margin-top-5" style={{marginTop: "20px"}}>
       <div className="col-md-3">
         <div className="card">
           <div className="card-header">Users in game:</div>
@@ -82,7 +82,7 @@ function Lobby({startGame, onSendChat, messages, players, game, countdownDuratio
           </ul>
         </div>
       </div>
-      <div className="col-md-6">
+      <div className="col-md-6" style={{padding: "12px"}}>
         <div className="card">
           <div className="card-body">
             <h2 className="card-title">Lobby Chat</h2>
@@ -102,6 +102,12 @@ function Lobby({startGame, onSendChat, messages, players, game, countdownDuratio
                   className="form-control"
                   value={currentMessage}
                   onChange={(e) => setCurrentMessage(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault(); // Prevent the default behavior of the Enter key (submitting the form)
+                      handleSendMessage();
+                    }
+                  }}
                   placeholder="Schreibe eine Nachricht..."
                 />
                 <button className="btn btn-primary" onClick={handleSendMessage}>Senden</button>
