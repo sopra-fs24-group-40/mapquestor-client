@@ -6,6 +6,7 @@ import { api } from "../../../helpers/api";
 function JoinGame(props) {
 
   const [gameCode, setGameCode] = useState("");
+  const [token, setToken] = useState(localStorage.getItem("token"));
   const [error, setError] = useState(null);
 
   const navigate = useNavigate();
@@ -17,23 +18,22 @@ function JoinGame(props) {
 
   const doJoinGame = async () => {
     try {
-      const requestBody = JSON.stringify({ gameCode });
-      const response = await api.get(`/games/${gameCode}/`, requestBody);
+
+      console.log("Joining game with code", gameCode, "and token", token);
+
+      const requestBody = JSON.stringify({ gameCode, token });
+      const response = await api.post(`/games/${gameCode}/join`, requestBody);
 
       console.log(response);
 
-      if (response.data.playerCount + 1 > response.data.maxPlayers) {
-        setError("Game is full!");
-        return;
+      if (response.status === 200) {
+        console.log("Game joined successfully", response.data);
+        navigate(`/game/${gameCode}`);
       }
 
-      if (response.data.gameStatus !== "LOBBY") {
-        setError("Game has already started!");
-        return;
-      }
-
-      navigate(`/game/${gameCode}/`);
     } catch (error) {
+      console.error("Error joining the game:", error.response);
+      console.log(error)
       setError("Error joining the game: " + (error.response?.data?.message || "Error joining the game!"));
     }
   };
@@ -62,7 +62,7 @@ function JoinGame(props) {
         <hr />
         <div className="row">
           <div className="col-6">
-            <button className="btn btn-danger" onClick={() => doJoinGame()}>Join Game</button>
+            <button className="btn btn-danger" onClick={() => doJoinGame()} disabled={!gameCode}>Join Game</button>
           </div>
           <div className="col-6 d-flex justify-content-end"> {/* This line aligns the "Back" button to the right */}
             <button className="btn btn-danger" onClick={() => navigate("/game")}>Back</button>
