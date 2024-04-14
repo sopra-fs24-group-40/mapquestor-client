@@ -38,6 +38,13 @@ const Game = () => {
                 <th>Total</th>
               </tr>
               </thead>
+              <tbody className="text-center bg-transparent">
+              <tr>
+                <td style={{fontSize: "2em"}}>1</td>
+                <td style={{fontSize: "2em"}}>John Doe</td>
+                <td style={{fontSize: "2em"}}>100</td>
+              </tr>
+              </tbody>
             </table>
           </section>
         </div>

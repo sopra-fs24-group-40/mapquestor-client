@@ -6,7 +6,8 @@
   padding: 20px 40px; /* Adjust padding to increase button size */
   font-size: 24px; /* Adjust font size to increase button size */
   width: 250px;
-  margin: 20px;
+  margin-bottom: 20px;
+  margin-top: 0px;
   border-radius: 10px;
   border: #77a381;
 }
@@ -22,29 +23,18 @@
   border: #77a381;
 }
 
-.individual-button:hover {
+.individual-button1:hover {
   background-color: darkgreen; /* Change color on hover if desired */
+}
+
+.individual-button2:hover {
+  background-color: darkred; /* Change color on hover if desired */
 }
 
 .ladder-title h1 {
   padding-right: 20px;
   padding-left: 20px;
   color: black;
-}
-
-.dropdown {
-  margin-right: 20px;
-  margin-left: 20px;
-}
-
-.col-md-6 {
-  background-color: rgb(216, 216, 216, 0.9);
-  border-radius: 10px;
-}
-
-.leaderboard-results thead th {
-  text-align: center;
-  font-size: 20px;
 }
 
 .ladder-nav1 {
@@ -68,71 +58,9 @@
   margin-top: -2px; /* Adjust the distance between text and underline */
 }
 
-.ladder-search {
-  flex: 1;
-  padding-right: 25px;
-}
-
-.ladder-title {
-  font-size: 20px;
-  color: #888DFF !important;
-  font-weight: bold;
-  text-transform: uppercase;
-}
-
-.ladder-search input {
-  color: black
-}
-
-/* /end Ladder Navigation */
-/* Leaderboard Results */
-.leaderboard-results {
-  text-align: left;
-  border-collapse: collapse;
-}
-
 .leaderboard-results thead th {
   padding-top: 0px;
   color: #747474;
   font-size: 20px;
   font-weight: bold;
-}
-
-.leaderboard-results tbody td {
-  padding: 15px 25px;
-  background: #1a1a1a;
-  font-size: 16px;
-  border-bottom: 5px solid #232323;
-}
-
-.leaderboard-results tbody td:nth-of-type(7) {
-  font-weight: bold;
-}
-
-.leaderboard-results tbody tr:hover td {
-  background: #1d1d1d;
-}
-
-.leaderboard-results tbody tr {
-  color: #747474;
-}
-
-.leaderboard-results tbody tr:first-child {
-  color: #686EF9;
-}
-
-.leaderboard-results tbody span {
-  font-weight: bold;
-  padding: 10px 15px;
-  border-radius: 50%;
-}
-
-.leaderboard-results tbody tr:first-child span {
-  background: #5055CB;
-  color: white;
-}
-
-.leaderboard-results tbody tr span {
-  background: #262626;
-  color: #747474;
 }
