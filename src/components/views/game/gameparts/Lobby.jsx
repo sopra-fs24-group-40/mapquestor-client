@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import PropTypes from "prop-types";
 import countdowns from "../../../../assets/countdowns.mp3"
 import { useNavigate } from "react-router-dom";
+import { api } from "helpers/api";
 
 
 function Lobby({startGame, onSendChat, messages, players, game, countdownDuration}) {
@@ -10,6 +11,10 @@ function Lobby({startGame, onSendChat, messages, players, game, countdownDuratio
   const [countdown, setCountdown] = useState(null);
   const [soundPlayed, setSoundPlayed] = useState(false);
   const navigate = useNavigate();
+  const [gameType, setGameType] = useState(game.gameType);
+  const [maxPlayers, setMaxPlayers] = useState(game.maxPlayers);
+  const [roundCount, setRoundCount] = useState(game.roundCount);
+  const [showEditForm, setShowEditForm] = useState(false);
 
 
   useEffect(() => {
@@ -64,6 +69,13 @@ function Lobby({startGame, onSendChat, messages, players, game, countdownDuratio
 
   const handleStartCountdown = () => {
     onSendChat(localStorage.getItem("token"), "Has started the countdown!", "START_COUNTDOWN");
+  };
+
+  const handleUpdateGameSettings = (e) => {
+    e.preventDefault();
+    //api request
+    console.log(`Updating game settings: Type: ${gameType}, Max Players: ${maxPlayers}, Round Count: ${roundCount}`);
+    setShowEditForm(false);
   };
 
   return (
@@ -126,9 +138,57 @@ function Lobby({startGame, onSendChat, messages, players, game, countdownDuratio
                 )
               )}
               <button className="btn btn-secondary mt-3" onClick={handleLeaveGame}>Spiel verlassen</button>
-              <button onClick={() => navigate(`/game/${id}/settings`)} className="btn btn-warning mt-3 d-flex justify-content-end" disabled={!creator}>Settings</button>
+              <button 
+                onClick={() => setShowEditForm(!showEditForm)} 
+                className="btn btn-warning mt-3 d-flex justify-content-end" 
+                disabled={!creator}>Edit</button>
             </div>
           </div>
+        </div>
+      </div>
+      <div className="col-md-3">
+        <div className="card">
+          <div className="card-header">Game</div>
+          <ul className="list-group list-group-flush p-3">
+            Host: {game.creator}<br />
+            Game Type: {game.gameType}<br />
+            Round Count: {game.roundCount}
+          </ul>
+          {showEditForm ? (
+          <form className="mt-3" onSubmit={handleUpdateGameSettings}>
+            <div className="form-group">
+              <label htmlFor="gameType">Game Type</label>
+              <input
+                type="text"
+                className="form-control"
+                id="gameType"
+                value={gameType}
+                onChange={(e) => setGameType(e.target.value)}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="maxPlayers">Max Players</label>
+              <input
+                type="number"
+                className="form-control"
+                id="maxPlayers"
+                value={maxPlayers}
+                onChange={(e) => setMaxPlayers(e.target.value)}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="roundCount">Round Count</label>
+              <input
+                type="number"
+                className="form-control"
+                id="roundCount"
+                value={roundCount}
+                onChange={(e) => setRoundCount(e.target.value)}
+              />
+              </div>
+              <button type="submit" className="btn btn-primary">Update Game Settings</button>
+          </form>
+        ) : null}
         </div>
       </div>
     </div>
@@ -155,6 +215,8 @@ Lobby.propTypes = {
   game: PropTypes.shape({
     creator: PropTypes.string.isRequired,
     maxPlayers: PropTypes.number.isRequired,
+    roundCount: PropTypes.number.isRequired,
+    gameType: PropTypes.string.isRequired,
   }).isRequired,
 };
 
