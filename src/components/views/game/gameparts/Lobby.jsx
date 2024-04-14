@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react";
 import PropTypes from "prop-types";
 import countdowns from "../../../../assets/countdowns.mp3"
+import { useNavigate } from "react-router-dom";
 
 
 function Lobby({startGame, onSendChat, messages, players, game, countdownDuration}) {
@@ -8,6 +9,7 @@ function Lobby({startGame, onSendChat, messages, players, game, countdownDuratio
   const [creator, setCreator] = useState(false);
   const [countdown, setCountdown] = useState(null);
   const [soundPlayed, setSoundPlayed] = useState(false);
+  const navigate = useNavigate();
 
 
   useEffect(() => {
@@ -124,6 +126,7 @@ function Lobby({startGame, onSendChat, messages, players, game, countdownDuratio
                 )
               )}
               <button className="btn btn-secondary mt-3" onClick={handleLeaveGame}>Spiel verlassen</button>
+              <button onClick={() => navigate(`/game/${id}/settings`)} className="btn btn-warning mt-3 d-flex justify-content-end" disabled={!creator}>Settings</button>
             </div>
           </div>
         </div>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Loader } from "@googlemaps/js-api-loader";
+//import { Loader } from "@googlemaps/js-api-loader";
 
 const InGame = () => {
   const navigate = useNavigate();
