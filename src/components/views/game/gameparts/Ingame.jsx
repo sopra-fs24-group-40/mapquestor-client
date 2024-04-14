@@ -66,7 +66,7 @@ const InGame = () => {
           <section id="leaderboard">
             <nav className="ladder-nav">
               <div className="ladder-title text-center">
-                <h1 style={{ fontSize: "20px" }}>Leaderboard</h1>
+                <h1 style={{ fontSize: "22px" }}>Leaderboard</h1>
               </div>
             </nav>
             <table
@@ -76,8 +76,8 @@ const InGame = () => {
             >
               <thead>
               <tr>
-                <th>Name</th>
-                <th>Points</th>
+              <th className="text-dark">Name</th>
+              <th className="text-dark">Points</th>
               </tr>
               </thead>
             </table>
@@ -88,7 +88,6 @@ const InGame = () => {
       <div className="col-md-6 justify-content-center text-center bg-gray">
         <h1>In Game</h1>
 
-        {/* Timer display in top-right corner */}
         <div
           className="timer-container"
           style={{ position: "absolute" }}
@@ -122,11 +121,11 @@ const InGame = () => {
           <section id="chat" className="">
             <nav className="ladder-nav">
               <div className="ladder-title">
-                <h1 style={{ fontSize: "20px" }}>Chat</h1>
+                <h1 style={{ fontSize: "22px" }}>Chat</h1>
               </div>
             </nav>
           </section>
-          <p>TestChat</p>
+          <p style={{ fontSize: "20px" }}>TestChat</p>
         </div>
       </div>
     </div>
