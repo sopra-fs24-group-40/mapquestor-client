@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-//import { Loader } from "@googlemaps/js-api-loader";
+import { Loader } from "@googlemaps/js-api-loader";
 
 const InGame = () => {
   const navigate = useNavigate();
@@ -8,7 +8,7 @@ const InGame = () => {
 
   useEffect(() => {
     const apiOptions = {
-      apiKey: "AIzaSyDKZd3AoAgVQyvXXGptbGAnpmBBzLbXG0A" // Replace with your Google Maps API key
+      apiKey: "AIzaSyDKZd3AoAgVQyvXXGptbGAnpmBBzLbXG0A", // Replace with your Google Maps API key
     };
 
     const loader = new Loader(apiOptions);
@@ -19,7 +19,7 @@ const InGame = () => {
           position: { lat: 47.3786, lng: 8.5400 },
           pov: { heading: 165, pitch: 0 },
           zoom: 1,
-        }
+        },
       );
     }).catch(error => {
       console.error("Error loading Google Maps API:", error);
@@ -36,7 +36,7 @@ const InGame = () => {
         }
       });
     }, 1000);
-    
+
     // Clean up the interval on component unmount
     return () => clearInterval(intervalId);
   }, []);
@@ -54,7 +54,7 @@ const InGame = () => {
         width: "20px",
         height: "1px",
         backgroundColor: "black",
-        margin: "10px 5px"
+        margin: "10px 5px",
       }}
     ></div>
   ));
@@ -62,11 +62,11 @@ const InGame = () => {
   return (
     <div className="row mt-5">
       <div className="col-md-3 text-center">
-        <div className="container-wrap">
+        <div className="container-wrap bg-gray">
           <section id="leaderboard">
             <nav className="ladder-nav">
               <div className="ladder-title text-center">
-                <h1 style={{ fontSize: "20px" }}>Leaderboard</h1>
+                <h1 style={{ fontSize: "22px" }}>Leaderboard</h1>
               </div>
             </nav>
             <table
@@ -75,23 +75,22 @@ const InGame = () => {
               width="100%"
             >
               <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Points</th>
-                </tr>
+              <tr>
+              <th className="text-dark">Name</th>
+              <th className="text-dark">Points</th>
+              </tr>
               </thead>
             </table>
           </section>
         </div>
       </div>
 
-      <div className="col-md-6 justify-content-center text-center">
+      <div className="col-md-6 justify-content-center text-center bg-gray">
         <h1>In Game</h1>
 
-        {/* Timer display in top-right corner */}
         <div
           className="timer-container"
-          style={{ position: "absolute"}}
+          style={{ position: "absolute" }}
         >
           Timer: {timer} seconds
         </div>
@@ -118,14 +117,15 @@ const InGame = () => {
       </div>
 
       <div className="col-md-3 text-center">
-        <div className="container-wrap">
-          <section id="chat">
+        <div className="container-wrap bg-gray">
+          <section id="chat" className="">
             <nav className="ladder-nav">
               <div className="ladder-title">
-                <h1 style={{ fontSize: "20px" }}>Chat</h1>
+                <h1 style={{ fontSize: "22px" }}>Chat</h1>
               </div>
             </nav>
           </section>
+          <p style={{ fontSize: "20px" }}>TestChat</p>
         </div>
       </div>
     </div>

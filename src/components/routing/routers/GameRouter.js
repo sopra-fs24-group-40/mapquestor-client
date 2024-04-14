@@ -23,8 +23,6 @@ const GameRouter = () => {
           <Route path="users/:id" element={<ProfilePage/>}/>
           <Route path="join" element={<JoinGame/>}/>
           <Route path="edit" element={<EditPage/>}/>
-          <Route path="test" element={<Endgame/>}/>
-          <Route path="test2" element={<Ingame/>}/>
           <Route path=":id" element={<MainGame/>}/>
         </Route>
       </Routes>
