@@ -77,9 +77,7 @@ function ProfilePage() {
         <figure className="container-avatar">
           <img src={avatar} width={200} /></figure>
       <div className="text-center">
-        {checkUser ? 
-        <button className="btn btn-primary mb-3 d-flex" onClick={() => navigate("/game/edit")}>Edit</button> : null}
-          <h2><span className={checkStatus()}>{user.status}</span> | POINTS:</h2>
+        <h2><span className={checkStatus()}>{user.status}</span> | POINTS:</h2>
         {/* <ul>
           {userGames.map((game) => (
             <li key={game.id}>
@@ -87,6 +85,10 @@ function ProfilePage() {
             </li>
           ))}
         </ul> */}
+        <button 
+          className="btn btn-primary mb-3 d-flex" 
+          onClick={() => navigate("/game/edit")}
+          disabled={checkUser()}>Edit</button>
         <button className="btn btn-danger mb-3 d-flex" onClick={() => navigate("/game/users")}>Back</button>
       </div>
       </div>

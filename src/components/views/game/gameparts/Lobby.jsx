@@ -124,7 +124,7 @@ function Lobby({startGame, onSendChat, messages, players, game, countdownDuratio
                   }}
                   placeholder="Schreibe eine Nachricht..."
                 />
-                <button className="btn btn-primary" onClick={handleSendMessage}>Senden</button>
+                <button className="btn btn-primary" onClick={handleSendMessage}>Send</button>
               </div>
               {countdown !== null ? (
                 <div className="alert alert-info mt-5" role="alert">
@@ -133,11 +133,11 @@ function Lobby({startGame, onSendChat, messages, players, game, countdownDuratio
               ) : (
                 creator && (
                   <button onClick={handleStartCountdown} className="btn btn-success mt-3">
-                    Countdown starten
+                    Start Countdown
                   </button>
                 )
               )}
-              <button className="btn btn-secondary mt-3" onClick={handleLeaveGame}>Spiel verlassen</button>
+              <button className="btn btn-secondary mt-3" onClick={handleLeaveGame}>Leave Game</button>
               <button 
                 onClick={() => setShowEditForm(!showEditForm)} 
                 className="btn btn-warning mt-3 d-flex justify-content-end" 
