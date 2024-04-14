@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Lobby from "./Lobby";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { api } from "../../../../helpers/api";
 import Ingame from "./Ingame";
 import { getDomain } from "../../../../helpers/getDomain";
@@ -16,6 +16,7 @@ export default function Game() {
   const [game, setGame] = useState({});
   const [countdownDuration, setCountdownDuration] = useState(null);
   const { id } = useParams();
+  const navigate = useNavigate();
 
 
   useEffect(() => {
@@ -23,6 +24,15 @@ export default function Game() {
       try {
         const response = await api.get(`/games/${id}`);
         const gameData = response.data;
+
+        const joiningPlayerToken = localStorage.getItem("token");
+        const playerExists = gameData.players.some(player => player.token === joiningPlayerToken);
+
+        if (!playerExists) {
+          navigate("/game/join");
+          return;
+        }
+
 
         setGame(gameData);
         setPlayers(gameData.players || []);
@@ -52,6 +62,7 @@ export default function Game() {
         setStompClient(localStompClient);
       } catch (error) {
         console.error("Fehler beim Abrufen der Spieldaten: ", error);
+        navigate("/game/join")
       }
     };
 
@@ -91,7 +102,7 @@ export default function Game() {
       setPlayers(prevPlayers => prevPlayers.filter(player => player.username !== payload.from));
     } else if (payload.type === "CHAT") {
       setMessages(prevMessages => [...prevMessages, payload]);
-      console.log(players)
+      console.log(players);
     }
   };
 
