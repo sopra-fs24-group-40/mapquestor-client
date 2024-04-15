@@ -6,23 +6,23 @@ import User from "models/User";
 const Player = ({ user }: { user: User }) => (
   <div className="player container">
     <div className="d-flex align-items-center">
-      <span className="mr-2 fs-4 text-dark" style={{ textDecoration: 'underline', color: 'inherit' }}>username:</span>
+      <span className="me-2 fs-4 text-dark" style={{ textDecoration: "underline", color: "inherit" }}>username:</span>
       <div className="player-username fs-4 text-dark">
         <Link
           to={`/game/users/${user.id}`}
           className="text-decoration-none"
-          style={{ color: 'inherit' }}
+          style={{ color: "inherit" }}
         >
           {user.username}
         </Link>
       </div>
-      <div className="ml-2 fs-4 text-dark"> | </div>
-      <span className="ml-2 mr-2 fs-4 text-dark" style={{ textDecoration: 'underline', color: 'inherit' }}>ID:</span>
+      <div className="ms-2 fs-4 text-dark"> |</div>
+      <span className="ms-2 me-2 fs-4 text-dark" style={{ textDecoration: "underline", color: "inherit" }}>ID:</span>
       <div className="player-id fs-4 text-dark">
         <Link
           to={`/game/users/${user.id}`}
           className="text-decoration-none"
-          style={{ color: 'inherit' }}
+          style={{ color: "inherit" }}
         >
           {user.id}
         </Link>
@@ -45,11 +45,12 @@ function Users() {
         console.error(error);
       }
     }
+
     fetchUsers();
   }, []);
 
   if (users) {
-    
+
   }
 
   return (
@@ -59,15 +60,15 @@ function Users() {
         <ul>
           {users.map((user: User) => (
             <li key={user.id}>
-              <Link to = {`/game/users/${user.id}`}><Player user={user} /></Link>
+              <Link to={`/game/users/${user.id}`}><Player user={user} /></Link>
             </li>
           ))}
         </ul>
         <button
-        className="btn btn-danger mb-3" onClick={() => navigate("/game")}>Back
-      </button>
+          className="btn btn-danger mb-3" onClick={() => navigate("/game")}>Back
+        </button>
       </div>
-      
+
     </div>
   );
 };
