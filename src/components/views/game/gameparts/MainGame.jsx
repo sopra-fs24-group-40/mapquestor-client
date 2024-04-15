@@ -92,6 +92,9 @@ export default function Game() {
     stompClient && stompClient.send(`/app/${id}/gameState`, {}, JSON.stringify(message));
   };
 
+  const updatePlayers = (updatedPlayers) => {
+    setPlayers(updatedPlayers);
+  };
 
   const handleMessage = (payload) => {
     if (payload.type === "JOIN") {
@@ -123,7 +126,7 @@ export default function Game() {
                     countdownDuration={countdownDuration} />;
     case "INGAME":
       return <Ingame round={round} onSendChat={sendChatMessageGame} messagesGame={messagesGame} players={players}
-                     game={game} />;
+                     game={game} updatePlayers={updatePlayers}/>;
     case "ENDGAME":
       return <Endgame game={game} players={players} />;
     default:

@@ -1,15 +1,26 @@
+// InGame.js
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Loader } from "@googlemaps/js-api-loader";
 import { getRandomCountry } from "../../../../assets/cities";
 import PropTypes from "prop-types";
+import { api } from "helpers/api";
 
-const InGame = ({ round, onSendChat, messagesGame, players, game }) => {
-  const navigate = useNavigate();
+const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers }) => {
   const [timer, setTimer] = useState(60);
   const [location, setLocation] = useState(getRandomCountry());
   const [currentMessage, setCurrentMessage] = useState("");
+  const [leaderboard, setLeaderboard] = useState([]);
 
+  // Function to update the leaderboard
+  const updateLeaderboard = () => {
+    const sortedPlayers = [...players].sort((a, b) => b.points - a.points);
+    setLeaderboard(sortedPlayers);
+  };
+
+  // Update leaderboard when players change
+  useEffect(() => {
+    updateLeaderboard();
+  }, [players]);
 
   const handleSendMessageInGame = () => {
     if (!currentMessage.trim()) return;
@@ -17,7 +28,9 @@ const InGame = ({ round, onSendChat, messagesGame, players, game }) => {
     if (location) {
       const cityName = location.name;
       if (currentMessage.toLowerCase() === cityName.toLowerCase()) {
+        const points = timer;
         onSendChat(localStorage.getItem("username"), "Guessed the correct answer!", "CHAT_INGAME");
+        addPoints(points);
       } else {
         onSendChat(localStorage.getItem("username"), currentMessage, "CHAT_INGAME");
       }
@@ -26,6 +39,20 @@ const InGame = ({ round, onSendChat, messagesGame, players, game }) => {
     setCurrentMessage("");
   };
 
+  const addPoints = (points) => {
+    const updatedPlayers = players.map(player => {
+      if (player.username === localStorage.getItem("username")) {
+        return {
+          ...player,
+          points: player.points + points
+        };
+      } else {
+        return player;
+      }
+    });
+    updatePlayers(updatedPlayers);
+  };
+  
   useEffect(() => {
     let isMounted = true;
 
@@ -119,6 +146,14 @@ const InGame = ({ round, onSendChat, messagesGame, players, game }) => {
                 <th className="text-dark">Points</th>
               </tr>
               </thead>
+              <tbody>
+              {leaderboard.map((player, index) => (
+                <tr key={index}>
+                  <td>{player.username}</td>
+                  <td>{player.points}</td>
+                </tr>
+              ))}
+              </tbody>
             </table>
           </section>
           <h1>{cityName}</h1>
@@ -202,7 +237,7 @@ InGame.propTypes = {
   messagesGame: PropTypes.arrayOf(
     PropTypes.shape({
       from: PropTypes.string.isRequired,
-      text: PropTypes.string.isRequired,
+      content: PropTypes.string.isRequired,
     }),
   ).isRequired,
   players: PropTypes.arrayOf(
@@ -218,6 +253,7 @@ InGame.propTypes = {
     roundCount: PropTypes.number.isRequired,
     gameType: PropTypes.string.isRequired,
   }).isRequired,
+  updatePlayers: PropTypes.func.isRequired, 
 };
 
 export default InGame;
