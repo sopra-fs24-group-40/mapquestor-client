@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Loader } from "@googlemaps/js-api-loader";
 import { getRandomCountry } from "../../../../assets/cities";
 import PropTypes from "prop-types";
-import { api } from "helpers/api";
 
 const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers }) => {
   const [timer, setTimer] = useState(60);
@@ -45,7 +44,7 @@ const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers 
       if (player.username === localStorage.getItem("username")) {
         return {
           ...player,
-          points: player.points + points
+          points: player.points + points,
         };
       } else {
         return player;
@@ -53,7 +52,7 @@ const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers 
     });
     updatePlayers(updatedPlayers);
   };
-  
+
   useEffect(() => {
     let isMounted = true;
 
@@ -82,10 +81,10 @@ const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers 
             enableArrowKeys: true,
           },
           showRoadLabels: false, // Disable street names
-          linksControl: false // Disable Google Maps links
+          linksControl: false, // Disable Google Maps links
         });
-        
-        
+
+
       } catch (error) {
         console.error("Error loading Google Maps API:", error);
       }
@@ -228,7 +227,8 @@ const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers 
                 placeholder="Schreibe eine Nachricht..."
                 disabled={pointsAssigned} // Disable input if points are already assigned
               />
-              <button className="btn btn-primary" onClick={handleSendMessageInGame} disabled={pointsAssigned}>Send</button>
+              <button className="btn btn-primary" onClick={handleSendMessageInGame} disabled={pointsAssigned}>Send
+              </button>
             </div>
           </div>
         </div>
@@ -259,7 +259,7 @@ InGame.propTypes = {
     roundCount: PropTypes.number.isRequired,
     gameType: PropTypes.string.isRequired,
   }).isRequired,
-  updatePlayers: PropTypes.func.isRequired, 
+  updatePlayers: PropTypes.func.isRequired,
 };
 
 export default InGame;
