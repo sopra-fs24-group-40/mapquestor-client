@@ -35,7 +35,7 @@ const Game = () => {
               <tr>
                 <th>Rank</th>
                 <th>Name</th>
-                <th>Total</th>
+                <th>Wins</th>
               </tr>
               </thead>
               <tbody className="text-center bg-transparent">

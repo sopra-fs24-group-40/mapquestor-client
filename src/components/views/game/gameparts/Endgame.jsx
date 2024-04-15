@@ -50,25 +50,20 @@ function Endgame(/*{game , players}*/) {
   };
 
 
-  const handlePlayAgain = async () => {
-    try {
-      if (creator === true) {
-        console.log("Creator is playing again, redirecting to create game");
-        navigate(`/game/${game.gameCode}`);
+  const handlePlayAgain =  () => {
+    if (creator) {
+      console.log("Creator is playing again, redirecting to create game");
+      navigate(`/game/${game.gameCode}`);
+    } else {
+      if (game.playerCount < game.maxPlayers) {
+        console.log("Game is not full, redirecting to join game");
+        navigate(`/game/join/${game.gameCode}`);
       } else {
-        if (game.playerCount < game.maxPlayers) {
-          console.log("Game is not full, redirecting to join game");
-          navigate(`/game/join/${game.gameCode}`);
-        } else {
-          console.log("Game is full, redirecting to game");
-          navigate("/game");
-        }
+        console.log("Game is full, redirecting to game");
+        navigate("/game");
       }
-    } catch (error) {
-      console.error("Error pulling gamecode:", error.response);
-      setError("Error pulling gamecode: " + (error.response?.data?.message || "Error creating the game!"));
     }
-  };
+  }
   return (
     <div className="row">
       <div className="col-md-6 text-center mt-5">

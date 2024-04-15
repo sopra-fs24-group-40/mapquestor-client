@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { api } from "../../../helpers/api";
-import { useNavigate } from "react-router-dom";
+import React, {useState} from "react";
+import {api} from "../../../helpers/api";
+import {useNavigate} from "react-router-dom";
 
 function CreateGame() {
   const [maxPlayers, setMaxPlayers] = useState(2);
   const [roundCount, setRoundCount] = useState(2);
-  const [gameType, setGameType] = useState(1);
+  const [gameType, setGameType] = useState("COUNTRY");
   const [creator, setCreator] = useState(localStorage.getItem("token"));
   const [error, setError] = useState("");
 
@@ -33,8 +33,8 @@ function CreateGame() {
   };
 
   return (
-    <div className="row justify-content-center">
-      <div className="col-md-6">
+    <div className="row justify-content-center mt-5">
+      <div className="col-md-6 p-3">
         <h1 className="text-center mb-4">Create Game</h1>
         <form onSubmit={handleSubmit} className="bg-light p-4 border rounded">
           {error && (
@@ -43,10 +43,10 @@ function CreateGame() {
             </div>
           )}
           <div className="mb-3">
-            <label htmlFor="maxPlayers" className="form-label">Max Players</label>
+            <label htmlFor="maxPlayers" className="form-label fs-5">Max Players</label>
             <input
               type="number"
-              className="form-control"
+              className="form-control fs-5"
               id="maxPlayers"
               value={maxPlayers}
               onChange={(e) => setMaxPlayers(e.target.value)}
@@ -55,10 +55,10 @@ function CreateGame() {
             />
           </div>
           <div className="mb-3">
-            <label htmlFor="roundCount" className="form-label"># Rounds</label>
+            <label htmlFor="roundCount" className="form-label fs-5">Number of Rounds</label>
             <input
               type="number"
-              className="form-control"
+              className="form-control fs-5"
               id="roundCount"
               value={roundCount}
               onChange={(e) => setRoundCount(e.target.value)}
@@ -66,19 +66,33 @@ function CreateGame() {
               max="20"
             />
           </div>
-
-          <div className="mb-3">
-            <label htmlFor="gameType" className="form-label">Game Type</label>
-            <input
-              type="number"
-              className="form-control"
-              id="gameType"
-              value={gameType}
-              onChange={(e) => setGameType(e.target.value)}
-              min="2"
-              max="20"
-            />
+          <div className="row justify-content-left mb-5">
+            <div className="col-lg-6 fs-5">
+              <div className="text-left">
+                <label htmlFor="gameType" className="form-label fs-5">Game Mode</label>
+                <div className="btn-group mb-3" role="group" aria-label="Game Type">
+                  <button
+                    type="button"
+                    className={`btn ${gameType === "COUNTRY" ? "btn-primary" : "btn-secondary"} btn-lg rounded-3 me-2`}
+                    onClick={() => setGameType("COUNTRY")}
+                    style={{background: gameType === "COUNTRY" ? "green" : ""}}
+                  >
+                    Country Mode
+                  </button>
+                  <button
+                    type="button"
+                    className={`btn ${gameType === "CITY" ? "btn-primary" : "btn-secondary"} btn-lg rounded-3`}
+                    onClick={() => setGameType("CITY")}
+                    style={{background: gameType === "CITY" ? "green" : ""}}
+                  >
+                    City Mode
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
+
+
           <div className="row">
             <div className="col-6">
               <button onClick={handleSubmit} type="submit" className="btn btn-primary">Create Game</button>
