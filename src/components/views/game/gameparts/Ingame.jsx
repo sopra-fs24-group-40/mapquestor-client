@@ -13,37 +13,55 @@ const InGame = ({ round, onSendChat, messagesGame, players, game }) => {
 
   const handleSendMessageInGame = () => {
     if (!currentMessage.trim()) return;
-    onSendChat(localStorage.getItem("username"), currentMessage, "CHAT_INGAME");
+
+    if (location) {
+      const cityName = location.name;
+      if (currentMessage.toLowerCase() === cityName.toLowerCase()) {
+        onSendChat(localStorage.getItem("username"), "Guessed the correct answer!", "CHAT_INGAME");
+      } else {
+        onSendChat(localStorage.getItem("username"), currentMessage, "CHAT_INGAME");
+      }
+    }
+
     setCurrentMessage("");
   };
 
   useEffect(() => {
-    setLocation(getRandomCountry());
+    let isMounted = true;
 
-    const apiOptions = {
-      apiKey: "AIzaSyDKZd3AoAgVQyvXXGptbGAnpmBBzLbXG0A",
+    const initializeMap = async () => {
+      const newLocation = getRandomCountry();
+      setLocation(newLocation); // Setze zuerst den neuen Standort
+
+      const apiOptions = {
+        apiKey: "AIzaSyDKZd3AoAgVQyvXXGptbGAnpmBBzLbXG0A",
+      };
+
+      const loader = new Loader(apiOptions);
+      try {
+        await loader.load();
+        const streetView = new google.maps.StreetViewPanorama(
+          document.getElementById("street-view"), {
+            position: { lat: newLocation.latitude, lng: newLocation.longitude },
+            pov: { heading: 165, pitch: 0 },
+            zoom: 1,
+          },
+        );
+        streetView.setOptions({
+          disableDefaultUI: true,
+          navigationControl: true,
+          navigationControlOptions: {
+            enableArrowKeys: true,
+          },
+        });
+      } catch (error) {
+        console.error("Error loading Google Maps API:", error);
+      }
     };
 
-    const loader = new Loader(apiOptions);
-    loader.load().then(() => {
-      const streetView = new google.maps.StreetViewPanorama(
-        document.getElementById("street-view"), {
-          position: { lat: location.latitude, lng: location.longitude },
-          pov: { heading: 165, pitch: 0 },
-          zoom: 1,
-        },
-      );
-      streetView.setOptions({
-        disableDefaultUI: true,
-        navigationControl: true,
-        navigationControlOptions: {
-          enableArrowKeys: true
-        },
-      });
-
-    }).catch(error => {
-      console.error("Error loading Google Maps API:", error);
-    });
+    if (isMounted) {
+      initializeMap();
+    }
 
     const intervalId = setInterval(() => {
       setTimer(prevTimer => {
@@ -57,12 +75,14 @@ const InGame = ({ round, onSendChat, messagesGame, players, game }) => {
     }, 1000);
 
     // Cleanup function
-    return () => clearInterval(intervalId);
-  }, [round, location]);
+    return () => {
+      isMounted = false;
+      clearInterval(intervalId);
+    };
+  }, [round]);
 
-  // Calculate the number of letters in the city name
   const cityName = location.name;
-  const numLetters = cityName.length;
+  const numLetters = location.name.length;
 
   const hintLines = Array.from({ length: numLetters }, (_, index) => (
     <div
