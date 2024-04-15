@@ -1,10 +1,13 @@
-import React, {useEffect, useState} from "react";
-import PropTypes from "prop-types";
+import React, { useEffect } from "react";
 import "../../../../styles/views/endgame.scss";
-import {useNavigate} from "react-router-dom";
-import {api} from "../../../../helpers/api";
+import { useNavigate } from "react-router-dom";
+import { api } from "../../../../helpers/api";
 
-function Endgame(props) {
+function Endgame() {
+
+  useEffect(() => {
+    console.log(game);
+  }, []);
 
 
   const navigate = useNavigate();
@@ -29,15 +32,16 @@ function Endgame(props) {
     try {
       const response = await api.get(`/games/${gameCode}`);
       console.log("Gamecode pulled successfully", response.data);
-      navigate(`/game/${response.data.gameCode}`)
+      navigate(`/game/${response.data.gameCode}`);
     } catch (error) {
       console.error("Error pulling gamecode:", error.response);
       setError("Error pulling gamecode: " + (error.response?.data?.message || "Error creating the game!"));
     }
-  }
+  };
   return (
     <div className="row">
       <div className="col-md-6 text-center mt-5">
+        <h1>{game.creator}</h1>
         <div className="container-wrap">
           <section id="leaderboard">
             <nav className="ladder-nav1">
@@ -54,7 +58,7 @@ function Endgame(props) {
               </tr>
               </thead>
               <tbody className="text-center bg-transparent">
-              {renderPlayerRow({id: 1, rank: 1, name: "John Doe", total: 100})}
+              {renderPlayerRow({ id: 1, rank: 1, name: "John Doe", total: 100 })}
               </tbody>
             </table>
           </section>

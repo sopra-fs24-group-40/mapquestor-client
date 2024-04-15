@@ -1,30 +1,46 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Loader } from "@googlemaps/js-api-loader";
+import { getRandomCountry } from "../../../../assets/cities";
+import PropTypes from "prop-types";
 
-const InGame = () => {
+const InGame = ({ round, onSendChat, messagesGame, players, game }) => {
   const navigate = useNavigate();
-  const [timer, setTimer] = useState(60); // State for timer
+  const [timer, setTimer] = useState(60);
+  const [location, setLocation] = useState(getRandomCountry());
+  const [currentMessage, setCurrentMessage] = useState("");
+
+
+  const handleSendMessageInGame = () => {
+    if (!currentMessage.trim()) return;
+    onSendChat(localStorage.getItem("username"), currentMessage, "CHAT_INGAME");
+    setCurrentMessage("");
+  };
 
   useEffect(() => {
+    setLocation(getRandomCountry());
+
     const apiOptions = {
-      apiKey: "AIzaSyDKZd3AoAgVQyvXXGptbGAnpmBBzLbXG0A", // Replace with your Google Maps API key
+      apiKey: "AIzaSyDKZd3AoAgVQyvXXGptbGAnpmBBzLbXG0A",
     };
 
     const loader = new Loader(apiOptions);
-    
     loader.load().then(() => {
       const streetView = new google.maps.StreetViewPanorama(
         document.getElementById("street-view"), {
-          position: { lat: 47.3786, lng: 8.5400 },
+          position: { lat: location.latitude, lng: location.longitude },
           pov: { heading: 165, pitch: 0 },
           zoom: 1,
         },
       );
       streetView.setOptions({
         disableDefaultUI: true,
-    });
-    
+        navigationControl: true,
+        navigationControlOptions: {
+          enableArrowKeys: true
+        },
+      });
+
     }).catch(error => {
       console.error("Error loading Google Maps API:", error);
     });
@@ -40,14 +56,14 @@ const InGame = () => {
       });
     }, 1000);
 
+    // Cleanup function
     return () => clearInterval(intervalId);
-  }, []);
+  }, [round, location]);
 
   // Calculate the number of letters in the city name
-  const cityName = "Zuerich";
+  const cityName = location.name;
   const numLetters = cityName.length;
 
-  // Create an array of div elements representing hint lines
   const hintLines = Array.from({ length: numLetters }, (_, index) => (
     <div
       key={index}
@@ -58,7 +74,8 @@ const InGame = () => {
         backgroundColor: "black",
         margin: "10px 5px",
       }}
-    ></div>
+    >
+    </div>
   ));
 
   return (
@@ -78,12 +95,13 @@ const InGame = () => {
             >
               <thead>
               <tr>
-              <th className="text-dark">Name</th>
-              <th className="text-dark">Points</th>
+                <th className="text-dark">Name</th>
+                <th className="text-dark">Points</th>
               </tr>
               </thead>
             </table>
           </section>
+          <h1>{cityName}</h1>
         </div>
       </div>
 
@@ -127,11 +145,59 @@ const InGame = () => {
               </div>
             </nav>
           </section>
-          <p style={{ fontSize: "20px" }}>TestChat</p>
+          <div className="chat-container text-start p-2">
+            <ul className="list-unstyled">
+              {messagesGame.map((msg, index) => (
+                <li key={index}>
+                  <strong>{msg.from}</strong>: {msg.content}
+                </li>
+              ))}
+            </ul>
+            <div className="input-group mt-3">
+              <input
+                type="text"
+                className="form-control"
+                value={currentMessage}
+                onChange={(e) => setCurrentMessage(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleSendMessageInGame();
+                  }
+                }}
+                placeholder="Schreibe eine Nachricht..."
+              />
+              <button className="btn btn-primary" onClick={handleSendMessageInGame}>Send</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   );
+};
+
+InGame.propTypes = {
+  round: PropTypes.number.isRequired,
+  onSendChat: PropTypes.func.isRequired,
+  messagesGame: PropTypes.arrayOf(
+    PropTypes.shape({
+      from: PropTypes.string.isRequired,
+      text: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
+  players: PropTypes.arrayOf(
+    PropTypes.shape({
+      username: PropTypes.string.isRequired,
+      token: PropTypes.string.isRequired,
+      points: PropTypes.number.isRequired,
+    }),
+  ).isRequired,
+  game: PropTypes.shape({
+    creator: PropTypes.string.isRequired,
+    maxPlayers: PropTypes.number.isRequired,
+    roundCount: PropTypes.number.isRequired,
+    gameType: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default InGame;

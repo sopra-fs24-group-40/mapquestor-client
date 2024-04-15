@@ -2,20 +2,23 @@ import React, { useEffect, useState } from "react";
 import Lobby from "./Lobby";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { api } from "../../../../helpers/api";
 import Ingame from "./Ingame";
 import { getDomain } from "../../../../helpers/getDomain";
+import Endgame from "./Endgame";
 
 
 export default function Game() {
   const [gamePhase, setGamePhase] = useState("LOBBY");
   const [messages, setMessages] = useState([]);
+  const [messagesGame, setMessagesGame] = useState([]);
   const [players, setPlayers] = useState([]);
   const [stompClient, setStompClient] = useState(null);
   const [game, setGame] = useState({});
   const [countdownDuration, setCountdownDuration] = useState(null);
   const { id } = useParams();
+  const [round, setRound] = useState(1);
   const navigate = useNavigate();
 
 
@@ -60,7 +63,7 @@ export default function Game() {
 
         setStompClient(localStompClient);
       } catch (error) {
-        navigate("/game/join")
+        navigate("/game/join");
       }
     };
 
@@ -75,6 +78,11 @@ export default function Game() {
 
 
   const sendChatMessage = (from, content, type) => {
+    const message = { from, content, type };
+    stompClient && stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message));
+  };
+
+  const sendChatMessageGame = (from, content, type) => {
     const message = { from, content, type };
     stompClient && stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message));
   };
@@ -101,8 +109,11 @@ export default function Game() {
     } else if (payload.type === "CHAT") {
       setMessages(prevMessages => [...prevMessages, payload]);
       console.log(players);
+    } else if (payload.type === "CHAT_INGAME") {
+      setMessagesGame(prevMessages => [...prevMessages, payload]);
+      console.log(players);
     } else if (payload.type === "START_COUNTDOWN") {
-      setCountdownDuration(10);
+      setCountdownDuration(1);
     }
   };
 
@@ -111,7 +122,10 @@ export default function Game() {
       return <Lobby startGame={startGame} onSendChat={sendChatMessage} messages={messages} players={players} game={game}
                     countdownDuration={countdownDuration} />;
     case "INGAME":
-      return <Ingame />;
+      return <Ingame round={round} onSendChat={sendChatMessageGame} messagesGame={messagesGame} players={players}
+                     game={game} />;
+    case "ENDGAME":
+      return <Endgame game={game} players={players} />;
     default:
       return <div>Lade...</div>;
   }
