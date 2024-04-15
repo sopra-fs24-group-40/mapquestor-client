@@ -16,7 +16,7 @@ const Player = ({ user }: { user: User }) => (
           {user.username}
         </Link>
       </div>
-      <div className="ml-2 fs-4 text-dark"> , </div>
+      <div className="ml-2 fs-4 text-dark"> | </div>
       <span className="ml-2 mr-2 fs-4 text-dark" style={{ textDecoration: 'underline', color: 'inherit' }}>ID:</span>
       <div className="player-id fs-4 text-dark">
         <Link
