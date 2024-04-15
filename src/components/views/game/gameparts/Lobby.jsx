@@ -23,13 +23,6 @@ function Lobby({startGame, onSendChat, messages, players, game, countdownDuratio
   }, [game.creator]);
 
   useEffect(() => {
-
-    if (countdownDuration > 0) {
-      setCountdown(countdownDuration);
-    }
-  }, [countdownDuration]);
-
-  useEffect(() => {
     if (countdown === 3 && !soundPlayed) {
       const countdownSound = new Audio(countdowns);
       countdownSound.play()
@@ -37,10 +30,7 @@ function Lobby({startGame, onSendChat, messages, players, game, countdownDuratio
         .catch(error => console.error("Fehler beim Abspielen des Sounds:", error));
     }
 
-    if (countdownDuration > 0 && countdown === countdownDuration) {
-      setSoundPlayed(false);
-    }
-  }, [countdown, countdownDuration, soundPlayed]);
+  }, [countdown, soundPlayed]);
 
 
   useEffect(() => {
@@ -68,7 +58,8 @@ function Lobby({startGame, onSendChat, messages, players, game, countdownDuratio
   };
 
   const handleStartCountdown = () => {
-    onSendChat(localStorage.getItem("token"), "Has started the countdown!", "START_COUNTDOWN");
+    onSendChat(localStorage.getItem("username"), "Has started the countdown!", "CHAT");
+    setCountdown(10);
   };
 
   const handleUpdateGameSettings = (e) => {
@@ -118,7 +109,7 @@ function Lobby({startGame, onSendChat, messages, players, game, countdownDuratio
                   onChange={(e) => setCurrentMessage(e.target.value)}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
-                      e.preventDefault(); // Prevent the default behavior of the Enter key (submitting the form)
+                      e.preventDefault();
                       handleSendMessage();
                     }
                   }}

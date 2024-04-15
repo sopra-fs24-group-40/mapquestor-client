@@ -25,19 +25,17 @@ const InGame = () => {
       console.error("Error loading Google Maps API:", error);
     });
 
-    // Start the timer interval (increment every second)
     const intervalId = setInterval(() => {
       setTimer(prevTimer => {
         if (prevTimer > 0) {
           return prevTimer - 1;
         } else {
-          clearInterval(intervalId); // Stop the timer when it reaches 0
+          clearInterval(intervalId);
           return 0;
         }
       });
     }, 1000);
 
-    // Clean up the interval on component unmount
     return () => clearInterval(intervalId);
   }, []);
 

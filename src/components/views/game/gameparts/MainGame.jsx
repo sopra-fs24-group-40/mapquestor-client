@@ -37,13 +37,9 @@ export default function Game() {
         setGame(gameData);
         setPlayers(gameData.players || []);
 
-        console.log(game);
-        console.log(players);
-
         const socket = new SockJS(getDomain() + "/ws");
         const localStompClient = Stomp.over(socket);
         localStompClient.connect({}, function(frame) {
-          console.log("Connected: " + frame);
 
           localStompClient.subscribe(`/topic/${id}/chat`, (message) => {
             const payload = JSON.parse(message.body);
@@ -61,7 +57,6 @@ export default function Game() {
 
         setStompClient(localStompClient);
       } catch (error) {
-        console.error("Fehler beim Abrufen der Spieldaten: ", error);
         navigate("/game/join")
       }
     };
