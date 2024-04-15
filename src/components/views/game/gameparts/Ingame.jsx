@@ -1,4 +1,3 @@
-// InGame.js
 import React, { useEffect, useState } from "react";
 import { Loader } from "@googlemaps/js-api-loader";
 import { getRandomCountry } from "../../../../assets/cities";
@@ -10,6 +9,7 @@ const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers 
   const [location, setLocation] = useState(getRandomCountry());
   const [currentMessage, setCurrentMessage] = useState("");
   const [leaderboard, setLeaderboard] = useState([]);
+  const [pointsAssigned, setPointsAssigned] = useState(false); // New state variable
 
   // Function to update the leaderboard
   const updateLeaderboard = () => {
@@ -25,12 +25,13 @@ const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers 
   const handleSendMessageInGame = () => {
     if (!currentMessage.trim()) return;
 
-    if (location) {
+    if (location && !pointsAssigned) { // Check if points are not already assigned
       const cityName = location.name;
       if (currentMessage.toLowerCase() === cityName.toLowerCase()) {
         const points = timer;
         onSendChat(localStorage.getItem("username"), "Guessed the correct answer!", "CHAT_INGAME");
         addPoints(points);
+        setPointsAssigned(true); // Mark points as assigned
       } else {
         onSendChat(localStorage.getItem("username"), currentMessage, "CHAT_INGAME");
       }
@@ -221,8 +222,9 @@ const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers 
                   }
                 }}
                 placeholder="Schreibe eine Nachricht..."
+                disabled={pointsAssigned} // Disable input if points are already assigned
               />
-              <button className="btn btn-primary" onClick={handleSendMessageInGame}>Send</button>
+              <button className="btn btn-primary" onClick={handleSendMessageInGame} disabled={pointsAssigned}>Send</button>
             </div>
           </div>
         </div>
