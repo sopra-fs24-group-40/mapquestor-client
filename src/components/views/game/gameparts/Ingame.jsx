@@ -12,7 +12,7 @@ const InGame = () => {
     };
 
     const loader = new Loader(apiOptions);
-
+    
     loader.load().then(() => {
       const streetView = new google.maps.StreetViewPanorama(
         document.getElementById("street-view"), {
@@ -21,6 +21,10 @@ const InGame = () => {
           zoom: 1,
         },
       );
+      streetView.setOptions({
+        disableDefaultUI: true,
+    });
+    
     }).catch(error => {
       console.error("Error loading Google Maps API:", error);
     });
