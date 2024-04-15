@@ -5,8 +5,29 @@ import User from "models/User";
 
 const Player = ({ user }: { user: User }) => (
   <div className="player container">
-    <div className="player username">username: {user.username}</div>
-    <div className="player id">id: {user.id}</div>
+    <div className="d-flex align-items-center">
+      <span className="mr-2 fs-4 text-dark" style={{ textDecoration: 'underline', color: 'inherit' }}>username:</span>
+      <div className="player-username fs-4 text-dark">
+        <Link
+          to={`/game/users/${user.id}`}
+          className="text-decoration-none"
+          style={{ color: 'inherit' }}
+        >
+          {user.username}
+        </Link>
+      </div>
+      <div className="ml-2 fs-4 text-dark"> , </div>
+      <span className="ml-2 mr-2 fs-4 text-dark" style={{ textDecoration: 'underline', color: 'inherit' }}>ID:</span>
+      <div className="player-id fs-4 text-dark">
+        <Link
+          to={`/game/users/${user.id}`}
+          className="text-decoration-none"
+          style={{ color: 'inherit' }}
+        >
+          {user.id}
+        </Link>
+      </div>
+    </div>
   </div>
 );
 
@@ -32,8 +53,8 @@ function Users() {
   }
 
   return (
-    <div className="row">
-      <div className="col bg-light mt-3 border rounded">
+    <div className="row justify-content-center">
+      <div className="col-md-4 bg-light mt-3 border rounded">
         <h1 className="text-center p-2">All Users</h1>
         <ul>
           {users.map((user: User) => (
