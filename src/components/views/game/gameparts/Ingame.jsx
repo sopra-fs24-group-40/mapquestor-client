@@ -81,7 +81,11 @@ const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers 
           navigationControlOptions: {
             enableArrowKeys: true,
           },
+          showRoadLabels: false, // Disable street names
+          linksControl: false // Disable Google Maps links
         });
+        
+        
       } catch (error) {
         console.error("Error loading Google Maps API:", error);
       }
