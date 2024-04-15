@@ -6,7 +6,7 @@ import User from "models/User";
 const Player = ({ user }: { user: User }) => (
   <div className="player container">
     <div className="d-flex align-items-center">
-      <span className="me-2 fs-4 text-dark" style={{ textDecoration: "underline", color: "inherit" }}>username: </span>
+      <span className="me-2 fs-4 text-dark" style={{ textDecoration: "underline", color: "inherit" }}>username:</span>
       <div className="player-username fs-4 text-dark">
         <Link
           to={`/game/users/${user.id}`}
@@ -16,8 +16,8 @@ const Player = ({ user }: { user: User }) => (
           {user.username}
         </Link>
       </div>
-      <div className="ml-2 fs-4 text-dark"> |</div>
-      <span className="ml-2 mr-2 fs-4 text-dark" style={{ textDecoration: "underline", color: "inherit" }}>ID:</span>
+      <div className="ms-2 fs-4 text-dark"> |</div>
+      <span className="ms-2 me-2 fs-4 text-dark" style={{ textDecoration: "underline", color: "inherit" }}>ID:</span>
       <div className="player-id fs-4 text-dark">
         <Link
           to={`/game/users/${user.id}`}
