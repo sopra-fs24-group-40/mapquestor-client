@@ -1,16 +1,15 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import countdowns from "../../../../assets/countdowns.mp3"
+import countdowns from "../../../../assets/countdowns.mp3";
 import { useNavigate } from "react-router-dom";
 import { api } from "helpers/api";
 
 
-function Lobby({startGame, onSendChat, messages, players, game, countdownDuration}) {
+function Lobby({ startGame, onSendChat, messages, players, game, countdownDuration }) {
   const [currentMessage, setCurrentMessage] = useState("");
   const [creator, setCreator] = useState(false);
   const [countdown, setCountdown] = useState(null);
   const [soundPlayed, setSoundPlayed] = useState(false);
-  const navigate = useNavigate();
   const [gameType, setGameType] = useState(game.gameType);
   const [maxPlayers, setMaxPlayers] = useState(game.maxPlayers);
   const [roundCount, setRoundCount] = useState(game.roundCount);
@@ -88,7 +87,7 @@ function Lobby({startGame, onSendChat, messages, players, game, countdownDuratio
               <li
                 key={index}
                 className="list-group-item"
-                style={{color: creator ? "red" : "inherit"}}
+                style={{ color: creator ? "red" : "inherit" }}
               >
                 {player.username}
               </li>
@@ -100,7 +99,7 @@ function Lobby({startGame, onSendChat, messages, players, game, countdownDuratio
         <div className="card">
           <div className="card-body">
             <h2 className="card-title">Lobby Chat</h2>
-            <hr/>
+            <hr />
             <h4>Players: {players.length} / {game.maxPlayers}</h4>
             <div className="chat-container">
               <ul className="list-unstyled">
@@ -138,10 +137,11 @@ function Lobby({startGame, onSendChat, messages, players, game, countdownDuratio
                 )
               )}
               <button className="btn btn-secondary mt-3" onClick={handleLeaveGame}>Leave Game</button>
-              <button 
-                onClick={() => setShowEditForm(!showEditForm)} 
-                className="btn btn-warning mt-3 d-flex justify-content-end" 
-                disabled={!creator}>Edit</button>
+              <button
+                onClick={() => setShowEditForm(!showEditForm)}
+                className="btn btn-warning mt-3 d-flex justify-content-end"
+                disabled={!creator}>Edit
+              </button>
             </div>
           </div>
         </div>
@@ -155,40 +155,40 @@ function Lobby({startGame, onSendChat, messages, players, game, countdownDuratio
             Round Count: {game.roundCount}
           </ul>
           {showEditForm ? (
-          <form className="mt-3" onSubmit={handleUpdateGameSettings}>
-            <div className="form-group">
-              <label htmlFor="gameType">Game Type</label>
-              <input
-                type="text"
-                className="form-control"
-                id="gameType"
-                value={gameType}
-                onChange={(e) => setGameType(e.target.value)}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="maxPlayers">Max Players</label>
-              <input
-                type="number"
-                className="form-control"
-                id="maxPlayers"
-                value={maxPlayers}
-                onChange={(e) => setMaxPlayers(e.target.value)}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="roundCount">Round Count</label>
-              <input
-                type="number"
-                className="form-control"
-                id="roundCount"
-                value={roundCount}
-                onChange={(e) => setRoundCount(e.target.value)}
-              />
+            <form className="mt-3" onSubmit={handleUpdateGameSettings}>
+              <div className="form-group">
+                <label htmlFor="gameType">Game Type</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="gameType"
+                  value={gameType}
+                  onChange={(e) => setGameType(e.target.value)}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="maxPlayers">Max Players</label>
+                <input
+                  type="number"
+                  className="form-control"
+                  id="maxPlayers"
+                  value={maxPlayers}
+                  onChange={(e) => setMaxPlayers(e.target.value)}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="roundCount">Round Count</label>
+                <input
+                  type="number"
+                  className="form-control"
+                  id="roundCount"
+                  value={roundCount}
+                  onChange={(e) => setRoundCount(e.target.value)}
+                />
               </div>
               <button type="submit" className="btn btn-primary">Update Game Settings</button>
-          </form>
-        ) : null}
+            </form>
+          ) : null}
         </div>
       </div>
     </div>
@@ -210,7 +210,7 @@ Lobby.propTypes = {
       username: PropTypes.string.isRequired,
       token: PropTypes.string.isRequired,
       points: PropTypes.number.isRequired,
-    })
+    }),
   ).isRequired,
   game: PropTypes.shape({
     creator: PropTypes.string.isRequired,

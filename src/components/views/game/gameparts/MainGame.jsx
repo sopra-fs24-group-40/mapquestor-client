@@ -51,6 +51,9 @@ export default function Game() {
             setGamePhase(gameState.status);
           });
 
+          let joinMessage = { from: localStorage.getItem("token"), content: "Joined the Game!", type: "JOIN" };
+          localStompClient.send(`/app/${id}/chat`, {}, JSON.stringify(joinMessage));
+
           let joinMessage2 = { from: localStorage.getItem("username"), content: "Joined the Game!", type: "CHAT" };
           localStompClient.send(`/app/${id}/chat`, {}, JSON.stringify(joinMessage2));
         });
