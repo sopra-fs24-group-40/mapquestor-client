@@ -98,6 +98,8 @@ export default function Game() {
     } else if (payload.type === "CHAT") {
       setMessages(prevMessages => [...prevMessages, payload]);
       console.log(players);
+    } else if (payload.type === "START_COUNTDOWN") {
+      setCountdownDuration(10);
     }
   };
 

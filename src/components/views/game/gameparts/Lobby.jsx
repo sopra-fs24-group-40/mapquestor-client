@@ -23,6 +23,13 @@ function Lobby({startGame, onSendChat, messages, players, game, countdownDuratio
   }, [game.creator]);
 
   useEffect(() => {
+
+    if (countdownDuration > 0) {
+      setCountdown(countdownDuration);
+    }
+  }, [countdownDuration]);
+
+  useEffect(() => {
     if (countdown === 3 && !soundPlayed) {
       const countdownSound = new Audio(countdowns);
       countdownSound.play()
@@ -30,7 +37,10 @@ function Lobby({startGame, onSendChat, messages, players, game, countdownDuratio
         .catch(error => console.error("Fehler beim Abspielen des Sounds:", error));
     }
 
-  }, [countdown, soundPlayed]);
+    if (countdownDuration > 0 && countdown === countdownDuration) {
+      setSoundPlayed(false);
+    }
+  }, [countdown, countdownDuration, soundPlayed]);
 
 
   useEffect(() => {
@@ -58,8 +68,7 @@ function Lobby({startGame, onSendChat, messages, players, game, countdownDuratio
   };
 
   const handleStartCountdown = () => {
-    onSendChat(localStorage.getItem("username"), "Has started the countdown!", "CHAT");
-    setCountdown(10);
+    onSendChat(localStorage.getItem("token"), "Has started the countdown!", "START_COUNTDOWN");
   };
 
   const handleUpdateGameSettings = (e) => {
