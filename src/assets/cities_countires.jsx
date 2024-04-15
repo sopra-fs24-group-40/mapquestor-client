@@ -41,3 +41,47 @@ const countries = [
     { name: "Vatican City", location: "St. Peter's Basilica", latitude: 41.9022, longitude: 12.4533 }
 ];
 
+const countries2 = [
+    { name: "France", capital: "Paris", latitude: 48.8566, longitude: 2.3522 },
+    { name: "Germany", capital: "Berlin", latitude: 52.5200, longitude: 13.4050 },
+    { name: "Italy", capital: "Rome", latitude: 41.9028, longitude: 12.4964 },
+    { name: "Spain", capital: "Madrid", latitude: 40.4168, longitude: -3.7038 },
+    { name: "United Kingdom", capital: "London", latitude: 51.5074, longitude: -0.1278 },
+    { name: "Russia", capital: "Moscow", latitude: 55.7558, longitude: 37.6176 },
+    { name: "Netherlands", capital: "Amsterdam", latitude: 52.3676, longitude: 4.9041 },
+    { name: "Switzerland", capital: "Bern", latitude: 46.9480, longitude: 7.4474 },
+    { name: "Austria", capital: "Vienna", latitude: 48.2082, longitude: 16.3738 },
+    { name: "Sweden", capital: "Stockholm", latitude: 59.3293, longitude: 18.0686 },
+    { name: "Norway", capital: "Oslo", latitude: 59.9139, longitude: 10.7522 },
+    { name: "Denmark", capital: "Copenhagen", latitude: 55.6761, longitude: 12.5683 },
+    { name: "Greece", capital: "Athens", latitude: 37.9838, longitude: 23.7275 },
+    { name: "Portugal", capital: "Lisbon", latitude: 38.7223, longitude: -9.1393 },
+    { name: "Belgium", capital: "Brussels", latitude: 50.8503, longitude: 4.3517 },
+    { name: "Poland", capital: "Warsaw", latitude: 52.2297, longitude: 21.0122 },
+    { name: "Czech Republic", capital: "Prague", latitude: 50.0755, longitude: 14.4378 },
+    { name: "Hungary", capital: "Budapest", latitude: 47.4979, longitude: 19.0402 },
+    { name: "Finland", capital: "Helsinki", latitude: 60.1695, longitude: 24.9354 },
+    { name: "Ireland", capital: "Dublin", latitude: 53.3498, longitude: -6.2603 },
+    { name: "Romania", capital: "Bucharest", latitude: 44.4268, longitude: 26.1025 },
+    { name: "Turkey", capital: "Ankara", latitude: 39.9334, longitude: 32.8597 },
+    { name: "Ukraine", capital: "Kyiv", latitude: 50.4501, longitude: 30.5234 },
+    { name: "Serbia", capital: "Belgrade", latitude: 44.7866, longitude: 20.4489 },
+    { name: "Croatia", capital: "Zagreb", latitude: 45.8150, longitude: 15.9819 },
+    { name: "Bulgaria", capital: "Sofia", latitude: 42.6977, longitude: 23.3219 },
+    { name: "Slovakia", capital: "Bratislava", latitude: 48.1486, longitude: 17.1077 },
+    { name: "Lithuania", capital: "Vilnius", latitude: 54.6872, longitude: 25.2797 },
+    { name: "Latvia", capital: "Riga", latitude: 56.9496, longitude: 24.1052 },
+    { name: "Estonia", capital: "Tallinn", latitude: 59.4370, longitude: 24.7536 },
+    { name: "Slovenia", capital: "Ljubljana", latitude: 46.0569, longitude: 14.5058 },
+    { name: "Montenegro", capital: "Podgorica", latitude: 42.4304, longitude: 19.2594 },
+    { name: "Macedonia", capital: "Skopje", latitude: 41.9973, longitude: 21.4280 },
+    { name: "Luxembourg", capital: "Luxembourg City", latitude: 49.6116, longitude: 6.1319 },
+    { name: "Malta", capital: "Valletta", latitude: 35.8989, longitude: 14.5146 },
+    { name: "Andorra", capital: "Andorra la Vella", latitude: 42.5063, longitude: 1.5218 },
+    { name: "San Marino", capital: "San Marino", latitude: 43.9424, longitude: 12.4578 },
+    { name: "Liechtenstein", capital: "Vaduz", latitude: 47.1410, longitude: 9.5209 },
+    { name: "Monaco", capital: "Monaco", latitude: 43.7384, longitude: 7.4246 },
+    { name: "Vatican City", capital: "Vatican City", latitude: 41.9029, longitude: 12.4534 }
+];
+
+
