@@ -116,7 +116,7 @@ export default function Game() {
       setMessagesGame(prevMessages => [...prevMessages, payload]);
       console.log(players);
     } else if (payload.type === "START_COUNTDOWN") {
-      setCountdownDuration(1);
+      setCountdownDuration(10);
     }
   };
 
@@ -126,7 +126,7 @@ export default function Game() {
                     countdownDuration={countdownDuration} />;
     case "INGAME":
       return <Ingame round={round} onSendChat={sendChatMessageGame} messagesGame={messagesGame} players={players}
-                     game={game} updatePlayers={updatePlayers}/>;
+                     game={game} updatePlayers={updatePlayers} />;
     case "ENDGAME":
       return <Endgame game={game} players={players} />;
     default:
