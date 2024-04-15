@@ -21,24 +21,19 @@ function ProfilePage() {
   const [validName, setValidName] = useState(false);
   const [userFocus, setUserFocus] = useState(false);
 
-  const [pwd, setPwd] = useState("");
-  const [validPwd, setValidPwd] = useState("");
-  const [pwdFocus, setPwdFocus] = useState(false);
-
-  const [matchPwd, setMatchPwd] = useState("");
-  const [validMatch, setValidMatch] = useState(false);
-  const [matchFocus, setMatchFocus] = useState(false);
-
   const [errMsg, setErrMsg] = useState("");
   const [success, setSuccess] = useState("");
 
   const [showEditForm, setShowEditForm] = useState(false);
+
+  const [usernameError, setUsernameError] = useState("");
 
   useEffect(() => {
     async function fetchUser() {
       try {
         const response = await api.get(`/users/${id}`);
         setUser(response.data);
+        setUsername(response.data.username);
       } catch (error) {
         console.log(error);
       }
@@ -64,12 +59,18 @@ function ProfilePage() {
   
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validName) {
+      setErrMsg("Username should be at least 4 characters.");
+      return;
+    }
     
     try {
-      const requestBody = JSON.stringify({ username, pwd});
-      await api.put(`/users/${id}`, requestBody);
+      const requestBody = JSON.stringify({ username});
+      const response = await api.put(`/users/${id}`, requestBody);
+      // setUser({ ...user, username: response.data.username });
       localStorage.setItem("username", username);
       setShowEditForm(false);
+      setSuccess(true);
     } catch (err) {
         if (!err?.response) {
         setErrMsg("No Server Response");
@@ -80,7 +81,18 @@ function ProfilePage() {
       }
       errRef.current.focus;
     }
-    setSuccess(true);
+  };
+
+  const handleUsernameChange = (e) => {
+    const value = e.target.value;
+    setUsername(value);
+    if (value.length < 4) {
+      setValidName(false);
+      setUsernameError("Username should be at least 4 characters.");
+    } else {
+      setValidName(true);
+      setUsernameError("");
+    }
   };
 
   const checkStatus = () => {
@@ -149,59 +161,21 @@ function ProfilePage() {
                 id="username"
                 ref={userRef}
                 autoComplete="off"
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={handleUsernameChange}
                 required
                 aria-invalid={validName ? "false" : "true"}
                 aria-describedby="uidnote"
                 onFocus={() => setUserFocus(true)}
                 onBlur={() => setUserFocus(false)}
               />
-              <p id="uidnote" className={userFocus && username && !validName ? "instructions" : "offscreen"}>
-                Username has wrong format! (Needs at least 4 characters)
-              </p>
+              {!validName && <p id="uidnote" className={userFocus ? "instructions" : "offscreen"}>{usernameError}</p>}
             </div>
-            <div className="form-group mb-3">
-              <label htmlFor="password">Password</label>
-              <input
-                className="form-control"
-                type="password"
-                id="password"
-                onChange={(e) => setPwd(e.target.value)}
-                required
-                aria-invalid={validPwd ? "false" : "true"}
-                aria-describedby="pwdnote"
-                onFocus={() => setPwdFocus(true)}
-                onBlur={() => setPwdFocus(false)}
-              />
-              <p id="pwdnote" className={pwdFocus && pwd && !validPwd ? "instructions" : "offscreen"}>
-                Password has wrong format! (Needs at least 4 characters)
-              </p>
-            </div>
-            <div className="form-group mb-3">
-              <label htmlFor="confirm_pwd">Confirm password</label>
-              <input
-                className="form-control"
-                type="password"
-                id="confirm_pwd"
-                value={matchPwd}
-                onChange={(e) => setMatchPwd(e.target.value)}
-                required
-                aria-invalid={validMatch ? "false" : "true"}
-                aria-describedby="confirmnote"
-                onFocus={() => setMatchFocus(true)}
-                onBlur={() => setMatchFocus(false)}
-              />
-            </div>
-            <p id="confirmnote" className={matchFocus && matchPwd && !validMatch ? "instructions" : "offscreen"}>
-              Passwords don&apos;t match!
-            </p>
             <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
             <hr />
             <div className="row">
               <div className="col-6">
                 <button 
-                className="btn btn-danger mb-3 float-start"
-                disabled={!validName || !validPwd || !validMatch}>Save</button>
+                className="btn btn-danger mb-3 float-start">Save</button>
               </div>
               <div className="col-6">
                 <button 
