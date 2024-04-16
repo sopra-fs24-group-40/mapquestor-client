@@ -1,23 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Loader } from "@googlemaps/js-api-loader";
-import { getRandomCountry } from "../../../../assets/cities";
 import PropTypes from "prop-types";
 
-const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers, cityData}) => {
+const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers }) => {
   const [timer, setTimer] = useState(60);
-  const [location, setLocation] = useState(getRandomCountry());
+  const [location, setLocation] = useState(game.cities[round - 1]);
   const [currentMessage, setCurrentMessage] = useState("");
   const [leaderboard, setLeaderboard] = useState([]);
   const [pointsAssigned, setPointsAssigned] = useState(false); // New state variable
 
-  console.log(cityData);
-  // Function to update the leaderboard
   const updateLeaderboard = () => {
     const sortedPlayers = [...players].sort((a, b) => b.points - a.points);
     setLeaderboard(sortedPlayers);
   };
 
-  // Update leaderboard when players change
   useEffect(() => {
     updateLeaderboard();
   }, [players]);
@@ -25,13 +21,13 @@ const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers,
   const handleSendMessageInGame = () => {
     if (!currentMessage.trim()) return;
 
-    if (location && !pointsAssigned) { // Check if points are not already assigned
+    if (location && !pointsAssigned) {
       const cityName = location.name;
       if (currentMessage.toLowerCase() === cityName.toLowerCase()) {
         const points = timer;
         onSendChat(localStorage.getItem("username"), "Guessed the correct answer!", "CHAT_INGAME");
         addPoints(points);
-        setPointsAssigned(true); // Mark points as assigned
+        setPointsAssigned(true);
       } else {
         onSendChat(localStorage.getItem("username"), currentMessage, "CHAT_INGAME");
       }
@@ -58,8 +54,8 @@ const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers,
     let isMounted = true;
 
     const initializeMap = async () => {
-      const newLocation = getRandomCountry();
-      setLocation(newLocation); // Setze zuerst den neuen Standort
+      const newLocation = game.cities[round - 1];
+      setLocation(newLocation);
 
       const apiOptions = {
         apiKey: "AIzaSyDKZd3AoAgVQyvXXGptbGAnpmBBzLbXG0A",
@@ -259,9 +255,14 @@ InGame.propTypes = {
     maxPlayers: PropTypes.number.isRequired,
     roundCount: PropTypes.number.isRequired,
     gameType: PropTypes.string.isRequired,
+    cities: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      capital: PropTypes.string.isRequired,
+      longitude: PropTypes.number.isRequired,
+      latitude: PropTypes.number.isRequired,
+    }),
   }).isRequired,
   updatePlayers: PropTypes.func.isRequired,
-  cityData: PropTypes.object,
 };
 
 export default InGame;

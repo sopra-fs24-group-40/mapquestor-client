@@ -20,9 +20,7 @@ export default function Game() {
   const { id } = useParams();
   const [round, setRound] = useState(1);
   const navigate = useNavigate();
-  const [cityData, setCityData] = useState(null); // Add state for city data
 
-  console.log(cityData);
   useEffect(() => {
     const fetchGameDataAndSetupWebSocket = async () => {
       try {
@@ -37,8 +35,8 @@ export default function Game() {
           return;
         }
 
-
         setGame(gameData);
+        console.log("GameData", gameData);
         setPlayers(gameData.players || []);
 
         const socket = new SockJS(getDomain() + "/ws");
@@ -54,13 +52,6 @@ export default function Game() {
             const gameState = JSON.parse(message.body);
             setGamePhase(gameState.status);
           });
-
-          localStompClient.subscribe(`/topic/${id}/cityData`, (message) => {
-            const cityData = JSON.parse(message.body);
-            // Handle incoming city data from the backend
-            console.log(cityData);
-            setCityData(cityData);
-        });
 
           let joinMessage = { from: localStorage.getItem("token"), content: "Joined the Game!", type: "JOIN" };
           localStompClient.send(`/app/${id}/chat`, {}, JSON.stringify(joinMessage));
@@ -134,7 +125,7 @@ export default function Game() {
                     countdownDuration={countdownDuration} />;
     case "INGAME":
       return <Ingame round={round} onSendChat={sendChatMessageGame} messagesGame={messagesGame} players={players}
-                     game={game} updatePlayers={updatePlayers} cityData={cityData} />;
+                     game={game} updatePlayers={updatePlayers} />;
     case "ENDGAME":
       return <Endgame game={game} players={players} />;
     default:

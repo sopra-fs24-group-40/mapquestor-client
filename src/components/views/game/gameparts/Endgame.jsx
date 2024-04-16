@@ -111,7 +111,7 @@ Endgame.propTypes =
         token: PropTypes.string.isRequired,
         points: PropTypes.number.isRequired,
       }),
-    ).isRequired,
+    ),
     game: PropTypes.shape({
       gameCode: PropTypes.string.isRequired,
       playerCount: PropTypes.number.isRequired,
@@ -119,7 +119,7 @@ Endgame.propTypes =
       maxPlayers: PropTypes.number.isRequired,
       roundCount: PropTypes.number.isRequired,
       gameType: PropTypes.string.isRequired,
-    }).isRequired,
+    }),
   };
 
 export default Endgame;

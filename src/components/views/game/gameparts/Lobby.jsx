@@ -195,11 +195,11 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
 Lobby.propTypes = {
   onSendChat: PropTypes.func.isRequired,
   startGame: PropTypes.func.isRequired,
-  countdownDuration: PropTypes.any.isRequired,
+  countdownDuration: PropTypes.any,
   messages: PropTypes.arrayOf(
     PropTypes.shape({
       from: PropTypes.string.isRequired,
-      text: PropTypes.string.isRequired,
+      content: PropTypes.string.isRequired,
     }),
   ).isRequired,
   players: PropTypes.arrayOf(
@@ -210,7 +210,7 @@ Lobby.propTypes = {
     }),
   ).isRequired,
   game: PropTypes.shape({
-    creator: PropTypes.string.isRequired,
+    creator: PropTypes.string,
     maxPlayers: PropTypes.number.isRequired,
     roundCount: PropTypes.number.isRequired,
     gameType: PropTypes.string.isRequired,
