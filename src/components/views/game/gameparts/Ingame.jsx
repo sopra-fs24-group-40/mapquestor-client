@@ -3,13 +3,14 @@ import { Loader } from "@googlemaps/js-api-loader";
 import { getRandomCountry } from "../../../../assets/cities";
 import PropTypes from "prop-types";
 
-const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers }) => {
+const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers, cityData}) => {
   const [timer, setTimer] = useState(60);
   const [location, setLocation] = useState(getRandomCountry());
   const [currentMessage, setCurrentMessage] = useState("");
   const [leaderboard, setLeaderboard] = useState([]);
   const [pointsAssigned, setPointsAssigned] = useState(false); // New state variable
 
+  console.log(cityData);
   // Function to update the leaderboard
   const updateLeaderboard = () => {
     const sortedPlayers = [...players].sort((a, b) => b.points - a.points);
@@ -260,6 +261,7 @@ InGame.propTypes = {
     gameType: PropTypes.string.isRequired,
   }).isRequired,
   updatePlayers: PropTypes.func.isRequired,
+  cityData: PropTypes.object,
 };
 
 export default InGame;
