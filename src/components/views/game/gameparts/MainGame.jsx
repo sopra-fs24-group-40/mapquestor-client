@@ -53,6 +53,7 @@ export default function Game() {
             setGamePhase(gameState.status);
           });
 
+
           let joinMessage = { from: localStorage.getItem("token"), content: "Joined the Game!", type: "JOIN" };
           localStompClient.send(`/app/${id}/chat`, {}, JSON.stringify(joinMessage));
 
@@ -93,6 +94,8 @@ export default function Game() {
 
   const updatePlayers = (updatedPlayers) => {
     setPlayers(updatedPlayers);
+    const message = { from: localStorage.getItem("token"), content: updatedPlayers, type: "POINTS" };
+    stompClient && stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message));
   };
 
   const handleMessage = (payload) => {
@@ -113,6 +116,9 @@ export default function Game() {
       setMessagesGame(prevMessages => [...prevMessages, payload]);
     } else if (payload.type === "START_COUNTDOWN") {
       setCountdownDuration(1);
+    } else if (payload.type === "POINTS") {
+      setPlayers(payload.content);
+      console.log("Das sollten die neuen Spieler sein mashallah  ---> ", payload.content);
     }
   };
 
