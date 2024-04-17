@@ -22,12 +22,12 @@ const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers 
     if (!currentMessage.trim()) return;
 
     if (location && !pointsAssigned) {
+
       const cityName = location.name;
       if (currentMessage.toLowerCase() === cityName.toLowerCase()) {
-        const points = timer;
-        onSendChat(localStorage.getItem("username"), "Guessed the correct answer!", "CHAT_INGAME");
-        addPoints(points);
+        addPoints(timer);
         setPointsAssigned(true);
+        onSendChat(localStorage.getItem("username"), "Guessed the correct answer!", "CHAT_INGAME");
       } else {
         onSendChat(localStorage.getItem("username"), currentMessage, "CHAT_INGAME");
       }
@@ -38,7 +38,8 @@ const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers 
 
   const addPoints = (points) => {
     const updatedPlayers = players.map(player => {
-      if (player.username === localStorage.getItem("username")) {
+      if (player.token === localStorage.getItem("token")) {
+        console.log(`Updating points for ${player.username} from ${player.points} to ${player.points + points}`);
         return {
           ...player,
           points: player.points + points,
@@ -47,6 +48,7 @@ const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers 
         return player;
       }
     });
+    console.log("Updated players:", updatedPlayers);
     updatePlayers(updatedPlayers);
   };
 
