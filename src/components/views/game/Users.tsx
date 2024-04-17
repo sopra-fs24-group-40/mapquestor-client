@@ -21,7 +21,7 @@ const Player = ({ user }: { user: User }) => {
         <Link
           to={`/game/users/${user.id}`}
           className="text-decoration-none">
-          <span className={`fs-4`}>
+          <span className={"fs-4"}>
             {user.username}
           </span>
         </Link>
