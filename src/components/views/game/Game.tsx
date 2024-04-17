@@ -1,10 +1,62 @@
-import React from "react";
+import React, {useState} from "react";
 import "../../../styles/views/game.scss";
 import {useNavigate} from "react-router-dom";
+import {api} from "../../../helpers/api";
+
 
 const Game = () => {
 
   const navigate = useNavigate();
+  const [gameCode, setGameCode] = useState("");
+  const [token, setToken] = useState(localStorage.getItem("token"));
+  const [error, setError] = useState(null);
+
+  const doJoinGame = async () => {
+    try {
+
+      console.log("Joining game with code", gameCode, "and token", token);
+
+      const requestBody = JSON.stringify({gameCode, token});
+      const response = await api.post(`/games/${gameCode}/join`, requestBody);
+
+      console.log(response);
+
+      if (response.status === 200) {
+        console.log("Game joined successfully", response.data);
+        navigate(`/game/${gameCode}`);
+      }
+
+    } catch (error) {
+      console.error("Error joining the game:", error.response);
+      console.log(error)
+      setError("Error joining the game: " + (error.response?.data?.message || "Error joining the game!"));
+    }
+  };
+
+  // Eine Funktion, die eine Liste von aktiven Lobbies rendert
+  const renderActiveLobbies = () => {
+    // Annahme: activeLobbies ist ein Array von Objekten, jedes Objekt repräsentiert eine Lobby
+    const activeLobbies = [
+      {id: 1, name: "Lobby 1", details: "Details zur Lobby 1"},
+      {id: 2, name: "Lobby 2", details: "Details zur Lobby 2"},
+      {id: 3, name: "Lobby 3", details: "Details zur Lobby 3"},
+      {id: 4, name: "Lobby 4", details: "Details zur Lobby 4"},
+      {id: 5, name: "Lobby 5", details: "Details zur Lobby 5"},
+      {id: 6, name: "Lobby 6", details: "Details zur Lobby 6"},
+      // Weitere Lobbies können hinzugefügt werden
+    ];
+
+    // Iteriere über alle aktiven Lobbies und rendere sie
+    return activeLobbies.map(lobby => (
+      <div key={lobby.id} className="col-md-4 ml-4 mb-4">
+        <div className="lobby p-3">
+          <h3>{lobby.name}</h3>
+          <p>{lobby.details}</p>
+          <button className="join-button" onClick={() => doJoinGame(lobby.id)}>Join Now</button>
+        </div>
+      </div>
+    ));
+  };
 
   return (
     <div className="row">
@@ -59,6 +111,13 @@ const Game = () => {
         </div>
         <div className="button-wrapper">
           <button className="individual-button" onClick={() => navigate("/game/create")}>Create Game</button>
+        </div>
+      </div>
+      {/* Bereich für aktive Lobbies, renderActiveLobbies wird aufgerufen */}
+      <div className="activeLobbies col-md-12 mt-5 pb-0 pt-2">
+        <h2 className="p-2 mb-2 pb-0">Aktive Lobbies</h2>
+        <div className="row">
+          {renderActiveLobbies()}
         </div>
       </div>
     </div>
