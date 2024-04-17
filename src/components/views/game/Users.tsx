@@ -3,7 +3,6 @@ import { api } from "helpers/api";
 import { Link, useNavigate } from "react-router-dom";
 import User from "models/User";
 import "../../../styles/views/users.scss";
-import classNames from "classnames";
 
 const getStatusColor = (status) => {
   if (status === "ONLINE") {
@@ -14,10 +13,7 @@ const getStatusColor = (status) => {
 };
 
 const Player = ({ user }: { user: User }) => {
-  const statusColorClass = classNames({
-    "text-success": user.status === "ONLINE",
-    "text-danger": user.status === "OFFLINE",
-  });
+
   
   return (
     <div className="player container">
@@ -25,7 +21,7 @@ const Player = ({ user }: { user: User }) => {
         <Link
           to={`/game/users/${user.id}`}
           className="text-decoration-none">
-          <span className={`fs-4 ${statusColorClass}`}>
+          <span className={`fs-4`}>
             {user.username}
           </span>
         </Link>
