@@ -10,6 +10,7 @@ const Game = () => {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [error, setError] = useState(null);
   const [activeLobbies, setActiveLobbies] = useState([]);
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
     async function fetchGames() {
@@ -54,6 +55,44 @@ const Game = () => {
     }
   };
 
+  useEffect(() => {
+    async function fetchUsers() {
+      try {
+        const response = await api.get("/users");
+        setUsers(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    fetchUsers();
+  }, []);
+
+  const renderPlayerRow = (users) => {
+  
+    // Sort players by their wonGames in descending order
+  
+    const sortedPlayers = users.sort((a, b) => b.wonGames - a.wonGames);
+   
+    return sortedPlayers.map((player, index) => (
+  
+      <tr key={player.token}>
+  
+        <td className="fs-2">{index + 1}</td>
+  
+        <td className="fs-2">{player.username}</td>
+  
+        <td className="fs-2">{player.wonGames}</td>
+  
+      </tr>
+  
+    ));
+  
+  };
+  
+
+
   // Eine Funktion, die eine Liste von aktiven Lobbies rendert
   const renderActiveLobbies = (activeLobbies) => {
 
@@ -97,24 +136,20 @@ const Game = () => {
             </nav>
             <table id="rankings" className="leaderboard-results" width="100%">
               <thead>
-              <tr>
-                <th>Rank</th>
-                <th>Name</th>
-                <th>Wins</th>
-              </tr>
+                <tr>
+                  <th>Rank</th>
+                  <th>Name</th>
+                  <th>Wins</th>
+                </tr>
               </thead>
               <tbody className="text-center bg-transparent">
-              <tr>
-                <td style={{fontSize: "2em"}}>1</td>
-                <td style={{fontSize: "2em"}}>John Doe</td>
-                <td style={{fontSize: "2em"}}>100</td>
-              </tr>
+                {/* Render player rows directly within tbody */}
+                {renderPlayerRow(users)}
               </tbody>
             </table>
           </section>
         </div>
       </div>
-
       <div className="col-md-6 bg-transparent text-center mt-5">
         <div className="button-wrapper justify-content-center">
           <button className="individual-button" onClick={() => navigate("/game/users")}>All Users</button>
