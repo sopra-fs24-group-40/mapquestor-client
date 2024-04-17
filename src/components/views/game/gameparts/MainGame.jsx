@@ -98,6 +98,19 @@ export default function Game() {
     stompClient && stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message));
   };
 
+  const updateRound = (round) => {
+
+    const maxRounds = game.roundCount;
+    if (round > maxRounds) {
+      let message = { status: "ENDGAME" };
+      stompClient && stompClient.send(`/app/${id}/gameState`, {}, JSON.stringify(message));
+    } else {
+      setRound(round);
+    }
+
+  };
+
+
   const handleMessage = (payload) => {
     if (payload.type === "JOIN") {
       setPlayers(prevPlayers => {
@@ -128,7 +141,7 @@ export default function Game() {
                     countdownDuration={countdownDuration} />;
     case "INGAME":
       return <Ingame round={round} onSendChat={sendChatMessageGame} messagesGame={messagesGame} players={players}
-                     game={game} updatePlayers={updatePlayers} />;
+                     game={game} updatePlayers={updatePlayers} updateRound={updateRound} />;
     case "ENDGAME":
       return <Endgame game={game} players={players} />;
     default:

@@ -4,25 +4,7 @@ import {useNavigate} from "react-router-dom";
 import PropTypes from "prop-types";
 
 
-// TO BE DELETED
-let game;
-let players;
-
-players = [
-  {username: "John Doe", token: "ABCD", points: 100},
-  {username: "Jane Doe", token: "EFGH", points: 200},
-];
-
-game = {
-  creator: "John Doe",
-  gameCode: "ABCD",
-  gameType: "Singleplayer",
-  maxPlayers: 2,
-  playerCount: 2,
-  roundCount: 2,
-};
-
-function Endgame(/*{game , players}*/) {
+function Endgame({game , players}) {
 
   const navigate = useNavigate();
   const [creator, setCreator] = useState(false);
@@ -34,10 +16,8 @@ function Endgame(/*{game , players}*/) {
   }, [game.creator]);
 
   const renderPlayerRow = (players) => {
-    // Konvertiere die Spieler aus dem Objekt in ein Array
     const playerArray = Object.values(players);
 
-    // Sortiere die Spieler nach ihren Punkten in absteigender Reihenfolge
     const sortedPlayers = playerArray.sort((a, b) => b.points - a.points);
 
     return sortedPlayers.map((player, index) => (

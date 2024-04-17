@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Loader } from "@googlemaps/js-api-loader";
 import PropTypes from "prop-types";
 
-const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers }) => {
-  const [timer, setTimer] = useState(60);
+const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers, updateRound }) => {
+  const [timer, setTimer] = useState(10);
   const [location, setLocation] = useState(game.cities[round - 1]);
   const [currentMessage, setCurrentMessage] = useState("");
   const [leaderboard, setLeaderboard] = useState([]);
@@ -17,6 +17,21 @@ const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers 
   useEffect(() => {
     updateLeaderboard();
   }, [players]);
+
+  useEffect(() => {
+    let intervalId;
+    if (timer > 0) {
+      intervalId = setInterval(() => {
+        setTimer(timer - 1);
+      }, 1000);
+    } else if (timer === 0) {
+      clearInterval(intervalId);
+      updateRound(round + 1);
+      setTimer(10);
+      setPointsAssigned(false);
+    }
+    return () => clearInterval(intervalId);
+  }, [timer]);
 
   const handleSendMessageInGame = () => {
     if (!currentMessage.trim()) return;
@@ -101,7 +116,7 @@ const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers 
     return () => {
       isMounted = false;
     };
-  }, [round, game]);
+  }, [round]);
 
   const cityName = location.name;
   const numLetters = location.name.length;
@@ -159,13 +174,11 @@ const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers 
         <h1>In Game</h1>
 
         <div
-          className="timer-container"
-          style={{ position: "absolute" }}
-        >
-          Timer: {timer} seconds
+          className="timer-container mb-5">
+          Timer: {timer && timer} seconds <br />
+          Round: {round} / {game.roundCount}
         </div>
 
-        {/* Display the hint lines */}
         <div
           className="hint-lines-container"
           style={{ display: "flex", justifyContent: "center" }}
@@ -230,6 +243,7 @@ const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers 
 InGame.propTypes = {
   round: PropTypes.number.isRequired,
   onSendChat: PropTypes.func.isRequired,
+  updateRound: PropTypes.func.isRequired,
   messagesGame: PropTypes.arrayOf(
     PropTypes.shape({
       from: PropTypes.string.isRequired,
