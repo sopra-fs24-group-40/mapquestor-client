@@ -7,11 +7,10 @@ import {api} from "../../../helpers/api";
 const Game = () => {
 
   const navigate = useNavigate();
-  const [gameCode, setGameCode] = useState("");
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [error, setError] = useState(null);
 
-  const doJoinGame = async () => {
+  const doJoinGame = async (gameCode) => {
     try {
 
       console.log("Joining game with code", gameCode, "and token", token);
