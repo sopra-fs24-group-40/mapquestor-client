@@ -39,7 +39,6 @@ const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers 
   const addPoints = (points) => {
     const updatedPlayers = players.map(player => {
       if (player.token === localStorage.getItem("token")) {
-        console.log(`Updating points for ${player.username} from ${player.points} to ${player.points + points}`);
         return {
           ...player,
           points: player.points + points,
@@ -48,7 +47,6 @@ const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers 
         return player;
       }
     });
-    console.log("Updated players:", updatedPlayers);
     updatePlayers(updatedPlayers);
   };
 

@@ -46,7 +46,6 @@ export default function Game() {
           localStompClient.subscribe(`/topic/${id}/chat`, (message) => {
             const payload = JSON.parse(message.body);
             handleMessage(payload);
-            console.log("Received message for points --------->", payload);
           });
 
           localStompClient.subscribe(`/topic/${id}/gameState`, (message) => {
@@ -95,7 +94,8 @@ export default function Game() {
 
   const updatePlayers = (updatedPlayers) => {
     setPlayers(updatedPlayers);
-    stompClient && stompClient.send(localStorage.getItem("username"), updatedPlayers, "POINTS");
+    const message = { from: localStorage.getItem("token"), content: updatedPlayers, type: "POINTS" };
+    stompClient && stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message));
   };
 
   const handleMessage = (payload) => {
@@ -118,6 +118,7 @@ export default function Game() {
       setCountdownDuration(1);
     } else if (payload.type === "POINTS") {
       setPlayers(payload.content);
+      console.log("Das sollten die neuen Spieler sein mashallah  ---> ", payload.content);
     }
   };
 
