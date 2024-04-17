@@ -53,14 +53,6 @@ const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers 
   useEffect(() => {
     let isMounted = true;
 
-    console.log("MOUNTED");
-    console.log(game);
-    console.log(game.cities);
-    console.log(game.cities[0]);
-    console.log(game.cities[0].name);
-    console.log(game.cities[0].latitude);
-    console.log(game.cities[0].longitude);
-
     const initializeMap = async () => {
       if (!game || !game.cities || game.cities.length < round) {
         console.error("Invalid game data or round");
@@ -83,7 +75,7 @@ const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers 
         await loader.load();
         const streetView = new google.maps.StreetViewPanorama(
           document.getElementById("street-view"), {
-            position: { lat: newLocation.longitude, lng: newLocation.latitude },
+            position: { lat: newLocation.latitude, lng: newLocation.longitude },
             pov: { heading: 165, pitch: 0 },
             zoom: 1,
           },
