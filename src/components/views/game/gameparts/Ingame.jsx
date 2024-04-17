@@ -9,6 +9,8 @@ const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers 
   const [leaderboard, setLeaderboard] = useState([]);
   const [pointsAssigned, setPointsAssigned] = useState(false); // New state variable
 
+  console.log(location.latitude, location.longitude); 
+
   const updateLeaderboard = () => {
     const sortedPlayers = [...players].sort((a, b) => b.points - a.points);
     setLeaderboard(sortedPlayers);
@@ -255,7 +257,7 @@ InGame.propTypes = {
     maxPlayers: PropTypes.number.isRequired,
     roundCount: PropTypes.number.isRequired,
     gameType: PropTypes.string.isRequired,
-    cities: PropTypes.object({
+    cities: PropTypes.shape({
       name: PropTypes.string.isRequired,
       capital: PropTypes.string.isRequired,
       longitude: PropTypes.number.isRequired,
