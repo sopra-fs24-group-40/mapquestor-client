@@ -2,34 +2,37 @@ import React, { useState, useEffect } from "react";
 import { api } from "helpers/api";
 import { Link, useNavigate } from "react-router-dom";
 import User from "models/User";
+import "../../../styles/views/users.scss";
+import classNames from "classnames";
 
-const Player = ({ user }: { user: User }) => (
-  <div className="player container">
-    <div className="d-flex align-items-center">
-      <span className="me-2 fs-4 text-dark" style={{ textDecoration: "underline", color: "inherit" }}>username:</span>
-      <div className="player-username fs-4 text-dark">
+const getStatusColor = (status) => {
+  if (status === "ONLINE") {
+    return "text-success";
+  } else {
+    return "text-danger"
+  }
+};
+
+const Player = ({ user }: { user: User }) => {
+  const statusColorClass = classNames({
+    "text-success": user.status === "ONLINE",
+    "text-danger": user.status === "OFFLINE",
+  });
+  
+  return (
+    <div className="player container">
+      <div className="d-flex align-items-center">
         <Link
           to={`/game/users/${user.id}`}
-          className="text-decoration-none"
-          style={{ color: "inherit" }}
-        >
-          {user.username}
+          className="text-decoration-none">
+          <span className={`fs-4 ${statusColorClass}`}>
+            {user.username}
+          </span>
         </Link>
-      </div>
-      <div className="ms-2 fs-4 text-dark"> |</div>
-      <span className="ms-2 me-2 fs-4 text-dark" style={{ textDecoration: "underline", color: "inherit" }}>ID:</span>
-      <div className="player-id fs-4 text-dark">
-        <Link
-          to={`/game/users/${user.id}`}
-          className="text-decoration-none"
-          style={{ color: "inherit" }}
-        >
-          {user.id}
-        </Link>
-      </div>
     </div>
   </div>
-);
+  );
+};
 
 function Users() {
   const [users, setUsers] = useState([]);
@@ -49,21 +52,18 @@ function Users() {
     fetchUsers();
   }, []);
 
-  if (users) {
-
-  }
-
   return (
     <div className="row justify-content-center">
       <div className="col-md-4 bg-light mt-3 border rounded">
         <h1 className="text-center p-2">All Users</h1>
-        <ul>
+        <div className="d-flex flex-column align-items-center">
           {users.map((user: User) => (
-            <li key={user.id}>
-              <Link to={`/game/users/${user.id}`}><Player user={user} /></Link>
-            </li>
+            <div key={user.id}>
+              <Link to={`/game/users/${user.id}`}
+              className="text-decoration-none"><Player user={user} /></Link>
+            </div>
           ))}
-        </ul>
+        </div>
         <button
           className="btn btn-danger mb-3" onClick={() => navigate("/game")}>Back
         </button>

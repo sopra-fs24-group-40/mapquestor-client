@@ -3,6 +3,7 @@ import { api } from "helpers/api";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import User from "models/User";
 import avatar from "../../../assets/avatar.png";
+import Fett from "../../../assets/Fett.png";
 
 const USER_REGEX = /^.{4,}$/;
 const PWD_REGEX = /^.{4,}$/;
@@ -25,6 +26,7 @@ function ProfilePage() {
   const [success, setSuccess] = useState("");
 
   const [showEditForm, setShowEditForm] = useState(false);
+  const [selectedAvatar, setSelectedAvatar] = useState  (null);
 
   const [usernameError, setUsernameError] = useState("");
 
@@ -34,6 +36,7 @@ function ProfilePage() {
         const response = await api.get(`/users/${id}`);
         setUser(response.data);
         setUsername(response.data.username);
+        setSelectedAvatar(response.data.avatar || avatar);
       } catch (error) {
         console.log(error);
       }
@@ -56,7 +59,10 @@ function ProfilePage() {
   //   return user.avatar ? user.avatar : avatar;
   // };
 
-  
+  const handleAvatarChange = (avatar) => {
+    setSelectedAvatar(avatar);
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validName) {
@@ -113,6 +119,8 @@ function ProfilePage() {
     }
   };
 
+  const avatarOptions = [avatar, Fett];
+
   return (
     <div className="row">
       <div className="col bg-light mt-3 border rounded">
@@ -131,10 +139,22 @@ function ProfilePage() {
         </div>
         <h1 className="text-center">{user.username}</h1>
         <p className="text-center">#{user.id}</p>
-        <figure className="container-avatar">
-          <img src={avatar} width={200} /></figure>
+        <img src={selectedAvatar} alt="Selected Avatar" className="img-fluid mx-auto d-block" />
+        <div className="avatar-options d-flex justify-content-center">
+          {avatarOptions.map((avatar, index) => (
+            <img
+              key={index}
+              src={avatar}
+              alt={`Avatar ${index + 1}`}
+              className={selectedAvatar === avatar ? "selected" : ""}
+              onClick={() => handleAvatarChange(index)}
+            />
+          ))}
+        </div>
+        {/* <figure className="container-avatar">
+          <img src={avatar} width={200} /></figure> */}
       <div className="text-center">
-        <h2><span className={checkStatus()}>{user.status}</span> | POINTS:</h2>
+        <h2><span className={checkStatus()}>{user.status}</span> | WINS:</h2>
         {/* <ul>
           {userGames.map((game) => (
             <li key={game.id}>
@@ -146,7 +166,7 @@ function ProfilePage() {
           <button 
             className="btn btn-primary mb-3 d-flex" 
             onClick={() => setShowEditForm(true)}
-            disabled={checkUser()}>Edit</button>
+            disabled={!checkUser()}>Edit</button>
           <button className="btn btn-danger mb-3 d-flex" onClick={() => navigate("/game/users")}>Back</button>
         </div>
       </div>
