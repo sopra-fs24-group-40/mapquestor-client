@@ -70,7 +70,6 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
   const handleUpdateGameSettings = (e) => {
     e.preventDefault();
     //api request
-    console.log(`Updating game settings: Type: ${gameType}, Max Players: ${maxPlayers}, Round Count: ${roundCount}`);
     setShowEditForm(false);
   };
 

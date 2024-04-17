@@ -105,17 +105,14 @@ export default function Game() {
           return prevPlayers;
         }
       });
-      console.log(players);
     } else if (payload.type === "LEAVE") {
       setPlayers(prevPlayers => prevPlayers.filter(player => player.username !== payload.from));
     } else if (payload.type === "CHAT") {
       setMessages(prevMessages => [...prevMessages, payload]);
-      console.log(players);
     } else if (payload.type === "CHAT_INGAME") {
       setMessagesGame(prevMessages => [...prevMessages, payload]);
-      console.log(players);
     } else if (payload.type === "START_COUNTDOWN") {
-      setCountdownDuration(10);
+      setCountdownDuration(1);
     }
   };
 

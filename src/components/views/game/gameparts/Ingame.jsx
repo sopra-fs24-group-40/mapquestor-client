@@ -9,8 +9,6 @@ const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers 
   const [leaderboard, setLeaderboard] = useState([]);
   const [pointsAssigned, setPointsAssigned] = useState(false); // New state variable
 
-  console.log(location.latitude, location.longitude); 
-
   const updateLeaderboard = () => {
     const sortedPlayers = [...players].sort((a, b) => b.points - a.points);
     setLeaderboard(sortedPlayers);
@@ -55,9 +53,26 @@ const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers 
   useEffect(() => {
     let isMounted = true;
 
+    console.log("MOUNTED");
+    console.log(game);
+    console.log(game.cities);
+    console.log(game.cities[0]);
+    console.log(game.cities[0].name);
+    console.log(game.cities[0].latitude);
+    console.log(game.cities[0].longitude);
+
     const initializeMap = async () => {
+      if (!game || !game.cities || game.cities.length < round) {
+        console.error("Invalid game data or round");
+        return;
+      }
       const newLocation = game.cities[round - 1];
       setLocation(newLocation);
+
+      if (!newLocation || !newLocation.latitude || !newLocation.longitude) {
+        console.error("Invalid location data");
+        return;
+      }
 
       const apiOptions = {
         apiKey: "AIzaSyDKZd3AoAgVQyvXXGptbGAnpmBBzLbXG0A",
@@ -68,7 +83,7 @@ const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers 
         await loader.load();
         const streetView = new google.maps.StreetViewPanorama(
           document.getElementById("street-view"), {
-            position: { lat: newLocation.latitude, lng: newLocation.longitude },
+            position: { lat: newLocation.longitude, lng: newLocation.latitude },
             pov: { heading: 165, pitch: 0 },
             zoom: 1,
           },
@@ -79,11 +94,9 @@ const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers 
           navigationControlOptions: {
             enableArrowKeys: true,
           },
-          showRoadLabels: false, // Disable street names
-          linksControl: false, // Disable Google Maps links
+          showRoadLabels: false,
+          linksControl: false,
         });
-
-
       } catch (error) {
         console.error("Error loading Google Maps API:", error);
       }
@@ -93,23 +106,10 @@ const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers 
       initializeMap();
     }
 
-    const intervalId = setInterval(() => {
-      setTimer(prevTimer => {
-        if (prevTimer > 0) {
-          return prevTimer - 1;
-        } else {
-          clearInterval(intervalId);
-          return 0;
-        }
-      });
-    }, 1000);
-
-    // Cleanup function
     return () => {
       isMounted = false;
-      clearInterval(intervalId);
     };
-  }, [round]);
+  }, [round, game]);
 
   const cityName = location.name;
   const numLetters = location.name.length;
@@ -181,8 +181,7 @@ const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers 
           {hintLines}
         </div>
 
-        {/* Display the Street View */}
-        <div id="street-view" style={{ width: "100%", height: "350px" }}></div>
+        <div id="street-view" style={{ width: "100%", height: "400px" }}></div>
 
         <div className="button-wrapper">
           <button className="individual-button" style={{ fontSize: "20px" }}>
@@ -257,12 +256,12 @@ InGame.propTypes = {
     maxPlayers: PropTypes.number.isRequired,
     roundCount: PropTypes.number.isRequired,
     gameType: PropTypes.string.isRequired,
-    cities: PropTypes.shape({
+    cities: PropTypes.arrayOf(PropTypes.shape({
       name: PropTypes.string.isRequired,
       capital: PropTypes.string.isRequired,
       longitude: PropTypes.number.isRequired,
       latitude: PropTypes.number.isRequired,
-    }),
+    })).isRequired,
   }).isRequired,
   updatePlayers: PropTypes.func.isRequired,
 };
