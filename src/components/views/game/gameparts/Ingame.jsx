@@ -255,7 +255,7 @@ InGame.propTypes = {
     maxPlayers: PropTypes.number.isRequired,
     roundCount: PropTypes.number.isRequired,
     gameType: PropTypes.string.isRequired,
-    cities: PropTypes.shape({
+    cities: PropTypes.object({
       name: PropTypes.string.isRequired,
       capital: PropTypes.string.isRequired,
       longitude: PropTypes.number.isRequired,
