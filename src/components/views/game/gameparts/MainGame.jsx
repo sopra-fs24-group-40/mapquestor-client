@@ -123,6 +123,7 @@ export default function Game() {
       });
     } else if (payload.type === "LEAVE") {
       setPlayers(prevPlayers => prevPlayers.filter(player => player.token !== payload.from));
+      setMessagesGame(prevMessages => [...prevMessages, payload]);
     } else if (payload.type === "CHAT") {
       setMessages(prevMessages => [...prevMessages, payload]);
     } else if (payload.type === "CHAT_INGAME") {
