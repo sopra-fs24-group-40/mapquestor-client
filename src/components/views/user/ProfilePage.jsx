@@ -12,7 +12,7 @@ function ProfilePage() {
   const navigate = useNavigate();
   const [user, setUser] = useState(new User());
   const [userGames, setUserGames] = useState([]);
-  const logged_id = localStorage.getItem("userId");
+  const logged_id = localStorage.getItem("id");
   const { id } = useParams();
 
   const userRef = useRef();
@@ -26,7 +26,7 @@ function ProfilePage() {
   const [success, setSuccess] = useState("");
 
   const [showEditForm, setShowEditForm] = useState(false);
-  const [selectedAvatar, setSelectedAvatar] = useState  (null);
+  const [selectedAvatar, setSelectedAvatar] = useState(user.avatar || avatar);
 
   const [usernameError, setUsernameError] = useState("");
 
@@ -36,7 +36,7 @@ function ProfilePage() {
         const response = await api.get(`/users/${id}`);
         setUser(response.data);
         setUsername(response.data.username);
-        setSelectedAvatar(response.data.avatar || avatar);
+        setSelectedAvatar(response.data.avatar ? response.data.avatar : avatar);
       } catch (error) {
         console.log(error);
       }
@@ -71,9 +71,9 @@ function ProfilePage() {
     }
     
     try {
-      const requestBody = JSON.stringify({ username});
+      const requestBody = JSON.stringify({ username });
       const response = await api.put(`/users/${id}`, requestBody);
-      // setUser({ ...user, username: response.data.username });
+      setUser({ ...user, username: username });
       localStorage.setItem("username", username);
       setShowEditForm(false);
       setSuccess(true);
@@ -119,7 +119,15 @@ function ProfilePage() {
     }
   };
 
+  const resetForm = () => {
+    setUsername(user.username);
+    setValidName(true);
+    setUsernameError("");
+  };
+
   const avatarOptions = [avatar, Fett];
+
+  console.log(logged_id, id)
 
   return (
     <div className="row">
@@ -139,20 +147,8 @@ function ProfilePage() {
         </div>
         <h1 className="text-center">{user.username}</h1>
         <p className="text-center">#{user.id}</p>
-        <img src={selectedAvatar} alt="Selected Avatar" className="img-fluid mx-auto d-block" />
-        <div className="avatar-options d-flex justify-content-center">
-          {avatarOptions.map((avatar, index) => (
-            <img
-              key={index}
-              src={avatar}
-              alt={`Avatar ${index + 1}`}
-              className={selectedAvatar === avatar ? "selected" : ""}
-              onClick={() => handleAvatarChange(index)}
-            />
-          ))}
-        </div>
-        {/* <figure className="container-avatar">
-          <img src={avatar} width={200} /></figure> */}
+        <figure className="container-avatar">
+          <img src={avatar} width={200} /></figure>
       <div className="text-center">
         <h2><span className={checkStatus()}>{user.status}</span> | WINS:</h2>
         {/* <ul>
@@ -165,7 +161,10 @@ function ProfilePage() {
         <div className="d-flex justify-content-between align-items-center">
           <button 
             className="btn btn-primary mb-3 d-flex" 
-            onClick={() => setShowEditForm(true)}
+            onClick={() => {
+              resetForm();
+              setShowEditForm(true);
+            }}
             disabled={!checkUser()}>Edit</button>
           <button className="btn btn-danger mb-3 d-flex" onClick={() => navigate("/game/users")}>Back</button>
         </div>
@@ -189,6 +188,9 @@ function ProfilePage() {
                 onBlur={() => setUserFocus(false)}
               />
               {!validName && <p id="uidnote" className={userFocus ? "instructions" : "offscreen"}>{usernameError}</p>}
+              <div className="col mt-3 d-flex justify-content-center">
+              <button className="btn btn-primary">Change Avatar</button>
+              </div>
             </div>
             <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
             <hr />
@@ -202,6 +204,17 @@ function ProfilePage() {
                 className="btn btn-danger mb-3 float-end" 
                 onClick={() => setShowEditForm(false)}>Exit</button>
               </div>
+            </div>
+            <div className="avatar-options">
+              {avatarOptions.map((option, index) => (
+                <img
+                  key={index}
+                  src={option}
+                  alt={`Avatar Option ${index + 1}`}
+                  className={selectedAvatar === option ? "selected" : ""}
+                  onClick={() => setSelectedAvatar(option)}
+                />
+              ))}
             </div>
           </form>
         )}
