@@ -4,6 +4,11 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import User from "models/User";
 import avatar from "../../../assets/avatar.png";
 import Fett from "../../../assets/Fett.png";
+import Vader from "../../../assets/Vader.png";
+import C3PO from "../../../assets/C3PO.png";
+import Clone from "../../../assets/Clone.png";
+import Ren from "../../../assets/Ren.png";
+import Stormtrooper from "../../../assets/Stormtrooper.png";
 
 const USER_REGEX = /^.{4,}$/;
 const PWD_REGEX = /^.{4,}$/;
@@ -71,9 +76,9 @@ function ProfilePage() {
     }
     
     try {
-      const requestBody = JSON.stringify({ username });
+      const requestBody = JSON.stringify({ username, avatar: selectedAvatar });
       const response = await api.put(`/users/${id}`, requestBody);
-      setUser({ ...user, username: username });
+      setUser({ ...user, username: username, avatar: selectedAvatar });
       localStorage.setItem("username", username);
       setShowEditForm(false);
       setSuccess(true);
@@ -125,7 +130,7 @@ function ProfilePage() {
     setUsernameError("");
   };
 
-  const avatarOptions = [avatar, Fett];
+  const avatarOptions = [Fett, Vader, C3PO, Clone, Ren, Stormtrooper];
 
   console.log(logged_id, id)
 
@@ -207,13 +212,20 @@ function ProfilePage() {
             </div>
             <div className="avatar-options">
               {avatarOptions.map((option, index) => (
+                <div key={index} className="avatar-option">
                 <img
-                  key={index}
                   src={option}
+                  width={200}
                   alt={`Avatar Option ${index + 1}`}
                   className={selectedAvatar === option ? "selected" : ""}
-                  onClick={() => setSelectedAvatar(option)}
                 />
+                <button
+                  className="btn btn-primary"
+                  onClick={() => setSelectedAvatar(option)}
+                >
+                  Choose
+                </button>
+              </div>
               ))}
             </div>
           </form>
