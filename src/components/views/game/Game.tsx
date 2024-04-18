@@ -26,7 +26,7 @@ const Game = () => {
         setActiveLobbies(lobbies);
         console.log(lobbies);
       } catch (error) {
-        console.error('Error fetching games:', error);
+        console.error("Error fetching games:", error);
       }
     }
 
@@ -91,7 +91,6 @@ const Game = () => {
   
   };
   
-
 
   // Eine Funktion, die eine Liste von aktiven Lobbies rendert
   const renderActiveLobbies = (activeLobbies) => {
