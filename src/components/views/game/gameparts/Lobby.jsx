@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import countdowns from "../../../../assets/countdowns.mp3";
+import {useNavigate} from "react-router-dom";
 
 function Lobby({ startGame, onSendChat, messages, players, game, countdownDuration }) {
   const [currentMessage, setCurrentMessage] = useState("");
@@ -11,6 +12,7 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
   const [maxPlayers, setMaxPlayers] = useState(game.maxPlayers);
   const [roundCount, setRoundCount] = useState(game.roundCount);
   const [showEditForm, setShowEditForm] = useState(false);
+  const navigate = useNavigate();
 
 
   useEffect(() => {
@@ -60,7 +62,7 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
   };
 
   const handleLeaveGame = () => {
-    console.log("Spiel verlassen (Logik noch zu implementieren)");
+    onSendChat(localStorage.getItem("token"), "Left the match!", "LEAVE");
   };
 
   const handleStartCountdown = () => {
@@ -72,7 +74,7 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
     //api request
     setShowEditForm(false);
   };
-
+  // console.log(localStorage.getItem());
   return (
     <div className="row justify-content-center mt-5">
       <div className="col-md-3">
@@ -132,7 +134,8 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
                   </button>
                 )
               )}
-              <button className="btn btn-secondary mt-3" onClick={handleLeaveGame}>Leave Game</button>
+              <button className="btn btn-secondary mt-3" onClick={() => {handleLeaveGame(); navigate("/game")}}>Leave Game</button>
+
               <button
                 onClick={() => setShowEditForm(!showEditForm)}
                 className="btn btn-warning mt-3 d-flex justify-content-end"
