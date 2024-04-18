@@ -22,6 +22,18 @@ export default function Game() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      sendChatMessage(localStorage.getItem("username"), "Left the Game!", "LEAVE");
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
+  useEffect(() => {
     const fetchGameDataAndSetupWebSocket = async () => {
       try {
         const response = await api.get(`/games/${id}`);
