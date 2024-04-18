@@ -5,6 +5,7 @@ import "../../styles/views/game.scss";
 import logo from "../../assets/logo.png";
 import avatar from "../../assets/avatar.png";
 import { api, handleError } from "helpers/api";
+import User from "models/User";
 
 function GameLayout(props) {
   const navigate = useNavigate();
@@ -46,7 +47,7 @@ function GameLayout(props) {
           <div className="col-auto p-3">
             <figure className="container-avatar">
               <img src={avatar} width={50}/></figure>
-            <button onClick={() => navigate("/game/edit")}>My Profile</button>
+            <button onClick={() => navigate(`/game/users/${User.id}`)}>My Profile</button>
           </div>
           <div className="col-auto">
             <button className="btn btn-danger" onClick={() => logout()}>Logout</button>
