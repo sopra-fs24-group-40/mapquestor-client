@@ -14,6 +14,7 @@ const getStatusColor = (status) => {
 
 const Player = ({ user }: { user: User }) => {
 
+  const statusColorClass = getStatusColor(user.status);
   
   return (
     <div className="player container">
@@ -21,7 +22,7 @@ const Player = ({ user }: { user: User }) => {
         <Link
           to={`/game/users/${user.id}`}
           className="text-decoration-none">
-          <span className={"fs-4"}>
+          <span className={`fs-4 ${statusColorClass}`}>
             {user.username}
           </span>
         </Link>
