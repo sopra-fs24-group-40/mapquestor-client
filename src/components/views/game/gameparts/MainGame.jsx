@@ -21,17 +21,6 @@ export default function Game() {
   const [round, setRound] = useState(1);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const handleBeforeUnload = (event) => {
-      sendChatMessage(localStorage.getItem("username"), "Left the Game!", "LEAVE");
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, []);
 
   useEffect(() => {
     const fetchGameDataAndSetupWebSocket = async () => {
@@ -81,10 +70,29 @@ export default function Game() {
 
     fetchGameDataAndSetupWebSocket();
 
+    const handleUnload = (event) => {
+      event.preventDefault();
+      event.returnValue = "";
+
+      if (stompClient) {
+        const leaveMessage = {
+          from: localStorage.getItem("username") || "unknown",
+          content: "Left the game",
+          type: "LEAVE",
+        };
+        stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(leaveMessage));
+      }
+    };
+
+    window.addEventListener("beforeunload", handleUnload);
+
+
     return () => {
       if (stompClient) {
         stompClient.disconnect();
       }
+      window.removeEventListener("beforeunload", handleUnload);
+
     };
   }, [id]);
 
@@ -135,7 +143,7 @@ export default function Game() {
       });
     } else if (payload.type === "LEAVE") {
       setPlayers(prevPlayers => prevPlayers.filter(player => player.token !== payload.from));
-      setMessagesGame(prevMessages => [...prevMessages, payload]);
+      setMessages(prevMessages => [...prevMessages, payload]);
     } else if (payload.type === "CHAT") {
       setMessages(prevMessages => [...prevMessages, payload]);
     } else if (payload.type === "CHAT_INGAME") {
