@@ -5,8 +5,6 @@ import User from "models/User";
 import "../../../styles/views/users.scss";
 import { Spinner } from "./gameparts/Spinner.jsx";
 
-const [isLoading, setIsLoading] = useState(true);
-
 const getStatusColor = (status) => {
   if (status === "ONLINE") {
     return "text-success";
@@ -37,7 +35,7 @@ const Player = ({ user }: { user: User }) => {
 function Users() {
   const [users, setUsers] = useState([]);
   const navigate = useNavigate();
-
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     async function fetchUsers() {
       setIsLoading(true);

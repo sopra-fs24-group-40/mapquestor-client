@@ -93,9 +93,6 @@ const Game = () => {
       </tr>
     ));
   };
-
-  
-
   // Eine Funktion, die eine Liste von aktiven Lobbies rendert
   const renderActiveLobbies = (activeLobbies) => {
 
