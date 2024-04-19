@@ -3,6 +3,9 @@ import { api } from "helpers/api";
 import { Link, useNavigate } from "react-router-dom";
 import User from "models/User";
 import "../../../styles/views/users.scss";
+import { Spinner } from "./gameparts/Spinner.jsx";
+
+const [isLoading, setIsLoading] = useState(true);
 
 const getStatusColor = (status) => {
   if (status === "ONLINE") {
@@ -37,12 +40,15 @@ function Users() {
 
   useEffect(() => {
     async function fetchUsers() {
+      setIsLoading(true);
       try {
         const response = await api.get("/users");
         setUsers(response.data);
         console.log(response.data);
       } catch (error) {
         console.error(error);
+      } finally {
+        setIsLoading(false);
       }
     }
 
@@ -54,12 +60,16 @@ function Users() {
       <div className="col-md-4 bg-light mt-3 border rounded">
         <h1 className="text-center p-2">All Users</h1>
         <div className="d-flex flex-column align-items-center">
-          {users.map((user: User) => (
-            <div key={user.id}>
-              <Link to={`/game/users/${user.id}`}
-              className="text-decoration-none"><Player user={user} /></Link>
-            </div>
-          ))}
+          {isLoading ? (
+            <Spinner />
+          ) : (
+            users.map((user: User) => (
+              <div key={user.id}>
+                <Link to={`/game/users/${user.id}`}
+                  className="text-decoration-none"><Player user={user} /></Link>
+              </div>
+          ))
+        )}
         </div>
         <button
           className="btn btn-danger mb-3" onClick={() => navigate("/game")}>Back

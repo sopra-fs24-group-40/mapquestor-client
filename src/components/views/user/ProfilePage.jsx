@@ -9,6 +9,7 @@ import C3PO from "../../../assets/C3PO.png";
 import Clone from "../../../assets/Clone.png";
 import Ren from "../../../assets/Ren.png";
 import Stormtrooper from "../../../assets/Stormtrooper.png";
+import { Spinner } from "../game/gameparts/Spinner.jsx";
 
 const USER_REGEX = /^.{4,}$/;
 const PWD_REGEX = /^.{4,}$/;
@@ -16,7 +17,6 @@ const PWD_REGEX = /^.{4,}$/;
 function ProfilePage() {
   const navigate = useNavigate();
   const [user, setUser] = useState(new User());
-  const [userGames, setUserGames] = useState([]);
   const logged_id = localStorage.getItem("id");
   const { id } = useParams();
 
@@ -35,8 +35,11 @@ function ProfilePage() {
 
   const [usernameError, setUsernameError] = useState("");
 
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     async function fetchUser() {
+      setIsLoading(true);
       try {
         const response = await api.get(`/users/${id}`);
         setUser(response.data);
@@ -44,29 +47,12 @@ function ProfilePage() {
         setSelectedAvatar(response.data.avatar ? response.data.avatar : avatar);
       } catch (error) {
         console.log(error);
+      } finally {
+        setIsLoading(false);
       }
     }
-
-    // async function fetchUserGames() {
-    //   try {
-    //     const response = await api.get("/users/" + localStorage.getItem("id") + "/games");
-    //     setUserGames(response.data);
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // }
-
     fetchUser();
-    // fetchUserGames();
   }, [id]);
-
-  // const getAvatar = () => {
-  //   return user.avatar ? user.avatar : avatar;
-  // };
-
-  const handleAvatarChange = (avatar) => {
-    setSelectedAvatar(avatar);
-  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -132,11 +118,13 @@ function ProfilePage() {
 
   const avatarOptions = [Fett, Vader, C3PO, Clone, Ren, Stormtrooper];
 
-  console.log(logged_id, id)
-
   return (
     <div className="row">
       <div className="col bg-light mt-3 border rounded">
+        {isLoading ? (
+          <Spinner />
+        ) : (
+          <>
         <div className="col mt-3 d-flex justify-content-end"><select>
           <option>All Modes</option>
           <option>City-Mode</option>
@@ -155,7 +143,7 @@ function ProfilePage() {
         <figure className="container-avatar">
           <img src={avatar} width={200} /></figure>
       <div className="text-center">
-        <h2><span className={checkStatus()}>{user.status}</span> | WINS:</h2>
+        <h2><span className={checkStatus()}>{user.status}</span> | WINS: {user.wonGames}</h2>
         {/* <ul>
           {userGames.map((game) => (
             <li key={game.id}>
@@ -231,6 +219,8 @@ function ProfilePage() {
           </form>
         )}
       </div>
+      </>
+        )}
       </div>
     </div>
   );
