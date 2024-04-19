@@ -11,6 +11,7 @@ const Game = () => {
   const [error, setError] = useState(null);
   const [activeLobbies, setActiveLobbies] = useState([]);
   const [users, setUsers] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     async function fetchGames() {
@@ -69,27 +70,30 @@ const Game = () => {
     fetchUsers();
   }, []);
 
-  const renderPlayerRow = (users) => {
-  
-    // Sort players by their wonGames in descending order
-  
-    const sortedPlayers = users.sort((a, b) => b.wonGames - a.wonGames);
-   
-    return sortedPlayers.map((player, index) => (
-  
-      <tr key={player.token}>
-  
-        <td className="fs-2">{index + 1}</td>
-  
-        <td className="fs-2">{player.username}</td>
-  
-        <td className="fs-2">{player.wonGames}</td>
-  
-      </tr>
-  
-    ));
-  
+  const handleSearchInputChange = (event) => {
+    setSearchQuery(event.target.value);
   };
+
+  const renderPlayerRow = (users) => {
+    // Filter players based on searchQuery if it's not empty
+    const filteredPlayers = searchQuery
+      ? users.filter((player) =>
+          player.username.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      : users;
+
+    // Sort players by their wonGames in descending order
+    const sortedPlayers = filteredPlayers.sort((a, b) => b.wonGames - a.wonGames);
+
+    return sortedPlayers.map((player, index) => (
+      <tr key={player.token}>
+        <td className="fs-2">{index + 1}</td>
+        <td className="fs-2">{player.username}</td>
+        <td className="fs-2">{player.wonGames}</td>
+      </tr>
+    ));
+  };
+
   
 
   // Eine Funktion, die eine Liste von aktiven Lobbies rendert
@@ -119,6 +123,12 @@ const Game = () => {
                 <h1>Leaderboard</h1>
               </div>
               <div className="ladder-search">
+              <input
+                  type="text"
+                  placeholder="Search by username..."
+                  value={searchQuery}
+                  onChange={handleSearchInputChange}
+                />
                 <select className="dropdown">
                   <option value="All Modes">All Modes</option>
                   <option value="City-Mode">City-Mode</option>
