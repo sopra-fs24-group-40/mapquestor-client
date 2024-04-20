@@ -4,7 +4,7 @@ import {useNavigate} from "react-router-dom";
 import PropTypes from "prop-types";
 
 
-function Endgame({game , players}) {
+function Endgame({game ,onSendChat, messages, players}) {
 
   const navigate = useNavigate();
   const [creator, setCreator] = useState(false);
@@ -27,6 +27,10 @@ function Endgame({game , players}) {
         <td className="fs-2">{player.points}</td>
       </tr>
     ));
+  };
+
+  const handleLeaveGame = () => {
+    onSendChat(localStorage.getItem("token"), "Left the match!", "LEAVE");
   };
 
 
@@ -76,7 +80,7 @@ function Endgame({game , players}) {
           <button className="individual-button1" onClick={() => handlePlayAgain()}>Play Again</button>
         </div>
         <div className="button-wrapper">
-          <button className="individual-button2" onClick={() => navigate("/game")}>Main Menu</button>
+          <button className="individual-button2" onClick={() => {handleLeaveGame(); navigate("/game")}}>Main Menu</button>
         </div>
       </div>
     </div>
@@ -85,6 +89,13 @@ function Endgame({game , players}) {
 
 Endgame.propTypes =
   {
+    onSendChat: PropTypes.func.isRequired,
+    messages: PropTypes.arrayOf(
+      PropTypes.shape({
+        from: PropTypes.string.isRequired,
+        content: PropTypes.string.isRequired,
+      }),
+    ).isRequired,
     players: PropTypes.arrayOf(
       PropTypes.shape({
         username: PropTypes.string.isRequired,

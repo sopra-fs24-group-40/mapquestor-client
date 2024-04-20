@@ -164,7 +164,7 @@ export default function Game() {
       return <Ingame round={round} onSendChat={sendChatMessageGame} messagesGame={messagesGame} players={players}
                      game={game} updatePlayers={updatePlayers} updateRound={updateRound} />;
     case "ENDGAME":
-      return <Endgame game={game} players={players} />;
+      return <Endgame game={game} onSendChat={sendChatMessage} messages={messages} players={players} />;
     default:
       return <div>Lade...</div>;
   }
