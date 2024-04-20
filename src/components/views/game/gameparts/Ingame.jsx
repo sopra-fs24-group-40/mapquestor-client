@@ -3,11 +3,13 @@ import { Loader } from "@googlemaps/js-api-loader";
 import PropTypes from "prop-types";
 
 const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers, updateRound }) => {
-  const [timer, setTimer] = useState(10);
+  const [timer, setTimer] = useState(40);
   const [location, setLocation] = useState(game.cities[round - 1]);
   const [currentMessage, setCurrentMessage] = useState("");
   const [leaderboard, setLeaderboard] = useState([]);
   const [pointsAssigned, setPointsAssigned] = useState(false); // New state variable
+  const [delayJoker, setdelayJoker] = useState(true);
+  const [revealedLetters, setRevealedLetters] = useState(0);
 
   const updateLeaderboard = () => {
     const sortedPlayers = [...players].sort((a, b) => b.points - a.points);
@@ -33,6 +35,17 @@ const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers,
     return () => clearInterval(intervalId);
   }, [timer]);
 
+  useEffect(() => {
+    if (timer%10 === 0 && timer !== 0) {
+      // If timer is 10 and not zero, reveal one more letter
+      setRevealedLetters(prev => prev + 1);
+    }
+  }, [timer]);
+
+  useEffect(() => {
+    setRevealedLetters(0); // Reset revealed letters when the round changes
+  }, [round]);
+  
   const handleSendMessageInGame = () => {
     if (!currentMessage.trim()) return;
 
@@ -121,19 +134,16 @@ const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers,
   const cityName = location.name;
   const numLetters = location.name.length;
 
-  const hintLines = Array.from({ length: numLetters }, (_, index) => (
-    <div
-      key={index}
-      className="hint-line"
-      style={{
-        width: "20px",
-        height: "1px",
-        backgroundColor: "black",
-        margin: "10px 5px",
-      }}
-    >
+  const hintLines = (
+    <div className="hint-line">
+      {location.name.split("").map((letter, index) => (
+        <span key={index} style={{ marginRight: "5px", fontSize: "24px" }}>
+          {index < revealedLetters ? letter : "_"}
+        </span>
+      ))}
     </div>
-  ));
+  );
+  
 
   return (
     <div className="row mt-5">
@@ -189,7 +199,7 @@ const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers,
         <div id="street-view" style={{ width: "100%", height: "400px" }}></div>
 
         <div className="button-wrapper">
-          <button className="individual-button" style={{ fontSize: "20px" }}>
+          <button className="individual-button" style={{ fontSize: "20px" }} disabled = {delayJoker}>
             Delay Joker
           </button>
           <button className="individual-button" style={{ fontSize: "20px" }}>
