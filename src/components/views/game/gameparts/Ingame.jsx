@@ -3,13 +3,15 @@ import { Loader } from "@googlemaps/js-api-loader";
 import PropTypes from "prop-types";
 
 const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers, updateRound }) => {
-  const [timer, setTimer] = useState(40);
+  const [timer, setTimer] = useState(10);
   const [location, setLocation] = useState(game.cities[round - 1]);
   const [currentMessage, setCurrentMessage] = useState("");
   const [leaderboard, setLeaderboard] = useState([]);
   const [pointsAssigned, setPointsAssigned] = useState(false); // New state variable
   const [delayJoker, setdelayJoker] = useState(true);
+  const [hintRemoveJoker, sethintRemoveJoker] = useState(true);
   const [revealedLetters, setRevealedLetters] = useState(0);
+  const [blackoutMap, setBlackoutMap] = useState(1);
 
   const updateLeaderboard = () => {
     const sortedPlayers = [...players].sort((a, b) => b.points - a.points);
@@ -79,6 +81,21 @@ const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers,
   };
 
   useEffect(() => {
+    if (messagesGame.length > 0) { // Check if messagesGame is not empty
+      const blackoutMessage = messagesGame[0].type === "JOKER";
+      if (blackoutMessage) {
+        setBlackoutMap(0);
+    
+        const timeoutId = setTimeout(() => {
+          setBlackoutMap(1);
+        }, 10000);
+  
+        return () => clearTimeout(timeoutId);
+      }
+    }
+  }, [messagesGame]);
+
+  useEffect(() => {
     let isMounted = true;
 
     const initializeMap = async () => {
@@ -129,10 +146,15 @@ const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers,
     return () => {
       isMounted = false;
     };
-  }, [round]);
+  }, [round, blackoutMap]);
 
   const cityName = location.name;
   const numLetters = location.name.length;
+
+  const handleJoker = (number) => {
+    onSendChat(localStorage.getItem("token"), "Used the delay Joker!", "JOKER");
+    // onSendChat(localStorage.getItem("token"), "Used the delay Joker!", "CHAT_INGAME");
+  };
 
   const hintLines = (
     <div className="hint-line">
@@ -196,13 +218,16 @@ const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers,
           {hintLines}
         </div>
 
-        <div id="street-view" style={{ width: "100%", height: "400px" }}></div>
-
+        <div id="street-view" style={{ width: "100%", height: "400px", opacity: blackoutMap}}></div>
         <div className="button-wrapper">
-          <button className="individual-button" style={{ fontSize: "20px" }} disabled = {delayJoker}>
+          <button className="individual-button" style={{ fontSize: "20px" }} 
+          // disabled = {delayJoker} 
+          onClick={() => {setdelayJoker(false), handleJoker(1)}}>
             Delay Joker
           </button>
-          <button className="individual-button" style={{ fontSize: "20px" }}>
+          <button className="individual-button" style={{ fontSize: "20px" }} 
+          // disabled = {hintRemoveJoker} 
+          onClick={() => {sethintRemoveJoker(false), handleJoker(2)}}>
             Hint remove Joker
           </button>
         </div>
@@ -258,6 +283,7 @@ InGame.propTypes = {
     PropTypes.shape({
       from: PropTypes.string.isRequired,
       content: PropTypes.string.isRequired,
+      type: PropTypes.string.isRequired,
     }),
   ).isRequired,
   players: PropTypes.arrayOf(

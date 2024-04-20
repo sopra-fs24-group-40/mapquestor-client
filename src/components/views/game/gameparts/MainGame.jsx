@@ -153,6 +153,9 @@ export default function Game() {
     } else if (payload.type === "POINTS") {
       setPlayers(payload.content);
       console.log("Das sollten die neuen Spieler sein mashallah  ---> ", payload.content);
+    } else if (payload.type === "JOKER") {
+      setMessagesGame(prevMessages => [...prevMessages, payload]);
+      console.log("JOKER -------------->", payload.content);
     }
   };
 

@@ -89,7 +89,7 @@ function Endgame({game ,onSendChat, messages, players}) {
 
 Endgame.propTypes =
   {
-    onSendChat: PropTypes.func.isRequired,
+    onSendChat: PropTypes.func,
     messages: PropTypes.arrayOf(
       PropTypes.shape({
         from: PropTypes.string.isRequired,
