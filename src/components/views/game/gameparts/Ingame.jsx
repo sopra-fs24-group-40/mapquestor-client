@@ -8,8 +8,8 @@ const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers,
   const [currentMessage, setCurrentMessage] = useState("");
   const [leaderboard, setLeaderboard] = useState([]);
   const [pointsAssigned, setPointsAssigned] = useState(false); // New state variable
-  const [delayJoker, setdelayJoker] = useState(true);
-  const [hintRemoveJoker, sethintRemoveJoker] = useState(true);
+  const [delayJoker, setdelayJoker] = useState(false);
+  const [hintRemoveJoker, sethintRemoveJoker] = useState(false);
   const [revealedLetters, setRevealedLetters] = useState(0);
   const [blackoutMap, setBlackoutMap] = useState(1);
 
@@ -82,7 +82,7 @@ const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers,
 
   useEffect(() => {
     if (messagesGame.length > 0) { // Check if messagesGame is not empty
-      const blackoutMessage = messagesGame[0].type === "JOKER";
+      const blackoutMessage = messagesGame[0].type === "JOKER" && messagesGame[0].from !== localStorage.getItem("token");
       if (blackoutMessage) {
         setBlackoutMap(0);
     
@@ -221,13 +221,13 @@ const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers,
         <div id="street-view" style={{ width: "100%", height: "400px", opacity: blackoutMap}}></div>
         <div className="button-wrapper">
           <button className="individual-button" style={{ fontSize: "20px" }} 
-          // disabled = {delayJoker} 
-          onClick={() => {setdelayJoker(false), handleJoker(1)}}>
+          disabled = {delayJoker} 
+          onClick={() => {setdelayJoker(true), handleJoker(1)}}>
             Delay Joker
           </button>
           <button className="individual-button" style={{ fontSize: "20px" }} 
-          // disabled = {hintRemoveJoker} 
-          onClick={() => {sethintRemoveJoker(false), handleJoker(2)}}>
+          disabled = {hintRemoveJoker} 
+          onClick={() => {sethintRemoveJoker(true), handleJoker(2)}}>
             Hint remove Joker
           </button>
         </div>
