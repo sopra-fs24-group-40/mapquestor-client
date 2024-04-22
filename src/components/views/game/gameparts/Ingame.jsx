@@ -3,7 +3,7 @@ import { Loader } from "@googlemaps/js-api-loader";
 import PropTypes from "prop-types";
 
 const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers, updateRound }) => {
-  const [timer, setTimer] = useState(10);
+  const [timer, setTimer] = useState(100000);
   const [location, setLocation] = useState(game.cities[round - 1]);
   const [currentMessage, setCurrentMessage] = useState("");
   const [leaderboard, setLeaderboard] = useState([]);
@@ -81,19 +81,29 @@ const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers,
   };
 
   useEffect(() => {
-    if (messagesGame.length > 0) { // Check if messagesGame is not empty
-      const blackoutMessage = messagesGame[0].type === "JOKER" && messagesGame[0].from !== localStorage.getItem("token");
-      if (blackoutMessage) {
-        setBlackoutMap(0);
-    
-        const timeoutId = setTimeout(() => {
-          setBlackoutMap(1);
-        }, 10000);
-  
-        return () => clearTimeout(timeoutId);
+    const len = messagesGame.length - 1;
+    if (messagesGame.length > 0 && messagesGame[len].type === "JOKER") { // Check if messagesGame is not empty
+      const num = messagesGame[len].content;
+      if(num === 1){
+        console.log("Delay Joker");
+        const blackoutMessage = messagesGame[len].type === "JOKER" && messagesGame[len].from !== localStorage.getItem("token");
+        if (blackoutMessage) {
+          setBlackoutMap(0);
+        
+          const timeoutId = setTimeout(() => {
+            setBlackoutMap(1);
+          }, 10000);
+        
+          return () => clearTimeout(timeoutId);
+        }
+    }else if(num === 2){
+      const removeJoker = messagesGame[len].type === "JOKER" && messagesGame[len].from !== localStorage.getItem("token");
+      if (removeJoker) {
+        console.log("Remove Joker");
+        setRevealedLetters(0);
       }
     }
-  }, [messagesGame]);
+  }}, [messagesGame]);
 
   useEffect(() => {
     let isMounted = true;
@@ -151,10 +161,18 @@ const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers,
   const cityName = location.name;
   const numLetters = location.name.length;
 
-  const handleJoker = (number) => {
-    onSendChat(localStorage.getItem("token"), "Used the delay Joker!", "JOKER");
-    // onSendChat(localStorage.getItem("token"), "Used the delay Joker!", "CHAT_INGAME");
+  const handleJoker = (jokerType) => {
+    let number;
+    if (jokerType === "delay") {
+      number = 1;
+      setdelayJoker(true);
+    } else if (jokerType === "hintRemove") {
+      number = 2;
+      sethintRemoveJoker(true);
+    }
+    onSendChat(localStorage.getItem("token"), number, "JOKER");
   };
+  
 
   const hintLines = (
     <div className="hint-line">
@@ -222,12 +240,12 @@ const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers,
         <div className="button-wrapper">
           <button className="individual-button" style={{ fontSize: "20px" }} 
           disabled = {delayJoker} 
-          onClick={() => {setdelayJoker(true), handleJoker(1)}}>
+          onClick={() => handleJoker("delay")}>
             Delay Joker
           </button>
           <button className="individual-button" style={{ fontSize: "20px" }} 
           disabled = {hintRemoveJoker} 
-          onClick={() => {sethintRemoveJoker(true), handleJoker(2)}}>
+          onClick={() => handleJoker("hintRemove")}>
             Hint remove Joker
           </button>
         </div>
