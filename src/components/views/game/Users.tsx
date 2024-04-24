@@ -36,6 +36,7 @@ function Users() {
   const [users, setUsers] = useState([]);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     async function fetchUsers() {
       setIsLoading(true);
