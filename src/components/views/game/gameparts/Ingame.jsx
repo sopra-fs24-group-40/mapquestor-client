@@ -216,7 +216,6 @@ const InGame = ({ round, onSendChat, messagesGame, players, game, updatePlayers,
               </tbody>
             </table>
           </section>
-          <h1>{cityName}</h1>
         </div>
       </div>
 
