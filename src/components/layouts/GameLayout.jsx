@@ -5,20 +5,25 @@ import "../../styles/views/game.scss";
 import logo from "../../assets/logo.png";
 import avatar from "../../assets/avatar.png";
 import {api, handleError} from "helpers/api";
-import User from "models/User";
 
 function GameLayout(props) {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResult, setSearchResult] = useState(null);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     async function fetchUsers() {
       try {
         const response = await api.get("/users");
-        setUsers(response.data);
         console.log(response.data);
+        setUsers(response.data);
+        const currentUserId = Number(localStorage.getItem("id"));
+        if (currentUserId) {
+          const currentUser = response.data.find(user => user.id === currentUserId);
+          setUser(currentUser);
+        }
       } catch (error) {
         console.error(error);
       }
@@ -32,7 +37,6 @@ function GameLayout(props) {
     localStorage.removeItem("id");
     try {
       const requestBody = JSON.stringify({"username": localStorage.getItem("username")});
-      console.log(requestBody);
       await api.post("/logout", requestBody);
     } catch (error) {
       console.log(`Something went wrong during the logout: \n${handleError(error)}`);
@@ -60,7 +64,7 @@ function GameLayout(props) {
         <div className="col">
           <div className="row align-items-center container-logoAndText">
             <div className="col-auto">
-              <img src={logo} width={100}/>
+              <img src={logo} width={100} alt=""/>
             </div>
             <div className="container-mapquestor col-6">
               <h1 className="custom-font">MapQuestor</h1>
@@ -84,7 +88,7 @@ function GameLayout(props) {
           <div className="col-auto p-3">
             <figure className="container-avatar">
               <img src={avatar} width={50}/></figure>
-            <button onClick={() => navigate(`/game/users/${User.id}`)}>My Profile</button>
+            <button onClick={() => user && navigate(`/game/users/${user.id}`)}>My Profile</button>
           </div>
           <div className="col-auto">
             <button className="btn btn-danger" onClick={() => logout()}>Logout</button>
