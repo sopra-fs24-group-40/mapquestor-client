@@ -63,7 +63,7 @@ function GameLayout(props) {
               <img src={logo} width={100}/>
             </div>
             <div className="container-mapquestor col-6">
-              <h1>MapQuestor</h1>
+              <h1 className="custom-font">MapQuestor</h1>
             </div>
           </div>
         </div>
