@@ -58,8 +58,10 @@ function Register(props) {
       const response = await api.post("/users", requestBody);
 
       const new_user = new User(response.data);
+      console.log(new_user); 
 
       localStorage.setItem("id", new_user.id);
+      localStorage.setItem("avatar", new_user.avatar);
       localStorage.setItem("token", new_user.token);
       localStorage.setItem("username", new_user.username);
 

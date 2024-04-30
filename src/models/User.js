@@ -8,8 +8,8 @@ class User {
     this.username = null;
     this.token = null;
     this.status = null;
-    Object.assign(this, data);
     this.avatar = null;
+    Object.assign(this, data);
   }
 }
 
