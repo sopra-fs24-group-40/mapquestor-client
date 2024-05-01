@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import countdowns from "../../../../assets/countdowns.mp3";
 import {useNavigate} from "react-router-dom";
 
-function Lobby({ startGame, onSendChat, messages, players, game, countdownDuration }) {
+function Lobby({ startGame, onSendChat, messages, players, game, countdownDuration, handleLeave }) {
   const [currentMessage, setCurrentMessage] = useState("");
   const [creator, setCreator] = useState(false);
   const [countdown, setCountdown] = useState(null);
@@ -62,7 +62,7 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
   };
 
   const handleLeaveGame = () => {
-    onSendChat(localStorage.getItem("token"), "Left the match!", "LEAVE");
+    handleLeave(localStorage.getItem("token"));
   };
 
   const handleStartCountdown = () => {
@@ -197,6 +197,7 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
 Lobby.propTypes = {
   onSendChat: PropTypes.func.isRequired,
   startGame: PropTypes.func.isRequired,
+  handleLeave: PropTypes.func.isRequired,
   countdownDuration: PropTypes.any,
   messages: PropTypes.arrayOf(
     PropTypes.shape({

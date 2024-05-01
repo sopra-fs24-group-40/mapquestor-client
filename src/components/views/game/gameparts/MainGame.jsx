@@ -1,100 +1,72 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Lobby from "./Lobby";
-import SockJS from "sockjs-client";
-import Stomp from "stompjs";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { api } from "../../../../helpers/api";
 import Ingame from "./Ingame";
-import { getDomain } from "../../../../helpers/getDomain";
 import Endgame from "./Endgame";
+import { GameContext } from "../../../layouts/GameLayout";
 
 
 export default function Game() {
+  const { stompClient, user, navigate } = useContext(GameContext);
   const [gamePhase, setGamePhase] = useState("LOBBY");
   const [messages, setMessages] = useState([]);
   const [messagesGame, setMessagesGame] = useState([]);
   const [players, setPlayers] = useState([]);
-  const [stompClient, setStompClient] = useState(null);
   const [game, setGame] = useState({});
   const [countdownDuration, setCountdownDuration] = useState(null);
   const { id } = useParams();
   const [round, setRound] = useState(1);
-  const navigate = useNavigate();
 
 
   useEffect(() => {
-    const fetchGameDataAndSetupWebSocket = async () => {
+    const fetchGameData = async () => {
       try {
         const response = await api.get(`/games/${id}`);
         const gameData = response.data;
 
-        const joiningPlayerToken = localStorage.getItem("token");
-        const playerExists = gameData.players.some(player => player.token === joiningPlayerToken);
-
-        if (!playerExists) {
+        if (!gameData.players.some(player => player.token === localStorage.getItem("token"))) {
           navigate("/game/join");
           return;
         }
 
         setGame(gameData);
-        console.log("GameData", gameData);
         setPlayers(gameData.players || []);
-
-        const socket = new SockJS(getDomain() + "/ws");
-        const localStompClient = Stomp.over(socket);
-        localStompClient.connect({}, function(frame) {
-
-          localStompClient.subscribe(`/topic/${id}/chat`, (message) => {
-            const payload = JSON.parse(message.body);
-            handleMessage(payload);
-          });
-
-          localStompClient.subscribe(`/topic/${id}/gameState`, (message) => {
-            const gameState = JSON.parse(message.body);
-            setGamePhase(gameState.status);
-          });
-
-
-          let joinMessage = { from: localStorage.getItem("token"), content: "Joined the Game!", type: "JOIN" };
-          localStompClient.send(`/app/${id}/chat`, {}, JSON.stringify(joinMessage));
-
-          let joinMessage2 = { from: localStorage.getItem("username"), content: "Joined the Game!", type: "CHAT" };
-          localStompClient.send(`/app/${id}/chat`, {}, JSON.stringify(joinMessage2));
-        });
-
-        setStompClient(localStompClient);
+        setGamePhase(gameData.status || "LOBBY");
       } catch (error) {
+        console.error("Error fetching game data:", error);
         navigate("/game/join");
       }
     };
 
-    fetchGameDataAndSetupWebSocket();
+    fetchGameData();
 
-    const handleUnload = (event) => {
-      event.preventDefault();
-      event.returnValue = "";
+    if (stompClient) {
+      const gameTopic = `/topic/${id}`;
 
-      if (stompClient) {
-        const leaveMessage = {
-          from: localStorage.getItem("username") || "unknown",
-          content: "Left the game",
-          type: "LEAVE",
-        };
-        stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(leaveMessage));
-      }
-    };
+      stompClient.subscribe(`${gameTopic}/gameState`, (message) => {
+        const gameState = JSON.parse(message.body);
+        setGamePhase(gameState.status);
+      });
 
-    window.addEventListener("beforeunload", handleUnload);
+      stompClient.subscribe(`${gameTopic}/chat`, (message) => {
+        const payload = JSON.parse(message.body);
+        handleMessage(payload);
+      });
+
+      let joinMessage = { from: localStorage.getItem("token"), content: "Joined the Game!", type: "JOIN" };
+      stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(joinMessage));
+
+      let joinMessage2 = { from: localStorage.getItem("username"), content: "Joined the Game!", type: "CHAT" };
+      stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(joinMessage2));
 
 
-    return () => {
-      if (stompClient) {
-        stompClient.disconnect();
-      }
-      window.removeEventListener("beforeunload", handleUnload);
-
-    };
-  }, [id]);
+      return () => {
+        stompClient.unsubscribe(`${gameTopic}/gameState`);
+        stompClient.unsubscribe(`${gameTopic}/chat`);
+      };
+    }
+  }, [stompClient, id, navigate]);
 
 
   const sendChatMessage = (from, content, type) => {
@@ -130,6 +102,18 @@ export default function Game() {
 
   };
 
+  const handleLeave = (player) => {
+
+    if (player === game.creator) {
+      console.log("Creator left the game ------------------>");
+      const message = { from: player, content: {}, type: "LEAVE_CREATOR" };
+      stompClient && stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message));
+    } else {
+      const message = { from: player, content: "Left the game", type: "LEAVE" };
+      stompClient && stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message));
+    }
+  };
+
 
   const handleMessage = (payload) => {
     if (payload.type === "JOIN") {
@@ -144,6 +128,8 @@ export default function Game() {
     } else if (payload.type === "LEAVE") {
       setPlayers(prevPlayers => prevPlayers.filter(player => player.token !== payload.from));
       setMessages(prevMessages => [...prevMessages, payload]);
+    } else if (payload.type === "LEAVE_CREATOR") {
+      navigate("/game");
     } else if (payload.type === "CHAT") {
       setMessages(prevMessages => [...prevMessages, payload]);
     } else if (payload.type === "CHAT_INGAME") {
@@ -162,12 +148,13 @@ export default function Game() {
   switch (gamePhase) {
     case "LOBBY":
       return <Lobby startGame={startGame} onSendChat={sendChatMessage} messages={messages} players={players} game={game}
-                    countdownDuration={countdownDuration} />;
+                    countdownDuration={countdownDuration} handleLeave={handleLeave} />;
     case "INGAME":
       return <Ingame round={round} onSendChat={sendChatMessageGame} messagesGame={messagesGame} players={players}
-                     game={game} updatePlayers={updatePlayers} updateRound={updateRound} />;
+                     game={game} updatePlayers={updatePlayers} updateRound={updateRound} handleLeave={handleLeave} />;
     case "ENDGAME":
-      return <Endgame game={game} onSendChat={sendChatMessage} messages={messages} players={players} />;
+      return <Endgame game={game} onSendChat={sendChatMessage} messages={messages} players={players}
+                      handleLeave={handleLeave} />;
     default:
       return <div>Lade...</div>;
   }
