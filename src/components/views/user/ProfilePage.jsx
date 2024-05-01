@@ -57,32 +57,6 @@ function ProfilePage() {
     fetchUser();
   }, [id]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!validName) {
-      setErrMsg("Username should be at least 4 characters.");
-      return;
-    }
-    
-    try {
-      const requestBody = JSON.stringify({ username, avatar: selectedAvatar });
-      const response = await api.put(`/users/${id}`, requestBody);
-      setUser({ ...user, username: username, avatar: selectedAvatar });
-      localStorage.setItem("username", username);
-      setShowEditForm(false);
-      setSuccess(true);
-    } catch (err) {
-        if (!err?.response) {
-        setErrMsg("No Server Response");
-      } else if (err.response?.status === 409) {
-        setErrMsg(err.response.data.message);
-      } else {
-        setErrMsg("Edit failed!");
-      }
-      errRef.current.focus;
-    }
-  };
-
   const handleUsernameChange = (e) => {
     const value = e.target.value;
     setUsername(value);
