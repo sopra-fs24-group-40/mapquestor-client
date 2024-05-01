@@ -36,6 +36,9 @@ function ProfilePage() {
   const [usernameError, setUsernameError] = useState("");
 
   const [isLoading, setIsLoading] = useState(true);
+  const [showAvatarOptions, setShowAvatarOptions] = useState(false);
+  const [showUsernameEditForm, setShowUsernameEditForm] = useState(false);
+  const [showAvatarEditForm, setShowAvatarEditForm] = useState(false);
 
   useEffect(() => {
     async function fetchUser() {
@@ -118,6 +121,58 @@ function ProfilePage() {
 
   const avatarOptions = [Fett, Vader, C3PO, Clone, Ren, Stormtrooper];
 
+  const handleAvatarChangeClick = () => {
+    setShowAvatarOptions(!showAvatarOptions);
+  };
+
+  const handleUsernameEditSubmit = async (e) => {
+    e.preventDefault();
+    if (!validName) {
+      setErrMsg("Username should be at least 4 characters.");
+      return;
+    }
+    
+    try {
+      const requestBody = JSON.stringify({ username });
+      const response = await api.put(`/users/${id}`, requestBody);
+      setUser({ ...user, username: username });
+      localStorage.setItem("username", username);
+      setShowUsernameEditForm(false);
+      setSuccess(true);
+    } catch (err) {
+        if (!err?.response) {
+        setErrMsg("No Server Response");
+      } else if (err.response?.status === 409) {
+        setErrMsg(err.response.data.message);
+      } else {
+        setErrMsg("Edit failed!");
+      }
+      errRef.current.focus;
+    }
+  };
+
+  const handleAvatarEditSubmit = async (e) => {
+    e.preventDefault();
+    
+    try {
+      const requestBody = JSON.stringify({ avatar: selectedAvatar });
+      const response = await api.put(`/users/${id}`, requestBody);
+      setUser({ avatar: selectedAvatar });
+      localStorage.setItem("avatar", selectedAvatar);
+      setShowAvatarEditForm(false);
+      setSuccess(true);
+    } catch (err) {
+        if (!err?.response) {
+        setErrMsg("No Server Response");
+      } else if (err.response?.status === 409) {
+        setErrMsg(err.response.data.message);
+      } else {
+        setErrMsg("Edit failed!");
+      }
+      errRef.current.focus;
+    }
+  }
+
   return (
     <div className="row">
       <div className="col bg-light mt-3 border rounded">
@@ -138,65 +193,68 @@ function ProfilePage() {
           <option>This Year</option>
         </select>
         </div>
+        <div className="text-center">
         <h1 className="text-center">{user.username}</h1>
+        {checkUser() && (
+        <button
+          className="btn btn-primary mb-3 align-item-center btn-sm"
+          onClick={() => setShowUsernameEditForm(true)}
+          disabled={!checkUser()}
+        >
+          Edit Username
+        </button>
+        )}
         <p className="text-center">#{user.id}</p>
+        </div>
+        <div className="text-center">
         <figure className="container-avatar">
           <img src={avatar} width={200} /></figure>
+          {checkUser() && (
+          <button
+          className="btn btn-primary mb-3 align-item-center btn-sm"
+          onClick={() => setShowAvatarEditForm(true)}
+          disabled={!checkUser()}
+        >
+          Edit Avatar
+        </button>
+        )}
+      </div>
       <div className="text-center">
+        
         <h2><span className={checkStatus()}>{user.status}</span> | WINS: {user.wonGames}</h2>
-        {/* <ul>
-          {userGames.map((game) => (
-            <li key={game.id}>
-              <Link to={"/game/" + game.id}>{game.name}</Link>
-            </li>
-          ))}
-        </ul> */}
         <div className="d-flex justify-content-between align-items-center">
-          <button 
-            className="btn btn-primary mb-3 d-flex" 
-            onClick={() => {
-              resetForm();
-              setShowEditForm(true);
-            }}
-            disabled={!checkUser()}>Edit</button>
           <button className="btn btn-danger mb-3 d-flex" onClick={() => navigate("/game/users")}>Back</button>
         </div>
       </div>
       <div className="text-center">
-        {showEditForm && (
-        <form onSubmit={handleSubmit}>
-          <div className="form-group mb-3">
-            <label htmlFor="username">Username</label>
-              <input
-                type="text"
-                className="form-control"
-                id="username"
-                ref={userRef}
-                autoComplete="off"
-                onChange={handleUsernameChange}
-                required
-                aria-invalid={validName ? "false" : "true"}
-                aria-describedby="uidnote"
-                onFocus={() => setUserFocus(true)}
-                onBlur={() => setUserFocus(false)}
-              />
-              {!validName && <p id="uidnote" className={userFocus ? "instructions" : "offscreen"}>{usernameError}</p>}
-              <div className="col mt-3 d-flex justify-content-center">
-              <button className="btn btn-primary">Change Avatar</button>
-              </div>
+        {showUsernameEditForm && (
+          <form onSubmit={handleUsernameEditSubmit}>
+            <div className="form-group mb-3">
+              <label htmlFor="username">Username</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="username"
+                  ref={userRef}
+                  autoComplete="off"
+                  onChange={handleUsernameChange}
+                  required
+                  aria-invalid={validName ? "false" : "true"}
+                  aria-describedby="uidnote"
+                  onFocus={() => setUserFocus(true)}
+                  onBlur={() => setUserFocus(false)}
+                />
+                {!validName && <p id="uidnote" className={userFocus ? "instructions" : "offscreen"}>{usernameError}</p>}
             </div>
-            <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
-            <hr />
-            <div className="row">
-              <div className="col-6">
-                <button 
-                className="btn btn-danger mb-3 float-start">Save</button>
-              </div>
-              <div className="col-6">
-                <button 
+            <button 
                 className="btn btn-danger mb-3 float-end" 
-                onClick={() => setShowEditForm(false)}>Exit</button>
-              </div>
+                onClick={() => setShowUsernameEditForm(false)}>Exit</button>
+          </form>
+        )}
+        {showAvatarEditForm && (
+          <form onSubmit={handleAvatarEditSubmit}>
+            <div className="col mt-3 d-flex justify-content-center">
+              <button className="btn btn-primary" onClick={handleAvatarChangeClick}>Change Avatar</button>
             </div>
             <div className="avatar-options">
               {avatarOptions.map((option, index) => (
@@ -216,9 +274,20 @@ function ProfilePage() {
               </div>
               ))}
             </div>
+            <button 
+                className="btn btn-danger mb-3 float-end" 
+                onClick={() => setShowAvatarEditForm(false)}>Exit</button>
           </form>
         )}
-      </div>
+            </div>
+            <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
+            <hr />
+            <div className="row">
+              <div className="col-6">
+              </div>
+              <div className="col-6">
+              </div>
+            </div>
       </>
         )}
       </div>

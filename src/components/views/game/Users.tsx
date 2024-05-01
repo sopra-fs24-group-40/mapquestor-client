@@ -43,7 +43,6 @@ function Users() {
       try {
         const response = await api.get("/users");
         setUsers(response.data);
-        // console.log(response.data);
       } catch (error) {
         console.error(error);
       } finally {
