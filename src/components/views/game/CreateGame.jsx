@@ -25,6 +25,7 @@ function CreateGame() {
     try {
       const response = await api.post("/games", gameData);
       console.log("Game created successfully", response.data);
+      localStorage.setItem("gameCode", response.data.gameCode);
       navigate(`/game/${response.data.gameCode}`);
     } catch (error) {
       console.error("Error creating the game:", error.response);

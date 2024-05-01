@@ -62,6 +62,7 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
   };
 
   const handleLeaveGame = () => {
+    localStorage.removeItem("gameCode")
     handleLeave(localStorage.getItem("token"));
   };
 

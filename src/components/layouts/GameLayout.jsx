@@ -39,11 +39,29 @@ function GameLayout(props) {
     fetchUsers();
 
 
-    // Setup WebSocket connection
     const socket = new SockJS(getDomain() + "/ws");
     const localStompClient = Stomp.over(socket);
     localStompClient.connect({}, function(frame) {
       setStompClient(localStompClient);
+
+
+      localStompClient.subscribe(`/topic/logout`, (message) => {
+
+        if (localStorage.getItem("gameCode")) {
+          const gameCode = localStorage.getItem("gameCode");
+          const message = { from: localStorage.getItem("token"), content: "Left the game", type: "LEAVE" };
+          localStompClient.send(`/app/${gameCode}/chat`, {}, JSON.stringify(message));
+        }
+
+        const payload = JSON.parse(message.body);
+        if (payload.from === localStorage.getItem("token")) {
+          localStorage.removeItem("token");
+          localStorage.removeItem("id");
+          localStorage.removeItem("username");
+          localStorage.removeItem("gameCode");
+          navigate("/login");
+        }
+      });
     });
 
     return () => {
@@ -53,17 +71,18 @@ function GameLayout(props) {
     };
   }, []);
 
-  const logout = async () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("id");
-    try {
-      const requestBody = JSON.stringify({ "token": localStorage.getItem("token") });
-      await api.post("/logout", requestBody);
-    } catch (error) {
-      console.log(`Something went wrong during the logout: \n${handleError(error)}`);
+  const logout = () => {
+
+    if (stompClient) {
+
+      let logoutMessage = {
+        from: localStorage.getItem("token"),
+        content: localStorage.getItem("gameCode"),
+        type: "LOGOUT",
+      };
+      stompClient.send(`/app/logout`, {}, JSON.stringify(logoutMessage));
+
     }
-    localStorage.removeItem("username");
-    navigate("/login");
   };
 
   const handleSearch = () => {
@@ -83,6 +102,7 @@ function GameLayout(props) {
     stompClient,
     user,
     navigate,
+    logout,
   };
 
   return (

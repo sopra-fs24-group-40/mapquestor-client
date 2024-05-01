@@ -19,15 +19,13 @@ function JoinGame(props) {
   const doJoinGame = async () => {
     try {
 
-      console.log("Joining game with code", gameCode, "and token", token);
-
       const requestBody = JSON.stringify({ gameCode, token });
       const response = await api.post(`/games/${gameCode}/join`, requestBody);
 
-      console.log(response);
 
       if (response.status === 200) {
         console.log("Game joined successfully", response.data);
+        localStorage.setItem("gameCode", gameCode);
         navigate(`/game/${gameCode}`);
       }
 

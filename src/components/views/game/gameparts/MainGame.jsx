@@ -8,7 +8,7 @@ import { GameContext } from "../../../layouts/GameLayout";
 
 
 export default function Game() {
-  const { stompClient, user, navigate } = useContext(GameContext);
+  const { stompClient, user, navigate, logout } = useContext(GameContext);
   const [gamePhase, setGamePhase] = useState("LOBBY");
   const [messages, setMessages] = useState([]);
   const [messagesGame, setMessagesGame] = useState([]);
@@ -69,6 +69,12 @@ export default function Game() {
   }, [stompClient, id, navigate]);
 
 
+  const handleLogout = (payload) => {
+    setPlayers(prevPlayers => prevPlayers.filter(player => player.token !== payload.from));
+    setMessages(prevMessages => [...prevMessages, payload]);
+  };
+
+
   const sendChatMessage = (from, content, type) => {
     const message = { from, content, type };
     stompClient && stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message));
@@ -105,7 +111,6 @@ export default function Game() {
   const handleLeave = (player) => {
 
     if (player === game.creator) {
-      console.log("Creator left the game ------------------>");
       const message = { from: player, content: {}, type: "LEAVE_CREATOR" };
       stompClient && stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message));
     } else {
