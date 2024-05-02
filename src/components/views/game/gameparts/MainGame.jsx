@@ -140,7 +140,6 @@ export default function Game() {
       setRound(round);
       setCorrectGuesses(0);
     }
-
   };
 
   const handleLeave = (player) => {
