@@ -1,16 +1,16 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import "../../../../styles/views/endgame.scss";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 
 
-function Endgame({game ,onSendChat, messages, players}) {
+function Endgame({ game, onSendChat, messages, players, playAgain }) {
 
   const navigate = useNavigate();
   const [creator, setCreator] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(false);
-  const [timer, setTimer] = useState(10000);
-  const [playAgain, setplayAgain] = useState(false);
+  const [timer, setTimer] = useState(10);
+  const [playAgainButton, setPlayAgainButton] = useState(false);
 
 
   useEffect(() => {
@@ -35,18 +35,17 @@ function Endgame({game ,onSendChat, messages, players}) {
   const handleLeaveGame = () => {
     if (creator) {
       onSendChat(localStorage.getItem("token"), "Left the match!", "LEAVE_CREATOR");
-    }
-    else {  
+    } else {
       onSendChat(localStorage.getItem("token"), "Left the game!", "LEAVE");
     }
   };
 
 
-  const handlePlayAgain =  () => {
+  const handlePlayAgain = () => {
     setButtonDisabled(true);
     onSendChat(localStorage.getItem("token"), "Wants to play again!", "PLAY_AGAIN");
-    setplayAgain(true);
-  }
+    setPlayAgainButton(true);
+  };
 
   useEffect(() => {
     let intervalId;
@@ -55,10 +54,19 @@ function Endgame({game ,onSendChat, messages, players}) {
         setTimer(timer - 1);
       }, 1000);
     } else if (timer === 0) {
-      navigate("/game");
+      if (!playAgainButton) {
+        if (game.creator === localStorage.getItem("token")) {
+          onSendChat(localStorage.getItem("token"), "Left the match!", "LEAVE_CREATOR");
+        } else {
+          onSendChat(localStorage.getItem("token"), "Left the game!", "LEAVE");
+        }
+      } else {
+        playAgain();
+      }
+
     }
     return () => clearInterval(intervalId);
-  }, [timer,  players.length]);
+  }, [timer, players.length]);
 
   return (
     <div className="row">
@@ -87,16 +95,22 @@ function Endgame({game ,onSendChat, messages, players}) {
       </div>
 
       <div className="col-md-6 bg-transparent text-center mt-5">
-      <div
+        <div
           className="timer-container mb-5">
-          Timer: {timer && timer} seconds <br/>
+          Timer: {timer && timer} seconds <br />
         </div>
         <div className="button-wrapper justify-content-center">
           <p className="mb-0">{}/{game.playerCount} want to play again</p>
-          <button className="individual-button1" onClick={() => handlePlayAgain()} disabled={buttonDisabled}>Play Again</button>
+          <button className="individual-button1" onClick={() => handlePlayAgain()} disabled={buttonDisabled}>Play
+            Again
+          </button>
         </div>
         <div className="button-wrapper">
-          <button className="individual-button2" onClick={() => {handleLeaveGame(); navigate("/game")}}>Main Menu</button>
+          <button className="individual-button2" onClick={() => {
+            handleLeaveGame();
+            navigate("/game");
+          }}>Main Menu
+          </button>
         </div>
       </div>
     </div>
@@ -106,6 +120,7 @@ function Endgame({game ,onSendChat, messages, players}) {
 Endgame.propTypes =
   {
     onSendChat: PropTypes.func,
+    playAgain: PropTypes.func,
     messages: PropTypes.arrayOf(
       PropTypes.shape({
         from: PropTypes.string.isRequired,

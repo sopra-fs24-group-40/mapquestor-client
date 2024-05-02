@@ -12,6 +12,7 @@ const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, 
   const [hintRemoveJoker, sethintRemoveJoker] = useState(false);
   const [revealedLetters, setRevealedLetters] = useState(0);
   const [blackoutMap, setBlackoutMap] = useState(1);
+  const [safe, setSafe] = useState(false);
 
 
   const solution = game.gameType === "CITY" ? location.capital : location.name;
@@ -24,6 +25,10 @@ const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, 
   useEffect(() => {
     updateLeaderboard();
   }, [players]);
+
+  useEffect(() => {
+    setSafe(false);
+  }, [round]);
 
   useEffect(() => {
     let intervalId;
@@ -91,6 +96,7 @@ const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, 
   };
 
   useEffect(() => {
+    if(!safe) {
     const len = messagesGame.length - 1;
     if (messagesGame.length > 0 && messagesGame[len].type === "JOKER") { // Check if messagesGame is not empty
       const num = messagesGame[len].content;
@@ -112,7 +118,7 @@ const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, 
         }
       }
     }
-  }, [messagesGame]);
+  }}, [messagesGame]);
 
   useEffect(() => {
     let isMounted = true;
@@ -175,6 +181,7 @@ const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, 
       number = 2;
       sethintRemoveJoker(true);
     }
+    setSafe(true);
     onSendChat(localStorage.getItem("token"), number, "JOKER");
   };
 
