@@ -125,6 +125,7 @@ function GameLayout(props) {
               <input
                 type="search"
                 id="site-search"
+                placeholder="There are many..."
                 name="q"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}

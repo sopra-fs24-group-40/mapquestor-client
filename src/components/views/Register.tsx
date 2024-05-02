@@ -93,6 +93,7 @@ function Register(props) {
               className="form-control"
               type="text"
               id="username"
+              placeholder="How should we call you?"
               ref={userRef}
               autoComplete="off"
               onChange={(e) => setUser(e.target.value)}
@@ -112,6 +113,7 @@ function Register(props) {
               className="form-control"
               type="password"
               id="password"
+              placeholder="Don't tell anyone!"
               onChange={(e) => setPwd(e.target.value)}
               required
               aria-invalid={validPwd ? "false" : "true"}
@@ -129,6 +131,7 @@ function Register(props) {
               className="form-control"
               type="password"
               id="confirm_pwd"
+              placeholder="Just to be sure..."
               onChange={(e) => setMatchPwd(e.target.value)}
               required
               aria-invalid={validMatch ? "false" : "true"}
