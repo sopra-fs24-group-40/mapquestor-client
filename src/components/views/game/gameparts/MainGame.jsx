@@ -68,6 +68,7 @@ export default function Game() {
           }
         }
         setGamePhase(gameState.status);
+
       });
 
       stompClient.subscribe(`${gameTopic}/chat`, (message) => {
