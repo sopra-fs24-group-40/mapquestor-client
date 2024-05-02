@@ -2,8 +2,8 @@ import React, {useEffect, useState} from "react";
 import {Loader} from "@googlemaps/js-api-loader";
 import PropTypes from "prop-types";
 
-const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, updateRound}) => {
-  const [timer, setTimer] = useState(10);
+const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, updateRound, correctGuesses, roundLength }) => {
+  const [timer, setTimer] = useState(roundLength);
   const [location, setLocation] = useState(game.cities[round - 1]);
   const [currentMessage, setCurrentMessage] = useState("");
   const [leaderboard, setLeaderboard] = useState([]);
@@ -12,7 +12,6 @@ const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, 
   const [hintRemoveJoker, sethintRemoveJoker] = useState(false);
   const [revealedLetters, setRevealedLetters] = useState(0);
   const [blackoutMap, setBlackoutMap] = useState(1);
-  // const [correctGuesses, setCorrectGuesses] = useState([]);
 
 
   const solution = game.gameType === "CITY" ? location.capital : location.name;
@@ -32,32 +31,32 @@ const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, 
       intervalId = setInterval(() => {
         setTimer(timer - 1);
       }, 1000);
-    // } else if (correctGuesses.length === players.length) {
-    //   clearInterval(intervalId);
-    //   updateRound(round + 1);
-    //   setTimer(60);
-    //   setPointsAssigned(false);
-    //   setCorrectGuesses([]); // Reset correct guesses for the next round
     } else if (timer === 0) {
       clearInterval(intervalId);
       updateRound(round + 1);
-      setTimer(10);
+      setTimer(roundLength);
       setPointsAssigned(false);
-      // setCorrectGuesses([]); // Reset correct guesses for the next round
     }
     return () => clearInterval(intervalId);
-  }, [timer,  players.length]); //correctGuesses,
+  }, [timer,  players.length]);
 
   useEffect(() => {
     if (timer % 10 === 0 && timer !== 0) {
-      // If timer is 10 and not zero, reveal one more letter
       setRevealedLetters(prev => prev + 1);
     }
   }, [timer]);
 
   useEffect(() => {
-    setRevealedLetters(0); // Reset revealed letters when the round changes
+    setRevealedLetters(0);
   }, [round]);
+
+  useEffect(() => {
+    if (correctGuesses === players.length) {
+      updateRound(round + 1);
+      setTimer(roundLength);
+      setPointsAssigned(false);
+    }
+  }, [correctGuesses, players.length]);
 
   const handleSendMessageInGame = () => {
     if (!currentMessage.trim()) return;
@@ -67,14 +66,8 @@ const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, 
       if (currentMessage.toLowerCase() === cityName.toLowerCase()) {
         addPoints(timer);
         setPointsAssigned(true);
-        // setCorrectGuesses(prevGuesses => {
-        //   const newGuesses = [...prevGuesses, localStorage.getItem("token")];
-        //   console.log(newGuesses.length); // Log the new length
-        //   return newGuesses;
-        // });
-        // console.log(correctGuesses.length);
-        // console.log(players.length);
-        onSendChat(localStorage.getItem("username"), "Guessed the correct answer!", "CHAT_INGAME");
+        onSendChat(localStorage.getItem("username"), "Guessed the correct answer!", "CHAT_INGAME_CORRECT");
+        console.log("Correct guess received" + correctGuesses);
       } else {
         onSendChat(localStorage.getItem("username"), currentMessage, "CHAT_INGAME");
       }
@@ -291,7 +284,7 @@ const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, 
                     handleSendMessageInGame();
                   }
                 }}
-                placeholder="Schreibe eine Nachricht..."
+                placeholder="Write a message..."
                 disabled={pointsAssigned} // Disable input if points are already assigned
               />
               <button className="btn btn-primary" onClick={handleSendMessageInGame} disabled={pointsAssigned}>Send
@@ -306,6 +299,8 @@ const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, 
 
 InGame.propTypes = {
   round: PropTypes.number.isRequired,
+  correctGuesses: PropTypes.number.isRequired,
+  roundLength: PropTypes.number.isRequired,
   onSendChat: PropTypes.func.isRequired,
   updateRound: PropTypes.func.isRequired,
   messagesGame: PropTypes.arrayOf(

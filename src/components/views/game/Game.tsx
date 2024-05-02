@@ -25,7 +25,6 @@ const Game = () => {
           gamestatus: game.gameStatus
         }));
         setActiveLobbies(lobbies);
-        console.log(lobbies);
       } catch (error) {
         console.error("Error fetching games:", error);
       }
@@ -42,10 +41,9 @@ const Game = () => {
       const requestBody = JSON.stringify({gameCode, token});
       const response = await api.post(`/games/${gameCode}/join`, requestBody);
 
-      console.log(response);
-
       if (response.status === 200) {
         console.log("Game joined successfully", response.data);
+        localStorage.setItem("gameCode", gameCode);
         navigate(`/game/${gameCode}`);
       }
 

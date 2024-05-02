@@ -18,6 +18,8 @@ export default function Game() {
   const [countdownDuration, setCountdownDuration] = useState(null);
   const { id } = useParams();
   const [round, setRound] = useState(1);
+  const [correctGuesses, setCorrectGuesses] = useState(0);
+  const [roundLength, setRoundLength] = useState(60);
 
 
   useEffect(() => {
@@ -42,8 +44,12 @@ export default function Game() {
     };
 
     fetchGameData();
+  }, [id, navigate]);
 
-    if (stompClient) {
+
+  useEffect(() => {
+
+    if (stompClient && creator) {
       const gameTopic = `/topic/${id}`;
 
       stompClient.subscribe(`${gameTopic}/gameState`, (message) => {
@@ -68,7 +74,7 @@ export default function Game() {
         stompClient.unsubscribe(`${gameTopic}/chat`);
       };
     }
-  }, [stompClient, id, navigate]);
+  }, [game, creator]);
 
   useEffect(() => {
     setCreator(game.creator);
@@ -104,6 +110,7 @@ export default function Game() {
       stompClient && stompClient.send(`/app/${id}/gameState`, {}, JSON.stringify(message));
     } else {
       setRound(round);
+      setCorrectGuesses(0);
     }
 
   };
@@ -121,7 +128,6 @@ export default function Game() {
 
 
   const handleMessage = (payload) => {
-    console.log("hier ------>" + payload.type);
     if (payload.type === "JOIN") {
       setPlayers(prevPlayers => {
         const userExists = prevPlayers.some(player => player.username === payload.content.username);
@@ -133,13 +139,7 @@ export default function Game() {
       });
     } else if (payload.type === "LEAVE") {
 
-      console.log("Player left the game");
-      console.log(payload.from);
-      console.log(creator);
-      console.log(game);
-
       if (payload.from === creator) {
-        console.log("Creator left the game");
         const message = { from: payload.from, content: {}, type: "LEAVE_CREATOR" };
         stompClient && stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message));
       }
@@ -149,10 +149,12 @@ export default function Game() {
     } else if (payload.type === "LEAVE_CREATOR") {
       navigate("/game");
     } else if (payload.type === "CHAT") {
-      console.log(game);
       setMessages(prevMessages => [...prevMessages, payload]);
     } else if (payload.type === "CHAT_INGAME") {
       setMessagesGame(prevMessages => [...prevMessages, payload]);
+    } else if (payload.type === "CHAT_INGAME_CORRECT") {
+      setMessagesGame(prevMessages => [...prevMessages, payload]);
+      setCorrectGuesses(prev => prev + 1);
     } else if (payload.type === "START_COUNTDOWN") {
       setCountdownDuration(1);
     } else if (payload.type === "POINTS") {
@@ -168,7 +170,8 @@ export default function Game() {
                     countdownDuration={countdownDuration} handleLeave={handleLeave} />;
     case "INGAME":
       return <Ingame round={round} onSendChat={sendChatMessageGame} messagesGame={messagesGame} players={players}
-                     game={game} updatePlayers={updatePlayers} updateRound={updateRound} handleLeave={handleLeave} />;
+                     game={game} updatePlayers={updatePlayers} updateRound={updateRound} handleLeave={handleLeave}
+                     correctGuesses={correctGuesses} roundLength={roundLength} />;
     case "ENDGAME":
       return <Endgame game={game} onSendChat={sendChatMessage} messages={messages} players={players}
                       handleLeave={handleLeave} />;

@@ -119,7 +119,7 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
                       handleSendMessage();
                     }
                   }}
-                  placeholder="Schreibe eine Nachricht..."
+                  placeholder="Write a message..."
                 />
                 <button className="btn btn-primary" onClick={handleSendMessage}>Send</button>
               </div>
