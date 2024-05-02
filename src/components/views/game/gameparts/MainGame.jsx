@@ -128,7 +128,7 @@ export default function Game() {
     if (round > maxRounds) {
       const sortedPlayers = [...players].sort((a, b) => b.points - a.points);
       if (sortedPlayers[0].token === localStorage.getItem("token")) {
-        const message2 = { from: localStorage.getItem("token"), content: "WON!", type: "PLAYED" };
+        const message2 = { from: localStorage.getItem("token"), content: "WON", type: "PLAYED" };
         stompClient && stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message2));
       } else {
         const message1 = { from: localStorage.getItem("token"), content: "FINISHED!", type: "PLAYED" };
