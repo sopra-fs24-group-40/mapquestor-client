@@ -3,7 +3,7 @@ import {Loader} from "@googlemaps/js-api-loader";
 import PropTypes from "prop-types";
 
 const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, updateRound}) => {
-  const [timer, setTimer] = useState(60);
+  const [timer, setTimer] = useState(10);
   const [location, setLocation] = useState(game.cities[round - 1]);
   const [currentMessage, setCurrentMessage] = useState("");
   const [leaderboard, setLeaderboard] = useState([]);
@@ -41,12 +41,12 @@ const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, 
     } else if (timer === 0) {
       clearInterval(intervalId);
       updateRound(round + 1);
-      setTimer(60);
+      setTimer(10);
       setPointsAssigned(false);
       // setCorrectGuesses([]); // Reset correct guesses for the next round
     }
     return () => clearInterval(intervalId);
-  }, [timer, correctGuesses, players.length]);
+  }, [timer,  players.length]); //correctGuesses,
 
   useEffect(() => {
     if (timer % 10 === 0 && timer !== 0) {

@@ -8,6 +8,7 @@ function Endgame({game ,onSendChat, messages, players}) {
 
   const navigate = useNavigate();
   const [creator, setCreator] = useState(false);
+  const [buttonDisabled, setButtonDisabled] = useState(false);
 
 
   useEffect(() => {
@@ -30,11 +31,17 @@ function Endgame({game ,onSendChat, messages, players}) {
   };
 
   const handleLeaveGame = () => {
-    onSendChat(localStorage.getItem("token"), "Left the match!", "LEAVE");
+    if (creator) {
+      onSendChat(localStorage.getItem("token"), "Left the match!", "LEAVE_CREATOR");
+    }
+    else {  
+      onSendChat(localStorage.getItem("token"), "Left the game!", "LEAVE");
+    }
   };
 
 
   const handlePlayAgain =  () => {
+    setButtonDisabled(true);
     if (creator) {
       console.log("Creator is playing again, redirecting to create game");
       navigate(`/game/${game.gameCode}`);
@@ -77,7 +84,7 @@ function Endgame({game ,onSendChat, messages, players}) {
       <div className="col-md-6 bg-transparent text-center mt-5">
         <div className="button-wrapper justify-content-center">
           <p className="mb-0">{}/{game.playerCount} want to play again</p>
-          <button className="individual-button1" onClick={() => handlePlayAgain()}>Play Again</button>
+          <button className="individual-button1" onClick={() => handlePlayAgain()} disabled={buttonDisabled}>Play Again</button>
         </div>
         <div className="button-wrapper">
           <button className="individual-button2" onClick={() => {handleLeaveGame(); navigate("/game")}}>Main Menu</button>
