@@ -208,30 +208,31 @@ const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, 
               </div>
               {location.name}
             </nav>
-            <table
-              id="rankings"
-              className="leaderboard-results"
-              width="100%"
-            >
-              <thead>
-              <tr>
-                <th className="text-dark">Name</th>
-                <th className="text-dark">Points</th>
-              </tr>
-              </thead>
-              <tbody>
-              {leaderboard.map((player, index) => (
-                <tr key={index}>
-                  <td>{player.username}</td>
-                  <td>{player.points}</td>
-                </tr>
-              ))}
-              </tbody>
-            </table>
+            <div className="leaderboard-container text-center p-2" style={{ maxHeight: "120px", overflowY: "auto" }}>
+              <table
+                id="rankings"
+                className="leaderboard-results"
+                width="100%"
+              >
+                <thead>
+                  <tr>
+                    <th className="text-dark">Name</th>
+                    <th className="text-dark">Points</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {leaderboard.map((player, index) => (
+                    <tr key={index}>
+                      <td>{player.username}</td>
+                      <td>{player.points}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </section>
         </div>
       </div>
-
       <div className="col-md-6 justify-content-center text-center bg-gray">
         <h1>In Game</h1>
 
@@ -272,7 +273,7 @@ const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, 
               </div>
             </nav>
           </section>
-          <div className="chat-container text-start p-2">
+          <div className="chat-container text-start p-2" style={{ maxHeight: "120px", overflowY: "auto" }}>
             <ul className="list-unstyled">
               {messagesGame.map((msg, index) => (
                 <li key={index}>
@@ -280,24 +281,24 @@ const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, 
                 </li>
               ))}
             </ul>
-            <div className="input-group mt-3">
-              <input
-                type="text"
-                className="form-control"
-                value={currentMessage}
-                onChange={(e) => setCurrentMessage(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                    handleSendMessageInGame();
-                  }
-                }}
-                placeholder="Write a message..."
-                disabled={pointsAssigned} // Disable input if points are already assigned
-              />
-              <button className="btn btn-primary" onClick={handleSendMessageInGame} disabled={pointsAssigned}>Send
-              </button>
-            </div>
+          </div>
+          <div className="input-group mt-3">
+            <input
+              type="text"
+              className="form-control"
+              value={currentMessage}
+              onChange={(e) => setCurrentMessage(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  handleSendMessageInGame();
+                }
+              }}
+              placeholder="Write a message..."
+              disabled={pointsAssigned} // Disable input if points are already assigned
+            />
+            <button className="btn btn-primary" onClick={handleSendMessageInGame} disabled={pointsAssigned}>Send
+            </button>
           </div>
         </div>
       </div>

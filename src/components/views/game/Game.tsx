@@ -168,7 +168,7 @@ const Game = () => {
         </div>
       </div>
       {/* Bereich für aktive Lobbies, renderActiveLobbies wird aufgerufen */}
-      <div className="activeLobbies col-md-12 mt-5 pb-0 pt-2">
+      <div className="activeLobbies col-md-12 mt-5 pb-0 pt-2" style={{ maxHeight: "250px", overflowY: "auto" }}>
         <h2 className="p-2 mb-2 pb-0">Active Games</h2>
         <div className="row">
           {renderActiveLobbies(activeLobbies)}
