@@ -88,7 +88,6 @@ const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, 
     if (messagesGame.length > 0 && messagesGame[len].type === "JOKER") { // Check if messagesGame is not empty
       const num = messagesGame[len].content;
       if (num === 1) {
-        console.log("Delay Joker");
         const blackoutMessage = messagesGame[len].type === "JOKER" && messagesGame[len].from !== localStorage.getItem("token");
         if (blackoutMessage) {
           setBlackoutMap(0);
@@ -102,7 +101,6 @@ const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, 
       } else if (num === 2) {
         const removeJoker = messagesGame[len].type === "JOKER" && messagesGame[len].from !== localStorage.getItem("token");
         if (removeJoker) {
-          console.log("Remove Joker");
           setRevealedLetters(0);
         }
       }
@@ -114,14 +112,12 @@ const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, 
 
     const initializeMap = async () => {
       if (!game || !game.cities || game.cities.length < round) {
-        console.error("Invalid game data or round");
         return;
       }
       const newLocation = game.cities[round - 1];
       setLocation(newLocation);
 
       if (!newLocation || !newLocation.latitude || !newLocation.longitude) {
-        console.error("Invalid location data");
         return;
       }
 
@@ -149,7 +145,7 @@ const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, 
           linksControl: false,
         });
       } catch (error) {
-        console.error("Error loading Google Maps API:", error);
+        console.error("Error loading Google Maps API", error);
       }
     };
 

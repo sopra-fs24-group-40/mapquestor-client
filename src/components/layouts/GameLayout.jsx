@@ -47,12 +47,6 @@ function GameLayout(props) {
 
       localStompClient.subscribe(`/topic/logout`, (message) => {
 
-        if (localStorage.getItem("gameCode")) {
-          const gameCode = localStorage.getItem("gameCode");
-          const message = { from: localStorage.getItem("token"), content: "Left the game", type: "LEAVE" };
-          localStompClient.send(`/app/${gameCode}/chat`, {}, JSON.stringify(message));
-        }
-
         const payload = JSON.parse(message.body);
         if (payload.from === localStorage.getItem("token")) {
           localStorage.removeItem("token");
@@ -75,9 +69,16 @@ function GameLayout(props) {
 
     if (stompClient) {
 
+      const gameCode = localStorage.getItem("gameCode");
+
+      if (gameCode) {
+        const message = { from: localStorage.getItem("token"), content: "Left the game", type: "LEAVE" };
+        stompClient.send(`/app/${gameCode}/chat`, {}, JSON.stringify(message));
+      }
+
       let logoutMessage = {
         from: localStorage.getItem("token"),
-        content: localStorage.getItem("gameCode"),
+        content: gameCode,
         type: "LOGOUT",
       };
       stompClient.send(`/app/logout`, {}, JSON.stringify(logoutMessage));

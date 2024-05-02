@@ -14,6 +14,7 @@ export default function Game() {
   const [messagesGame, setMessagesGame] = useState([]);
   const [players, setPlayers] = useState([]);
   const [game, setGame] = useState({});
+  const [creator, setCreator] = useState(null);
   const [countdownDuration, setCountdownDuration] = useState(null);
   const { id } = useParams();
   const [round, setRound] = useState(1);
@@ -31,6 +32,7 @@ export default function Game() {
         }
 
         setGame(gameData);
+        setCreator(gameData.creator);
         setPlayers(gameData.players || []);
         setGamePhase(gameData.status || "LOBBY");
       } catch (error) {
@@ -68,11 +70,9 @@ export default function Game() {
     }
   }, [stompClient, id, navigate]);
 
-
-  const handleLogout = (payload) => {
-    setPlayers(prevPlayers => prevPlayers.filter(player => player.token !== payload.from));
-    setMessages(prevMessages => [...prevMessages, payload]);
-  };
+  useEffect(() => {
+    setCreator(game.creator);
+  }, [game]);
 
 
   const sendChatMessage = (from, content, type) => {
@@ -121,6 +121,7 @@ export default function Game() {
 
 
   const handleMessage = (payload) => {
+    console.log("hier ------>" + payload.type);
     if (payload.type === "JOIN") {
       setPlayers(prevPlayers => {
         const userExists = prevPlayers.some(player => player.username === payload.content.username);
@@ -131,11 +132,24 @@ export default function Game() {
         }
       });
     } else if (payload.type === "LEAVE") {
+
+      console.log("Player left the game");
+      console.log(payload.from);
+      console.log(creator);
+      console.log(game);
+
+      if (payload.from === creator) {
+        console.log("Creator left the game");
+        const message = { from: payload.from, content: {}, type: "LEAVE_CREATOR" };
+        stompClient && stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message));
+      }
+
       setPlayers(prevPlayers => prevPlayers.filter(player => player.token !== payload.from));
       setMessages(prevMessages => [...prevMessages, payload]);
     } else if (payload.type === "LEAVE_CREATOR") {
       navigate("/game");
     } else if (payload.type === "CHAT") {
+      console.log(game);
       setMessages(prevMessages => [...prevMessages, payload]);
     } else if (payload.type === "CHAT_INGAME") {
       setMessagesGame(prevMessages => [...prevMessages, payload]);
@@ -143,10 +157,8 @@ export default function Game() {
       setCountdownDuration(1);
     } else if (payload.type === "POINTS") {
       setPlayers(payload.content);
-      console.log("Das sollten die neuen Spieler sein mashallah  ---> ", payload.content);
     } else if (payload.type === "JOKER") {
       setMessagesGame(prevMessages => [...prevMessages, payload]);
-      console.log("JOKER -------------->", payload.content);
     }
   };
 

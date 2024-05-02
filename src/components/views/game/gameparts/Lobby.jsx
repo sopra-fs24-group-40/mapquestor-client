@@ -75,7 +75,6 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
     //api request
     setShowEditForm(false);
   };
-  // console.log(localStorage.getItem());
   return (
     <div className="row justify-content-center mt-5">
       <div className="col-md-3">

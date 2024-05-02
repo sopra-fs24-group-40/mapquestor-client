@@ -24,14 +24,12 @@ function JoinGame(props) {
 
 
       if (response.status === 200) {
-        console.log("Game joined successfully", response.data);
         localStorage.setItem("gameCode", gameCode);
         navigate(`/game/${gameCode}`);
       }
 
     } catch (error) {
       console.error("Error joining the game:", error.response);
-      console.log(error)
       setError("Error joining the game: " + (error.response?.data?.message || "Error joining the game!"));
     }
   };
