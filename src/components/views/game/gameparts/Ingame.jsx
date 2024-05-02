@@ -199,6 +199,7 @@ const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, 
               <div className="ladder-title text-center">
                 <h1 style={{fontSize: "22px"}}>Leaderboard</h1>
               </div>
+              {location.name}
             </nav>
             <table
               id="rankings"

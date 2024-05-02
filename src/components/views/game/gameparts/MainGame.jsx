@@ -19,7 +19,7 @@ export default function Game() {
   const { id } = useParams();
   const [round, setRound] = useState(1);
   const [correctGuesses, setCorrectGuesses] = useState(0);
-  const [roundLength, setRoundLength] = useState(60);
+  const [roundLength, setRoundLength] = useState(10);
 
 
   useEffect(() => {
@@ -106,6 +106,13 @@ export default function Game() {
 
     const maxRounds = game.roundCount;
     if (round > maxRounds) {
+      const sortedPlayers = [...players].sort((a, b) => b.points - a.points);
+      if (sortedPlayers[0].token === localStorage.getItem("token")) {
+        const message2 = { from: localStorage.getItem("token"), content: "WON!", type: "PLAYED" };
+        stompClient && stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message2));}
+      else{ 
+        const message1 = { from: localStorage.getItem("token"), content: "FINISHED!", type: "PLAYED" };
+        stompClient && stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message1));}
       let message = { status: "ENDGAME" };
       stompClient && stompClient.send(`/app/${id}/gameState`, {}, JSON.stringify(message));
     } else {
