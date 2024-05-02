@@ -52,7 +52,7 @@ export default function Game() {
     if (stompClient && creator) {
       const gameTopic = `/topic/${id}`;
 
-      stompClient.subscribe(`/topic/cities`, (message) => {
+      stompClient.subscribe("/topic/cities", (message) => {
         const payload = JSON.parse(message.body);
         game.cities = payload.cities;
       });
@@ -64,7 +64,7 @@ export default function Game() {
           setRound(1);
           let cityMessage = { roundCount: game.roundCount };
           if (game.creator === localStorage.getItem("token")) {
-            stompClient.send(`/app/cities`, {}, JSON.stringify(cityMessage));
+            stompClient.send("/app/cities", {}, JSON.stringify(cityMessage));
           }
         }
         setGamePhase(gameState.status);
@@ -154,7 +154,7 @@ export default function Game() {
 
   const cityTest = () => {
     let cityMessage = { roundCount: game.roundCount };
-    stompClient.send(`/app/cities`, {}, JSON.stringify(cityMessage));
+    stompClient.send("/app/cities", {}, JSON.stringify(cityMessage));
   };
 
 
