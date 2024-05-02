@@ -54,6 +54,7 @@ function Login(props) {
             className="form-control"
             type="text"
             id="username"
+            placeholder="What's your name?"
             ref={userRef}
             autoComplete="off"
             onChange={(e) => setUsername(e.target.value)}
@@ -66,6 +67,7 @@ function Login(props) {
             className="form-control"
             type="password"
             id="password"
+            placeholder="Top secret!"
             onChange={(e) => setPassword(e.target.value)}
             required
           />

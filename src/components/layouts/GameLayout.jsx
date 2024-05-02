@@ -4,7 +4,7 @@ import "../../styles/views/gameLayout.scss";
 import "../../styles/views/game.scss";
 import logo from "../../assets/logo.png";
 import avatar from "../../assets/avatar.png";
-import { api, handleError } from "helpers/api";
+import { api } from "helpers/api";
 import { getDomain } from "../../helpers/getDomain";
 
 import SockJS from "sockjs-client";
@@ -45,7 +45,7 @@ function GameLayout(props) {
       setStompClient(localStompClient);
 
 
-      localStompClient.subscribe(`/topic/logout`, (message) => {
+      localStompClient.subscribe("/topic/logout", (message) => {
 
         const payload = JSON.parse(message.body);
         if (payload.from === localStorage.getItem("token")) {
@@ -81,7 +81,7 @@ function GameLayout(props) {
         content: gameCode,
         type: "LOGOUT",
       };
-      stompClient.send(`/app/logout`, {}, JSON.stringify(logoutMessage));
+      stompClient.send("/app/logout", {}, JSON.stringify(logoutMessage));
 
     }
   };
@@ -99,12 +99,12 @@ function GameLayout(props) {
     setSearchQuery("");
   };
 
-  const contextValue = {
+  const contextValue = React.useMemo(() => ({
     stompClient,
     user,
     navigate,
     logout,
-  };
+  }), [stompClient, user, navigate, logout]);
 
   return (
     <GameContext.Provider value={contextValue}>
@@ -122,11 +122,11 @@ function GameLayout(props) {
           </div>
           <div className="col d-flex justify-content-end align-items-center">
             <div className="container-search-bar col-auto p-3">
-              <p>Search other Users</p>
-              <label htmlFor="site-search"></label>
+              <label htmlFor="site-search">Search Users: </label>
               <input
                 type="search"
                 id="site-search"
+                placeholder="There are many..."
                 name="q"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -136,7 +136,7 @@ function GameLayout(props) {
             </div>
             <div className="col-auto p-3">
               <figure className="container-avatar">
-                <img src={avatar} width={50} /></figure>
+                <img src={avatar} width={50} alt="" /></figure>
               <button onClick={() => user && navigate(`/game/users/${user.id}`)}>My Profile</button>
             </div>
             <div className="col-auto">

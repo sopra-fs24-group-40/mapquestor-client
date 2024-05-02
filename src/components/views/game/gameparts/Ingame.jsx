@@ -3,7 +3,7 @@ import {Loader} from "@googlemaps/js-api-loader";
 import PropTypes from "prop-types";
 
 const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, updateRound}) => {
-  const [timer, setTimer] = useState(60);
+  const [timer, setTimer] = useState(10);
   const [location, setLocation] = useState(game.cities[round - 1]);
   const [currentMessage, setCurrentMessage] = useState("");
   const [leaderboard, setLeaderboard] = useState([]);
@@ -12,6 +12,7 @@ const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, 
   const [hintRemoveJoker, sethintRemoveJoker] = useState(false);
   const [revealedLetters, setRevealedLetters] = useState(0);
   const [blackoutMap, setBlackoutMap] = useState(1);
+  // const [correctGuesses, setCorrectGuesses] = useState([]);
 
 
   const solution = game.gameType === "CITY" ? location.capital : location.name;
@@ -31,14 +32,21 @@ const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, 
       intervalId = setInterval(() => {
         setTimer(timer - 1);
       }, 1000);
+    // } else if (correctGuesses.length === players.length) {
+    //   clearInterval(intervalId);
+    //   updateRound(round + 1);
+    //   setTimer(60);
+    //   setPointsAssigned(false);
+    //   setCorrectGuesses([]); // Reset correct guesses for the next round
     } else if (timer === 0) {
       clearInterval(intervalId);
       updateRound(round + 1);
-      setTimer(60);
+      setTimer(10);
       setPointsAssigned(false);
+      // setCorrectGuesses([]); // Reset correct guesses for the next round
     }
     return () => clearInterval(intervalId);
-  }, [timer]);
+  }, [timer,  players.length]); //correctGuesses,
 
   useEffect(() => {
     if (timer % 10 === 0 && timer !== 0) {
@@ -55,11 +63,17 @@ const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, 
     if (!currentMessage.trim()) return;
 
     if (location && !pointsAssigned) {
-
       const cityName = solution;
       if (currentMessage.toLowerCase() === cityName.toLowerCase()) {
         addPoints(timer);
         setPointsAssigned(true);
+        // setCorrectGuesses(prevGuesses => {
+        //   const newGuesses = [...prevGuesses, localStorage.getItem("token")];
+        //   console.log(newGuesses.length); // Log the new length
+        //   return newGuesses;
+        // });
+        // console.log(correctGuesses.length);
+        // console.log(players.length);
         onSendChat(localStorage.getItem("username"), "Guessed the correct answer!", "CHAT_INGAME");
       } else {
         onSendChat(localStorage.getItem("username"), currentMessage, "CHAT_INGAME");
