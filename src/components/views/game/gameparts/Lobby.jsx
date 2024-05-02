@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import countdowns from "../../../../assets/countdowns.mp3";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-function Lobby({ startGame, onSendChat, messages, players, game, countdownDuration, handleLeave }) {
+function Lobby({ startGame, onSendChat, messages, players, game, countdownDuration, handleLeave, cityTest }) {
   const [currentMessage, setCurrentMessage] = useState("");
   const [creator, setCreator] = useState(false);
   const [countdown, setCountdown] = useState(null);
@@ -62,7 +62,7 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
   };
 
   const handleLeaveGame = () => {
-    localStorage.removeItem("gameCode")
+    localStorage.removeItem("gameCode");
     handleLeave(localStorage.getItem("token"));
   };
 
@@ -97,6 +97,7 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
         <div className="card">
           <div className="card-body">
             <h2 className="card-title">Lobby Chat</h2>
+            <button className="btn btn-secondary mt-3" onClick={cityTest}>Leave Game</button>
             <hr />
             <h4>Players: {players.length} / {game.maxPlayers}</h4>
             <div className="chat-container">
@@ -134,7 +135,12 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
                   </button>
                 )
               )}
-              <button className="btn btn-secondary mt-3" onClick={() => {handleLeaveGame(); navigate("/game")}}>Leave Game</button>
+              <button className="btn btn-secondary mt-3" onClick={() => {
+                handleLeaveGame();
+                navigate("/game");
+              }}>Leave Game
+              </button>
+
 
               <button
                 onClick={() => setShowEditForm(!showEditForm)}
@@ -197,6 +203,7 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
 Lobby.propTypes = {
   onSendChat: PropTypes.func.isRequired,
   startGame: PropTypes.func.isRequired,
+  cityTest: PropTypes.func.isRequired,
   handleLeave: PropTypes.func.isRequired,
   countdownDuration: PropTypes.any,
   messages: PropTypes.arrayOf(

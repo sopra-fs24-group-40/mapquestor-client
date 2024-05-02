@@ -52,8 +52,21 @@ export default function Game() {
     if (stompClient && creator) {
       const gameTopic = `/topic/${id}`;
 
+      stompClient.subscribe(`/topic/cities`, (message) => {
+        const payload = JSON.parse(message.body);
+        game.cities = payload.cities;
+      });
+
+
       stompClient.subscribe(`${gameTopic}/gameState`, (message) => {
         const gameState = JSON.parse(message.body);
+        if (gameState.status === "LOBBY") {
+          setRound(1);
+          let cityMessage = { roundCount: game.roundCount };
+          if (game.creator === localStorage.getItem("token")) {
+            stompClient.send(`/app/cities`, {}, JSON.stringify(cityMessage));
+          }
+        }
         setGamePhase(gameState.status);
       });
 
@@ -96,6 +109,11 @@ export default function Game() {
     stompClient && stompClient.send(`/app/${id}/gameState`, {}, JSON.stringify(message));
   };
 
+  const playAgain = () => {
+    let message = { status: "LOBBY" };
+    stompClient && stompClient.send(`/app/${id}/gameState`, {}, JSON.stringify(message));
+  };
+
   const updatePlayers = (updatedPlayers) => {
     setPlayers(updatedPlayers);
     const message = { from: localStorage.getItem("token"), content: updatedPlayers, type: "POINTS" };
@@ -109,10 +127,11 @@ export default function Game() {
       const sortedPlayers = [...players].sort((a, b) => b.points - a.points);
       if (sortedPlayers[0].token === localStorage.getItem("token")) {
         const message2 = { from: localStorage.getItem("token"), content: "WON!", type: "PLAYED" };
-        stompClient && stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message2));}
-      else{ 
+        stompClient && stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message2));
+      } else {
         const message1 = { from: localStorage.getItem("token"), content: "FINISHED!", type: "PLAYED" };
-        stompClient && stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message1));}
+        stompClient && stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message1));
+      }
       let message = { status: "ENDGAME" };
       stompClient && stompClient.send(`/app/${id}/gameState`, {}, JSON.stringify(message));
     } else {
@@ -131,6 +150,11 @@ export default function Game() {
       const message = { from: player, content: "Left the game", type: "LEAVE" };
       stompClient && stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message));
     }
+  };
+
+  const cityTest = () => {
+    let cityMessage = { roundCount: game.roundCount };
+    stompClient.send(`/app/cities`, {}, JSON.stringify(cityMessage));
   };
 
 
@@ -163,7 +187,7 @@ export default function Game() {
       setMessagesGame(prevMessages => [...prevMessages, payload]);
       setCorrectGuesses(prev => prev + 1);
     } else if (payload.type === "START_COUNTDOWN") {
-      setCountdownDuration(1);
+      setCountdownDuration(10);
     } else if (payload.type === "POINTS") {
       setPlayers(payload.content);
     } else if (payload.type === "JOKER") {
@@ -176,14 +200,14 @@ export default function Game() {
   switch (gamePhase) {
     case "LOBBY":
       return <Lobby startGame={startGame} onSendChat={sendChatMessage} messages={messages} players={players} game={game}
-                    countdownDuration={countdownDuration} handleLeave={handleLeave} />;
+                    countdownDuration={countdownDuration} handleLeave={handleLeave} cityTest={cityTest} />;
     case "INGAME":
       return <Ingame round={round} onSendChat={sendChatMessageGame} messagesGame={messagesGame} players={players}
                      game={game} updatePlayers={updatePlayers} updateRound={updateRound} handleLeave={handleLeave}
                      correctGuesses={correctGuesses} roundLength={roundLength} />;
     case "ENDGAME":
       return <Endgame game={game} onSendChat={sendChatMessage} messages={messages} players={players}
-                      handleLeave={handleLeave}/>;
+                      handleLeave={handleLeave} playAgain={playAgain} />;
     default:
       return <div>Lade...</div>;
   }
