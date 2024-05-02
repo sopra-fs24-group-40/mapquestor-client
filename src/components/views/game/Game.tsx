@@ -118,7 +118,7 @@ const Game = () => {
                 <h1>Leaderboard</h1>
               </div>
               <div className="ladder-search">
-              <input
+                <input
                   type="text"
                   placeholder="Search by username..."
                   value={searchQuery}
@@ -138,19 +138,21 @@ const Game = () => {
                 </select>
               </div>
             </nav>
-            <table id="rankings" className="leaderboard-results" width="100%">
-              <thead>
-                <tr>
-                  <th>Rank</th>
-                  <th>Name</th>
-                  <th>Wins</th>
-                </tr>
-              </thead>
-              <tbody className="text-center bg-transparent">
-                {/* Render player rows directly within tbody */}
-                {renderPlayerRow(users)}
-              </tbody>
-            </table>
+            <div className="leaderboard-scrollable" style={{ maxHeight: "350px", overflowY: "auto" }}>
+              <table id="rankings" className="table leaderboard-results">
+                <thead>
+                  <tr>
+                    <th>Rank</th>
+                    <th>Name</th>
+                    <th>Wins</th>
+                  </tr>
+                </thead>
+                <tbody className="text-center bg-transparent">
+                  {/* Render player rows directly within tbody */}
+                  {renderPlayerRow(users)}
+                </tbody>
+              </table>
+            </div>
           </section>
         </div>
       </div>
