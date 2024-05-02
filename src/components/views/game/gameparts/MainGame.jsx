@@ -44,6 +44,7 @@ export default function Game() {
     };
 
     fetchGameData();
+
   }, [id, navigate]);
 
 
