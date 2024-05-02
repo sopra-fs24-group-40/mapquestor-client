@@ -168,6 +168,8 @@ export default function Game() {
       setPlayers(payload.content);
     } else if (payload.type === "JOKER") {
       setMessagesGame(prevMessages => [...prevMessages, payload]);
+    } else if (payload.type === "PLAY_AGAIN") {
+      setMessagesGame(prevMessages => [...prevMessages, payload]);
     }
   };
 
@@ -181,7 +183,7 @@ export default function Game() {
                      correctGuesses={correctGuesses} roundLength={roundLength} />;
     case "ENDGAME":
       return <Endgame game={game} onSendChat={sendChatMessage} messages={messages} players={players}
-                      handleLeave={handleLeave} />;
+                      handleLeave={handleLeave}/>;
     default:
       return <div>Lade...</div>;
   }

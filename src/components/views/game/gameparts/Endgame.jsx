@@ -9,6 +9,8 @@ function Endgame({game ,onSendChat, messages, players}) {
   const navigate = useNavigate();
   const [creator, setCreator] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(false);
+  const [timer, setTimer] = useState(10000);
+  const [playAgain, setplayAgain] = useState(false);
 
 
   useEffect(() => {
@@ -42,19 +44,22 @@ function Endgame({game ,onSendChat, messages, players}) {
 
   const handlePlayAgain =  () => {
     setButtonDisabled(true);
-    if (creator) {
-      console.log("Creator is playing again, redirecting to create game");
-      navigate(`/game/${game.gameCode}`);
-    } else {
-      if (game.playerCount < game.maxPlayers) {
-        console.log("Game is not full, redirecting to join game");
-        navigate(`/game/join/${game.gameCode}`);
-      } else {
-        console.log("Game is full, redirecting to game");
-        navigate("/game");
-      }
-    }
+    onSendChat(localStorage.getItem("token"), "Wants to play again!", "PLAY_AGAIN");
+    setplayAgain(true);
   }
+
+  useEffect(() => {
+    let intervalId;
+    if (timer > 0) {
+      intervalId = setInterval(() => {
+        setTimer(timer - 1);
+      }, 1000);
+    } else if (timer === 0) {
+      navigate("/game");
+    }
+    return () => clearInterval(intervalId);
+  }, [timer,  players.length]);
+
   return (
     <div className="row">
       <div className="col-md-6 text-center mt-5">
@@ -82,6 +87,10 @@ function Endgame({game ,onSendChat, messages, players}) {
       </div>
 
       <div className="col-md-6 bg-transparent text-center mt-5">
+      <div
+          className="timer-container mb-5">
+          Timer: {timer && timer} seconds <br/>
+        </div>
         <div className="button-wrapper justify-content-center">
           <p className="mb-0">{}/{game.playerCount} want to play again</p>
           <button className="individual-button1" onClick={() => handlePlayAgain()} disabled={buttonDisabled}>Play Again</button>
