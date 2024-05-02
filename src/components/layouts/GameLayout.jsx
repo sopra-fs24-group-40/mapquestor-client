@@ -121,7 +121,7 @@ function GameLayout(props) {
             </div>
           </div>
           <div className="col d-flex justify-content-end align-items-center">
-            <div className="container-search-bar col-auto p-3">
+            <div className="container-search-bar col-auto p-3 d-flex flex-column align-items-start">
               <label htmlFor="site-search">Search Users: </label>
               <input
                 type="search"
@@ -131,16 +131,16 @@ function GameLayout(props) {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
-              <button onClick={handleSearch}>Search</button>
+              <button className="btn btn-primary mt-1" onClick={handleSearch}>Search</button>
               {searchResult === "not found" && <p style={{ color: "red" }}>User not found</p>}
             </div>
             <div className="col-auto p-3">
               <figure className="container-avatar">
                 <img src={avatar} width={50} alt="" /></figure>
-              <button onClick={() => user && navigate(`/game/users/${user.id}`)}>My Profile</button>
+              <button className="btn btn-primary"onClick={() => user && navigate(`/game/users/${user.id}`)}>My Profile</button>
             </div>
             <div className="col-auto">
-              <button className="btn btn-danger" onClick={() => logout()}>Logout</button>
+              <button className="btn btn-danger mb-5" onClick={() => logout()}>Logout</button>
             </div>
           </div>
         </div>

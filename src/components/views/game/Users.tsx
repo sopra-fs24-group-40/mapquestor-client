@@ -23,7 +23,7 @@ const Player = ({ user }: { user: User }) => {
         <Link
           to={`/game/users/${user.id}`}
           className="text-decoration-none">
-          <span className={`fs-4 ${statusColorClass}`}>
+          <span className={`fs-4 ${statusColorClass} font-weight-bold`}>
             {user.username}
           </span>
         </Link>
@@ -56,7 +56,7 @@ function Users() {
   return (
     <div className="row justify-content-center">
       <div className="col-md-4 bg-light mt-3 border rounded">
-        <h1 className="text-center p-2">All Users</h1>
+        <h1 className="text-center p-2">Users</h1>
         <div className="d-flex flex-column align-items-center">
           {isLoading ? (
             <Spinner />
