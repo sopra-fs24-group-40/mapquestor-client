@@ -76,7 +76,7 @@ const Game = () => {
     // Filter players based on searchQuery if it's not empty
     const filteredPlayers = searchQuery
       ? users.filter((player) =>
-          player.username.toLowerCase().includes(searchQuery.toLowerCase())
+          player.username.toLowerCase().startsWith(searchQuery.toLowerCase())
         )
       : users;
 
