@@ -55,9 +55,9 @@ function Users() {
 
   return (
     <div className="row justify-content-center">
-    <div className="col-md-4 bg-light mt-3 border rounded" style={{ maxHeight: "180px", overflowY: "auto" }}>
+    <div className="col-md-4 bg-light mt-3 border rounded">
       <h1 className="text-center p-2">Users</h1>
-      <div className="d-flex flex-column align-items-center">
+      <div className="d-flex flex-column align-items-center" style={{ maxHeight: "270px", overflowY: "auto" }}>
         {isLoading ? (
           <Spinner />
         ) : (

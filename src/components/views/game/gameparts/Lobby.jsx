@@ -156,7 +156,6 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
         <div className="card">
           <div className="card-header">Game</div>
           <ul className="list-group list-group-flush p-3">
-            Host: {game.creator}<br />
             Game Type: {game.gameType}<br />
             Round Count: {game.roundCount}
           </ul>
