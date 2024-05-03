@@ -56,6 +56,13 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
     return () => clearInterval(intervalId);
   }, [countdown, startGame]);
 
+  useEffect(() => {
+    // Check if the lobby is full
+    if (players.length === maxPlayers) {
+      // Start countdown automatically
+      setCountdown(10);
+    }
+  }, [players.length, maxPlayers]);
 
   useEffect(() => {
     // Scroll chat container to bottom when messages change
