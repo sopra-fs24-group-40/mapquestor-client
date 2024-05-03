@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useRef} from "react";
 import {Loader} from "@googlemaps/js-api-loader";
 import PropTypes from "prop-types";
 
@@ -12,6 +12,7 @@ const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, 
   const [hintRemoveJoker, sethintRemoveJoker] = useState(false);
   const [revealedLetters, setRevealedLetters] = useState(0);
   const [blackoutMap, setBlackoutMap] = useState(1);
+  const chatContainerRef = useRef(null); // Create a ref for the chat container
   const [safe, setSafe] = useState(false);
 
 
@@ -62,6 +63,12 @@ const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, 
       setPointsAssigned(false);
     }
   }, [correctGuesses, players.length]);
+
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [messagesGame]);
 
   const handleSendMessageInGame = () => {
     if (!currentMessage.trim()) return;
@@ -279,7 +286,7 @@ const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, 
               </div>
             </nav>
           </section>
-          <div className="chat-container text-start p-2" style={{ maxHeight: "120px", overflowY: "auto" }}>
+          <div className="chat-container text-start p-2" ref={chatContainerRef} style={{ maxHeight: "120px", overflowY: "auto" }}>
             <ul className="list-unstyled">
               {messagesGame.map((msg, index) => (
                 <li key={index}>
