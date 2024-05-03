@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import PropTypes from "prop-types";
 import countdowns from "../../../../assets/countdowns.mp3";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +12,7 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
   const [maxPlayers, setMaxPlayers] = useState(game.maxPlayers);
   const [roundCount, setRoundCount] = useState(game.roundCount);
   const [showEditForm, setShowEditForm] = useState(false);
+  const chatContainerRef = useRef(null);
   const navigate = useNavigate();
 
 
@@ -54,6 +55,21 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
     }
     return () => clearInterval(intervalId);
   }, [countdown, startGame]);
+
+  useEffect(() => {
+    // Check if the lobby is full
+    if (players.length === maxPlayers) {
+      // Start countdown automatically
+      setCountdown(10);
+    }
+  }, [players.length, maxPlayers]);
+
+  useEffect(() => {
+    // Scroll chat container to bottom when messages change
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   const handleSendMessage = () => {
     if (!currentMessage.trim()) return;
@@ -102,7 +118,7 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
             <h2 className="card-title">Lobby Chat</h2>
             <hr />
             <h4>Players: {players.length} / {game.maxPlayers}</h4>
-            <div className="chat-container" style={{ maxHeight: "120px", overflowY: "auto" }}>
+            <div className="chat-container" ref={chatContainerRef} style={{ maxHeight: "120px", overflowY: "auto" }}>
               <ul className="list-unstyled">
                 {messages.map((msg, index) => (
                   <li key={index}>
