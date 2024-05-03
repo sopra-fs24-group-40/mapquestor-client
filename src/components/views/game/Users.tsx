@@ -55,26 +55,25 @@ function Users() {
 
   return (
     <div className="row justify-content-center">
-      <div className="col-md-4 bg-light mt-3 border rounded">
-        <h1 className="text-center p-2">Users</h1>
-        <div className="d-flex flex-column align-items-center">
-          {isLoading ? (
-            <Spinner />
-          ) : (
-            users.map((user: User) => (
-              <div key={user.id}>
-                <Link to={`/game/users/${user.id}`}
-                  className="text-decoration-none"><Player user={user} /></Link>
-              </div>
+    <div className="col-md-4 bg-light mt-3 border rounded">
+      <h1 className="text-center p-2">Users</h1>
+      <div className="d-flex flex-column align-items-center" style={{ maxHeight: "270px", overflowY: "auto" }}>
+        {isLoading ? (
+          <Spinner />
+        ) : (
+          users.map((user: User) => (
+            <div key={user.id}>
+              <Link to={`/game/users/${user.id}`}
+                className="text-decoration-none"><Player user={user} /></Link>
+            </div>
           ))
         )}
-        </div>
-        <button
-          className="btn btn-danger mb-3" onClick={() => navigate("/game")}>Back
-        </button>
       </div>
-
+      <button
+        className="btn btn-danger mb-3" onClick={() => navigate("/game")}>Back
+      </button>
     </div>
+  </div>
   );
 };
 

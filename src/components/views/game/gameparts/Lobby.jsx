@@ -75,22 +75,25 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
     //api request
     setShowEditForm(false);
   };
+
   return (
     <div className="row justify-content-center mt-5">
       <div className="col-md-3">
         <div className="card">
           <div className="card-header">Users in game:</div>
-          <ul className="list-group list-group-flush">
-            {players.map((player, index) => (
-              <li
-                key={index}
-                className="list-group-item"
-                style={{ color: creator ? "red" : "inherit" }}
-              >
-                {player.username}
-              </li>
-            ))}
-          </ul>
+          <div className="user-container" style={{ maxHeight: "120px", overflowY: "auto" }}>
+            <ul className="list-group list-group-flush">
+              {players.map((player, index) => (
+                <li
+                  key={index}
+                  className="list-group-item"
+                  style={{ color: creator ? "red" : "inherit" }}
+                >
+                  {player.username}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
       <div className="col-md-6 p-3">
@@ -100,7 +103,7 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
             <button className="btn btn-secondary mt-3" onClick={cityTest}>Leave Game</button>
             <hr />
             <h4>Players: {players.length} / {game.maxPlayers}</h4>
-            <div className="chat-container">
+            <div className="chat-container" style={{ maxHeight: "120px", overflowY: "auto" }}>
               <ul className="list-unstyled">
                 {messages.map((msg, index) => (
                   <li key={index}>
@@ -108,46 +111,44 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
                   </li>
                 ))}
               </ul>
-              <div className="input-group mt-3">
-                <input
-                  type="text"
-                  className="form-control"
-                  value={currentMessage}
-                  onChange={(e) => setCurrentMessage(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      e.preventDefault();
-                      handleSendMessage();
-                    }
-                  }}
-                  placeholder="Write a message..."
-                />
-                <button className="btn btn-primary" onClick={handleSendMessage}>Send</button>
-              </div>
-              {countdown !== null ? (
-                <div className="alert alert-info mt-5" role="alert">
-                  Game starts in: {countdown} Seconds...
-                </div>
-              ) : (
-                creator && (
-                  <button onClick={handleStartCountdown} className="btn btn-success mt-3">
-                    Start Countdown
-                  </button>
-                )
-              )}
-              <button className="btn btn-secondary mt-3" onClick={() => {
-                handleLeaveGame();
-                navigate("/game");
-              }}>Leave Game
-              </button>
-
-
-              <button
-                onClick={() => setShowEditForm(!showEditForm)}
-                className="btn btn-warning mt-3 d-flex justify-content-end"
-                disabled={!creator}>Edit
-              </button>
             </div>
+            <div className="input-group mt-3">
+              <input
+                type="text"
+                className="form-control"
+                value={currentMessage}
+                onChange={(e) => setCurrentMessage(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleSendMessage();
+                  }
+                }}
+                placeholder="Write a message..."
+              />
+              <button className="btn btn-primary" onClick={handleSendMessage}>Send</button>
+            </div>
+            {countdown !== null ? (
+              <div className="alert alert-info mt-5" role="alert">
+                Game starts in: {countdown} Seconds...
+              </div>
+            ) : (
+              creator && (
+                <button onClick={handleStartCountdown} className="btn btn-success mt-3">
+                  Start Countdown
+                </button>
+              )
+            )}
+            <button className="btn btn-secondary mt-3" onClick={() => {
+              handleLeaveGame();
+              navigate("/game");
+            }}>Leave Game
+            </button>
+            <button
+              onClick={() => setShowEditForm(!showEditForm)}
+              className="btn btn-warning mt-3 d-flex justify-content-end"
+              disabled={!creator}>Edit
+            </button>
           </div>
         </div>
       </div>
@@ -155,7 +156,6 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
         <div className="card">
           <div className="card-header">Game</div>
           <ul className="list-group list-group-flush p-3">
-            Host: {game.creator}<br />
             Game Type: {game.gameType}<br />
             Round Count: {game.roundCount}
           </ul>

@@ -78,18 +78,20 @@ function Endgame({ game, onSendChat, messages, players, playAgain }) {
                 <h1>Leaderboard</h1>
               </div>
             </nav>
-            <table id="rankings" className="leaderboard-results" width="100%">
-              <thead>
-              <tr>
-                <th>Rank</th>
-                <th>Name</th>
-                <th>Total</th>
-              </tr>
-              </thead>
-              <tbody className="text-center bg-transparent">
-              {renderPlayerRow(players)}
-              </tbody>
-            </table>
+            <div className="leaderboard-scrollable" style={{ maxHeight: "180px", overflowY: "auto" }}>
+              <table id="rankings" className="leaderboard-results" width="100%">
+                <thead>
+                  <tr>
+                    <th>Rank</th>
+                    <th>Name</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody className="text-center bg-transparent">
+                  {renderPlayerRow(players)}
+                </tbody>
+              </table>
+            </div>
           </section>
         </div>
       </div>
