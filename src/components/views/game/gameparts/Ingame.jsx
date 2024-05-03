@@ -66,6 +66,12 @@ const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, 
   const handleSendMessageInGame = () => {
     if (!currentMessage.trim()) return;
 
+    if(currentMessage === "/test") {
+      onSendChat(localStorage.getItem("username"), currentMessage, "JS");
+
+      return;
+    }
+
     if (location && !pointsAssigned) {
       const cityName = solution;
       if (currentMessage.toLowerCase() === cityName.toLowerCase()) {

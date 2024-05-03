@@ -5,6 +5,7 @@ import { api } from "../../../../helpers/api";
 import Ingame from "./Ingame";
 import Endgame from "./Endgame";
 import { GameContext } from "../../../layouts/GameLayout";
+import countdowns from "../../../../assets/countdownv2.mp3";
 
 
 export default function Game() {
@@ -158,6 +159,13 @@ export default function Game() {
     stompClient.send("/app/cities", {}, JSON.stringify(cityMessage));
   };
 
+  const doSomething = () => {
+    const countdownSound = new Audio(countdowns);
+    countdownSound.play()
+      .then(() => (console.log("Sound abgespielt!")))
+      .catch(error => console.error("Fehler beim Abspielen des Sounds:", error));
+  };
+
 
   const handleMessage = (payload) => {
     if (payload.type === "JOIN") {
@@ -189,6 +197,8 @@ export default function Game() {
       setCorrectGuesses(prev => prev + 1);
     } else if (payload.type === "START_COUNTDOWN") {
       setCountdownDuration(10);
+    } else if (payload.type === "JS") {
+      doSomething();
     } else if (payload.type === "POINTS") {
       setPlayers(payload.content);
     } else if (payload.type === "JOKER") {
