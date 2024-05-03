@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, useParams } from "react-router-dom";
 import "../../styles/views/gameLayout.scss";
 import "../../styles/views/game.scss";
 import logo from "../../assets/logo.png";
 import avatar from "../../assets/avatar.png";
+import Fett from "../../assets/Fett.png";
+import Vader from "../../assets/Vader.png";
+import C3PO from "../../assets/C3PO.png";
+import Clone from "../../assets/Clone.png";
+import Ren from "../../assets/Ren.png";
+import Stormtrooper from "../../assets/Stormtrooper.png";
 import { api } from "helpers/api";
 import { getDomain } from "../../helpers/getDomain";
 
@@ -24,7 +30,6 @@ function GameLayout(props) {
     async function fetchUsers() {
       try {
         const response = await api.get("/users");
-        console.log(response.data);
         setUsers(response.data);
         const currentUserId = Number(localStorage.getItem("id"));
         if (currentUserId) {
@@ -106,6 +111,33 @@ function GameLayout(props) {
     logout,
   }), [stompClient, user, navigate, logout]);
 
+  const showCorrectAvatar = () => {
+      const image = localStorage.getItem("avatar");
+      return resolveAvatar(image);
+  };
+
+  const resolveAvatar = (image) => {
+    if (image === "0") {
+      return Fett;
+    }
+    if (image === "1") {
+      return Vader;
+    }
+    if (image === "2") {
+      return C3PO;
+    }
+    if (image === "3") {
+      return Clone;
+    }
+    if (image === "4") {
+      return Ren;
+    }
+    if (image === "5") {
+      return Stormtrooper;
+    }
+    return avatar;
+  };
+
   return (
     <GameContext.Provider value={contextValue}>
       <div className="container-fluid">
@@ -136,7 +168,7 @@ function GameLayout(props) {
             </div>
             <div className="col-auto p-3">
               <figure className="container-avatar">
-                <img src={avatar} width={50} alt="" /></figure>
+                <img src={showCorrectAvatar()} width={50} alt="" /></figure>
               <button className="btn btn-primary"onClick={() => user && navigate(`/game/users/${user.id}`)}>My Profile</button>
             </div>
             <div className="col-auto">

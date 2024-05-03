@@ -131,7 +131,7 @@ function ProfilePage() {
     try {
       const requestBody = JSON.stringify({ avatar: selectedAvatar });
       const response = await api.put(`/users/${id}`, requestBody);
-      setUser({ avatar: selectedAvatar });
+      setUser({ ...user, avatar: selectedAvatar });
       localStorage.setItem("avatar", selectedAvatar);
       setShowAvatarEditForm(false);
       setSuccess(true);
@@ -146,6 +146,36 @@ function ProfilePage() {
       errRef.current.focus;
     }
   }
+
+  const showCorrectAvatar = () => {
+    if(checkUser()) {
+      const image = localStorage.getItem("avatar");
+      return resolveAvatar(image);
+    }
+    return resolveAvatar(user.avatar);
+  };
+
+  const resolveAvatar = (image) => {
+    if (image === "0") {
+      return Fett;
+    }
+    if (image === "1") {
+      return Vader;
+    }
+    if (image === "2") {
+      return C3PO;
+    }
+    if (image === "3") {
+      return Clone;
+    }
+    if (image === "4") {
+      return Ren;
+    }
+    if (image === "5") {
+      return Stormtrooper;
+    }
+    return avatar;
+  };
 
   return (
     <div className="row">
@@ -182,7 +212,7 @@ function ProfilePage() {
         </div>
         <div className="text-center">
         <figure className="container-avatar">
-          <img src={avatar} width={200} /></figure>
+          <img src={showCorrectAvatar()} width={200} /></figure>
           {checkUser() && (
           <button
           className="btn btn-primary mb-3 align-item-center btn-sm"
@@ -227,9 +257,6 @@ function ProfilePage() {
         )}
         {showAvatarEditForm && (
           <form onSubmit={handleAvatarEditSubmit}>
-            <div className="col mt-3 d-flex justify-content-center">
-              <button className="btn btn-primary" onClick={handleAvatarChangeClick}>Change Avatar</button>
-            </div>
             <div className="avatar-options">
               {avatarOptions.map((option, index) => (
                 <div key={index} className="avatar-option">
@@ -241,7 +268,7 @@ function ProfilePage() {
                 />
                 <button
                   className="btn btn-primary"
-                  onClick={() => setSelectedAvatar(option)}
+                  onClick={() => setSelectedAvatar(index)}
                 >
                   Choose
                 </button>
@@ -255,7 +282,6 @@ function ProfilePage() {
         )}
             </div>
             <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
-            <hr />
             <div className="row">
               <div className="col-6">
               </div>
