@@ -100,7 +100,6 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
         <div className="card">
           <div className="card-body">
             <h2 className="card-title">Lobby Chat</h2>
-            <button className="btn btn-secondary mt-3" onClick={cityTest}>Leave Game</button>
             <hr />
             <h4>Players: {players.length} / {game.maxPlayers}</h4>
             <div className="chat-container" style={{ maxHeight: "120px", overflowY: "auto" }}>
@@ -139,14 +138,14 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
                 </button>
               )
             )}
-            <button className="btn btn-secondary mt-3" onClick={() => {
+            <button className="btn btn-danger mt-3 ms-3" onClick={() => {
               handleLeaveGame();
               navigate("/game");
             }}>Leave Game
             </button>
             <button
               onClick={() => setShowEditForm(!showEditForm)}
-              className="btn btn-warning mt-3 d-flex justify-content-end"
+              className="btn btn-primary mt-3 d-flex justify-content-end"
               disabled={!creator}>Edit
             </button>
           </div>
