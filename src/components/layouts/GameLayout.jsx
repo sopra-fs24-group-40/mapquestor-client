@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Outlet, useNavigate, useParams } from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {Outlet, useNavigate, useParams} from "react-router-dom";
 import "../../styles/views/gameLayout.scss";
 import "../../styles/views/game.scss";
 import logo from "../../assets/logo.png";
@@ -10,8 +10,8 @@ import C3PO from "../../assets/C3PO.png";
 import Clone from "../../assets/Clone.png";
 import Ren from "../../assets/Ren.png";
 import Stormtrooper from "../../assets/Stormtrooper.png";
-import { api } from "helpers/api";
-import { getDomain } from "../../helpers/getDomain";
+import {api} from "helpers/api";
+import {getDomain} from "../../helpers/getDomain";
 
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
@@ -46,7 +46,7 @@ function GameLayout(props) {
 
     const socket = new SockJS(getDomain() + "/ws");
     const localStompClient = Stomp.over(socket);
-    localStompClient.connect({}, function(frame) {
+    localStompClient.connect({}, function (frame) {
       setStompClient(localStompClient);
 
 
@@ -77,7 +77,7 @@ function GameLayout(props) {
       const gameCode = localStorage.getItem("gameCode");
 
       if (gameCode) {
-        const message = { from: localStorage.getItem("token"), content: "Left the game", type: "LEAVE" };
+        const message = {from: localStorage.getItem("token"), content: "Left the game", type: "LEAVE"};
         stompClient.send(`/app/${gameCode}/chat`, {}, JSON.stringify(message));
       }
 
@@ -112,8 +112,8 @@ function GameLayout(props) {
   }), [stompClient, user, navigate, logout]);
 
   const showCorrectAvatar = () => {
-      const image = localStorage.getItem("avatar");
-      return resolveAvatar(image);
+    const image = localStorage.getItem("avatar");
+    return resolveAvatar(image);
   };
 
   const resolveAvatar = (image) => {
@@ -145,7 +145,7 @@ function GameLayout(props) {
           <div className="col">
             <div className="row align-items-center container-logoAndText">
               <div className="col-auto">
-                <img src={logo} width={100} alt="" />
+                <img src={logo} width={100} alt=""/>
               </div>
               <div className="container-mapquestor col-6">
                 <h1 className="custom-font">MapQuestor</h1>
@@ -153,7 +153,7 @@ function GameLayout(props) {
             </div>
           </div>
           <div className="col d-flex justify-content-end align-items-center">
-            <div className="container-search-bar col-auto p-3 d-flex flex-column align-items-start">
+            <div className="container-search-bar col-auto p-3 pb-2 d-flex flex-column align-items-start">
               <label htmlFor="site-search">Search Users: </label>
               <input
                 type="search"
@@ -163,21 +163,23 @@ function GameLayout(props) {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
-              <button className="btn btn-primary mt-1" onClick={handleSearch}>Search</button>
-              {searchResult === "not found" && <p style={{ color: "red" }}>User not found</p>}
+              <button className="btn btn-primary mt-2" onClick={handleSearch}>Search</button>
+              {searchResult === "not found" && <p style={{color: "red"}}>User not found</p>}
             </div>
             <div className="col-auto p-3">
               <figure className="container-avatar">
-                <img src={showCorrectAvatar()} width={50} alt="" /></figure>
-              <button className="btn btn-primary"onClick={() => user && navigate(`/game/users/${user.id}`)}>My Profile</button>
+                <img src={showCorrectAvatar()} width={50} alt=""/></figure>
+              <button className="btn btn-primary" onClick={() => user && navigate(`/game/users/${user.id}`)}>My
+                Profile
+              </button>
             </div>
-            <div className="col-auto">
-              <button className="btn btn-danger mb-5" onClick={() => logout()}>Logout</button>
+            <div className="col-auto p-3">
+              <button className="btn btn-danger" onClick={() => logout()}>Logout</button>
             </div>
           </div>
         </div>
         <div className="container">
-          <Outlet />
+          <Outlet/>
         </div>
       </div>
     </GameContext.Provider>
