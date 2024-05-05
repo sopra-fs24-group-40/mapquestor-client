@@ -12,6 +12,7 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
   const [maxPlayers, setMaxPlayers] = useState(game.maxPlayers);
   const [roundCount, setRoundCount] = useState(game.roundCount);
   const [showEditForm, setShowEditForm] = useState(false);
+  const [isLobbyFull, setIsLobbyFull] = useState(false);
   const chatContainerRef = useRef(null);
   const navigate = useNavigate();
 
@@ -58,11 +59,16 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
 
   useEffect(() => {
     // Check if the lobby is full
-    if (players.length === maxPlayers) {
-      // Start countdown automatically
+    setIsLobbyFull(players.length === maxPlayers);
+  }, [players.length, maxPlayers]);
+
+  useEffect(() => {
+    console.log("isLobbyFull:", isLobbyFull);
+    if (isLobbyFull) {
+      console.log("Starting countdown...");
       setCountdown(10);
     }
-  }, [players.length, maxPlayers]);
+  }, [isLobbyFull]);
 
   useEffect(() => {
     // Scroll chat container to bottom when messages change
