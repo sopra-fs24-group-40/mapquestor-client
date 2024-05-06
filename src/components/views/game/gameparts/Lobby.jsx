@@ -102,7 +102,7 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
     <div className="row justify-content-center mt-5">
       <div className="col-md-3">
         <div className="card">
-          <div className="card-header">Users in game:</div>
+          <div className="card-header">Users in lobby:</div>
           <div className="user-container" style={{ maxHeight: "120px", overflowY: "auto" }}>
             <ul className="list-group list-group-flush">
               {players.map((player, index) => (
@@ -121,7 +121,7 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
       <div className="col-md-6 p-3">
         <div className="card">
           <div className="card-body">
-            <h2 className="card-title">Lobby Chat</h2>
+            <h2 className="card-title">Lobby {localStorage.getItem("gameCode")}</h2>
             <hr />
             <h4>Players: {players.length} / {game.maxPlayers}</h4>
             <div className="chat-container" ref={chatContainerRef} style={{ maxHeight: "120px", overflowY: "auto" }}>
@@ -177,6 +177,7 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
         <div className="card">
           <div className="card-header">Game</div>
           <ul className="list-group list-group-flush p-3">
+            {/* Creator: {game.creator}<br /> */}
             Game Type: {game.gameType}<br />
             Round Count: {game.roundCount}
           </ul>

@@ -31,7 +31,7 @@ function ProfilePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [showUsernameEditForm, setShowUsernameEditForm] = useState(false);
   const [showAvatarEditForm, setShowAvatarEditForm] = useState(false);
-  // const [currentAvatarIndex, setCurrentAvatarIndex] = useState(0);
+  const [currentAvatarIndex, setCurrentAvatarIndex] = useState(0);
   const avatarOptions = [Fett, Vader, C3PO, Clone, Ren, Stormtrooper];
 
   useEffect(() => {
@@ -51,21 +51,21 @@ function ProfilePage() {
     fetchUser();
   }, [id]);
 
-  // useEffect(() => {
-  //   const handleKeyDown = (event) => {
-  //     if (event.key === "ArrowLeft" && currentAvatarIndex > 0) {
-  //       setCurrentAvatarIndex(currentAvatarIndex - 1);
-  //     } else if (event.key === "ArrowRight" && currentAvatarIndex < avatarOptions.length - 1) {
-  //       setCurrentAvatarIndex(currentAvatarIndex + 1);
-  //     }
-  //   };
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "ArrowLeft" && currentAvatarIndex > 0) {
+        setCurrentAvatarIndex(currentAvatarIndex - 1);
+      } else if (event.key === "ArrowRight" && currentAvatarIndex < avatarOptions.length - 1) {
+        setCurrentAvatarIndex(currentAvatarIndex + 1);
+      }
+    };
 
-  //   window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
 
-  //   return () => {
-  //     window.removeEventListener("keydown", handleKeyDown);
-  //   };
-  // }, [currentAvatarIndex, avatarOptions.length]);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [currentAvatarIndex, avatarOptions.length]);
 
   const handleUsernameChange = (e) => {
     const value = e.target.value;
@@ -76,6 +76,7 @@ function ProfilePage() {
     } else {
       setValidName(true);
       setUsernameError("");
+      setErrMsg("");
     }
   };
 
@@ -222,7 +223,6 @@ function ProfilePage() {
         )}
       </div>
       <div className="text-center">
-        
         <h2><span className={checkStatus()}>{user.status}</span> | WINS: {user.wonGames}</h2>
         <div className="d-flex justify-content-between align-items-center">
           <button className="btn btn-danger mb-3 d-flex" onClick={() => navigate("/game/users")}>Back</button>
@@ -230,6 +230,7 @@ function ProfilePage() {
       </div>
       <div className="text-center">
         {showUsernameEditForm && (
+          <>
           <form onSubmit={handleUsernameEditSubmit}>
             <div className="form-group mb-3">
               <label htmlFor="username">Username</label>
@@ -249,33 +250,38 @@ function ProfilePage() {
                 {!validName && <p id="uidnote" className={userFocus ? "instructions" : "offscreen"}>{usernameError}</p>}
             </div>
             <button 
-                className="btn btn-danger mb-3 float-end" 
-                onClick={() => setShowUsernameEditForm(false)}>Exit</button>
+                className="btn btn-primary mb-3 float-start" 
+                onClick={() => handleUsernameEditSubmit}>Save</button>
           </form>
+              <button 
+              className="btn btn-danger mb-3 float-end" 
+              onClick={() => {
+                setShowUsernameEditForm(false)
+                setErrMsg("");
+              }}>Exit</button>
+              </>
         )}
         {showAvatarEditForm && (
           <form onSubmit={handleAvatarEditSubmit}>
             <div className="avatar-options">
-              {avatarOptions.map((option, index) => (
-                <div key={index} className="avatar-option">
-                <img
-                  src={option}
-                  width={200}
-                  alt={`Avatar Option ${index + 1}`}
-                  className={selectedAvatar === option ? "selected" : ""}
-                />
-                <button
-                  className="btn btn-primary"
-                  onClick={() => setSelectedAvatar(index)}
-                >
-                  Choose
-                </button>
-              </div>
-              ))}
+              <img
+                src={avatarOptions[currentAvatarIndex]}
+                width={200}
+                alt={"Selected Avatar"}
+                className={currentAvatarIndex === selectedAvatar ? "selected" : ""}
+              />
             </div>
-            <button 
+            <button
+                className="btn btn-primary"
+                onClick={() => setSelectedAvatar(currentAvatarIndex)}>
+                Choose
+              </button>
+              <p>←/→ to navigate</p>
+            <div>
+              <button 
                 className="btn btn-danger mb-3 float-end" 
                 onClick={() => setShowAvatarEditForm(false)}>Exit</button>
+            </div>
           </form>
         )}
             </div>

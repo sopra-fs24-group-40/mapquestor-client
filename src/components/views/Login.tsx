@@ -23,7 +23,8 @@ function Login(props) {
     userRef.current.focus();
   }, []);
 
-  const doLogin = async () => {
+  const doLogin = async (event) => {
+    event.preventDefault();
     try {
       const requestBody = JSON.stringify({ username, password });
       const response = await api.post("/login", requestBody);
@@ -61,6 +62,7 @@ function Login(props) {
             required
           />
         </div>
+        <form onSubmit={doLogin}>
         <div className="form-group">
           <label htmlFor="password">Password</label>
           <input
@@ -76,7 +78,8 @@ function Login(props) {
         <div className="row">
           <div className="col-6">
             <button
-              className="btn btn-danger" disabled={!username || !password} onClick={() => doLogin()}>Login
+              className="btn btn-danger" disabled={!username || !password}
+              type="submit">Login
             </button>
             </div>
           <div className="col-6 d-flex justify-content-end">
@@ -85,6 +88,7 @@ function Login(props) {
             </button>
           </div>
         </div>
+        </form>
         {error && <p className="text-danger" style={{marginTop: error ? "1rem" : "0", marginBottom: "0"}}>{error}</p>}
       </div>
     </div>
