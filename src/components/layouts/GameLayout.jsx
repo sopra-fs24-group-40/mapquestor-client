@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Outlet, useNavigate, useParams} from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import "../../styles/views/gameLayout.scss";
 import "../../styles/views/game.scss";
 import logo from "../../assets/logo.png";

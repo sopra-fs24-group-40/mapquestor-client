@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { api } from "helpers/api";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import User from "models/User";
 import avatar from "../../../assets/avatar.png";
 import Fett from "../../../assets/Fett.png";
@@ -19,26 +19,20 @@ function ProfilePage() {
   const [user, setUser] = useState(new User());
   const logged_id = localStorage.getItem("id");
   const { id } = useParams();
-
   const userRef = useRef();
   const errRef = useRef();
-
   const [username, setUsername] = useState("");
   const [validName, setValidName] = useState(false);
   const [userFocus, setUserFocus] = useState(false);
-
   const [errMsg, setErrMsg] = useState("");
   const [success, setSuccess] = useState("");
-
-  const [showEditForm, setShowEditForm] = useState(false);
   const [selectedAvatar, setSelectedAvatar] = useState(user.avatar || avatar);
-
   const [usernameError, setUsernameError] = useState("");
-
   const [isLoading, setIsLoading] = useState(true);
-  const [showAvatarOptions, setShowAvatarOptions] = useState(false);
   const [showUsernameEditForm, setShowUsernameEditForm] = useState(false);
   const [showAvatarEditForm, setShowAvatarEditForm] = useState(false);
+  // const [currentAvatarIndex, setCurrentAvatarIndex] = useState(0);
+  const avatarOptions = [Fett, Vader, C3PO, Clone, Ren, Stormtrooper];
 
   useEffect(() => {
     async function fetchUser() {
@@ -56,6 +50,22 @@ function ProfilePage() {
     }
     fetchUser();
   }, [id]);
+
+  // useEffect(() => {
+  //   const handleKeyDown = (event) => {
+  //     if (event.key === "ArrowLeft" && currentAvatarIndex > 0) {
+  //       setCurrentAvatarIndex(currentAvatarIndex - 1);
+  //     } else if (event.key === "ArrowRight" && currentAvatarIndex < avatarOptions.length - 1) {
+  //       setCurrentAvatarIndex(currentAvatarIndex + 1);
+  //     }
+  //   };
+
+  //   window.addEventListener("keydown", handleKeyDown);
+
+  //   return () => {
+  //     window.removeEventListener("keydown", handleKeyDown);
+  //   };
+  // }, [currentAvatarIndex, avatarOptions.length]);
 
   const handleUsernameChange = (e) => {
     const value = e.target.value;
@@ -85,18 +95,6 @@ function ProfilePage() {
     } else {
       return false;
     }
-  };
-
-  const resetForm = () => {
-    setUsername(user.username);
-    setValidName(true);
-    setUsernameError("");
-  };
-
-  const avatarOptions = [Fett, Vader, C3PO, Clone, Ren, Stormtrooper];
-
-  const handleAvatarChangeClick = () => {
-    setShowAvatarOptions(!showAvatarOptions);
   };
 
   const handleUsernameEditSubmit = async (e) => {
