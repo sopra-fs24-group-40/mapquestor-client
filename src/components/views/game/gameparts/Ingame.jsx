@@ -28,10 +28,6 @@ const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, 
   }, [players]);
 
   useEffect(() => {
-    setSafe(false);
-  }, [round]);
-
-  useEffect(() => {
     let intervalId;
     if (timer > 0) {
       intervalId = setInterval(() => {
@@ -55,6 +51,7 @@ const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, 
   useEffect(() => {
     setRevealedLetters(0);
     setBlackoutMap(1);
+    setSafe(false);
   }, [round]);
 
   useEffect(() => {
@@ -123,7 +120,7 @@ const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, 
             setBlackoutMap(1);
           }, 10000);
 
-          return () => clearTimeout(timeoutId);
+          // return () => clearTimeout(timeoutId);
         }
       } else if (num === 2) {
         const removeJoker = messagesGame[len].type === "JOKER" && messagesGame[len].from !== localStorage.getItem("token");
