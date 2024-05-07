@@ -37,6 +37,11 @@ export default function Game() {
         setGame(gameData);
         setCreator(gameData.creator);
         setPlayers(gameData.players || []);
+
+        if (localStorage.getItem("gameState")) {
+          setGamePhase(localStorage.getItem("gameState"));
+        }
+
         setGamePhase(gameData.status || "LOBBY");
       } catch (error) {
         console.error("Error fetching game data:", error);
@@ -51,6 +56,8 @@ export default function Game() {
 
   useEffect(() => {
 
+    setGamePhase(localStorage.getItem("gameState") || "LOBBY");
+
     if (stompClient && creator) {
       const gameTopic = `/topic/${id}`;
 
@@ -62,6 +69,7 @@ export default function Game() {
 
       stompClient.subscribe(`${gameTopic}/gameState`, (message) => {
         const gameState = JSON.parse(message.body);
+        localStorage.setItem("gameState", gameState.status);
         if (gameState.status === "LOBBY") {
           setRound(1);
           let cityMessage = { roundCount: game.roundCount };
@@ -186,7 +194,11 @@ export default function Game() {
 
       setPlayers(prevPlayers => prevPlayers.filter(player => player.token !== payload.from));
       setMessages(prevMessages => [...prevMessages, payload]);
+      localStorage.removeItem("gameState");
+      localStorage.removeItem("gameCode");
     } else if (payload.type === "LEAVE_CREATOR") {
+      localStorage.removeItem("gameState");
+      localStorage.removeItem("gameCode");
       navigate("/game");
     } else if (payload.type === "CHAT") {
       setMessages(prevMessages => [...prevMessages, payload]);

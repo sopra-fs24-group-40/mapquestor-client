@@ -7,12 +7,12 @@ const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, 
   const [location, setLocation] = useState(game.cities[round - 1]);
   const [currentMessage, setCurrentMessage] = useState("");
   const [leaderboard, setLeaderboard] = useState([]);
-  const [pointsAssigned, setPointsAssigned] = useState(false); // New state variable
+  const [pointsAssigned, setPointsAssigned] = useState(false);
   const [delayJoker, setdelayJoker] = useState(false);
   const [hintRemoveJoker, sethintRemoveJoker] = useState(false);
   const [revealedLetters, setRevealedLetters] = useState(0);
   const [blackoutMap, setBlackoutMap] = useState(1);
-  const chatContainerRef = useRef(null); // Create a ref for the chat container
+  const chatContainerRef = useRef(null);
   const [safe, setSafe] = useState(false);
 
 
@@ -288,7 +288,7 @@ const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, 
           </section>
           <div className="chat-container text-start p-2" ref={chatContainerRef} style={{ maxHeight: "120px", overflowY: "auto" }}>
             <ul className="list-unstyled">
-              {messagesGame.map((msg, index) => (
+              {messagesGame.filter(msg => msg.type !== "JOKER").map((msg, index) => (
                 <li key={index}>
                   <strong>{msg.from}</strong>: {msg.content}
                 </li>

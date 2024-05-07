@@ -1,6 +1,6 @@
-import React, {useState} from "react";
-import {api} from "../../../helpers/api";
-import {useNavigate} from "react-router-dom";
+import React, { useState } from "react";
+import { api } from "../../../helpers/api";
+import { useNavigate } from "react-router-dom";
 
 function CreateGame() {
   const [maxPlayers, setMaxPlayers] = useState(2);
@@ -26,6 +26,7 @@ function CreateGame() {
       const response = await api.post("/games", gameData);
       console.log("Game created successfully", response.data);
       localStorage.setItem("gameCode", response.data.gameCode);
+      localStorage.setItem("gameState", "LOBBY");
       navigate(`/game/${response.data.gameCode}`);
     } catch (error) {
       console.error("Error creating the game:", error.response);
@@ -76,7 +77,7 @@ function CreateGame() {
                     type="button"
                     className={`btn ${gameType === "COUNTRY" ? "btn-primary" : "btn-secondary"} btn-lg rounded-3 me-2`}
                     onClick={() => setGameType("COUNTRY")}
-                    style={{background: gameType === "COUNTRY" ? "green" : ""}}
+                    style={{ background: gameType === "COUNTRY" ? "green" : "" }}
                   >
                     Country Mode
                   </button>
@@ -84,7 +85,7 @@ function CreateGame() {
                     type="button"
                     className={`btn ${gameType === "CITY" ? "btn-primary" : "btn-secondary"} btn-lg rounded-3`}
                     onClick={() => setGameType("CITY")}
-                    style={{background: gameType === "CITY" ? "green" : ""}}
+                    style={{ background: gameType === "CITY" ? "green" : "" }}
                   >
                     City Mode
                   </button>
