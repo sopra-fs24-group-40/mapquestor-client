@@ -183,19 +183,6 @@ function ProfilePage() {
           <Spinner />
         ) : (
           <>
-        <div className="col mt-3 d-flex justify-content-end"><select>
-          <option>All Modes</option>
-          <option>City-Mode</option>
-          <option>Country-Mode</option>
-        </select>
-        <select>
-          <option>All Time</option>
-          <option>Today</option>
-          <option>This Week</option>
-          <option>This Month</option>
-          <option>This Year</option>
-        </select>
-        </div>
         <div className="text-center">
         <h1 className="text-center">{user.username}</h1>
         {checkUser() && (

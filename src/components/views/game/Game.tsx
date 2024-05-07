@@ -12,25 +12,33 @@ const Game = () => {
   const [activeLobbies, setActiveLobbies] = useState([]);
   const [users, setUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-
+  
   useEffect(() => {
-    async function fetchGames() {
+    const fetchGamesAndUsers = async () => {
       try {
-        const response = await api.get("/games");
-        const games = response.data;
+        const gamesResponse = await api.get("/games");
+        const usersResponse = await api.get("/users");
+
+        const games = gamesResponse.data;
         const lobbies = games.map(game => ({
           gamecode: game.gameCode,
           name: `Lobby ${game.gameCode}`,
           details: `Currently ${game.playerCount}/${game.maxPlayers} Player/s in ${game.gameStatus}`,
           gamestatus: game.gameStatus
         }));
+
         setActiveLobbies(lobbies);
+        setUsers(usersResponse.data);
       } catch (error) {
         console.error("Error fetching games:", error);
       }
-    }
+    };
 
-    fetchGames();
+    fetchGamesAndUsers();
+
+    const intervalId = setInterval(fetchGamesAndUsers, 10000);
+
+    return () => clearInterval(intervalId);
   }, []);
 
   const doJoinGame = async (gameCode) => {
@@ -54,19 +62,19 @@ const Game = () => {
     }
   };
 
-  useEffect(() => {
-    async function fetchUsers() {
-      try {
-        const response = await api.get("/users");
-        setUsers(response.data);
-        console.log(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    }
+  // useEffect(() => {
+  //   async function fetchUsers() {
+  //     try {
+  //       const response = await api.get("/users");
+  //       setUsers(response.data);
+  //       console.log(response.data);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   }
 
-    fetchUsers();
-  }, []);
+  //   fetchUsers();
+  // }, []);
 
   const handleSearchInputChange = (event) => {
     setSearchQuery(event.target.value);
@@ -122,20 +130,7 @@ const Game = () => {
                   type="text"
                   placeholder="Search by username..."
                   value={searchQuery}
-                  onChange={handleSearchInputChange}
-                />
-                <select className="dropdown">
-                  <option value="All Modes">All Modes</option>
-                  <option value="City-Mode">City-Mode</option>
-                  <option value="Country-Mode">Country-Mode</option>
-                </select>
-                <select className="dropdown">
-                  <option value="All Time">All Time</option>
-                  <option value="Today">Today</option>
-                  <option value="This Week">This Week</option>
-                  <option value="This Month">This Month</option>
-                  <option value="This Year">This Year</option>
-                </select>
+                  onChange={handleSearchInputChange}/>
               </div>
             </nav>
             <div className="leaderboard-scrollable" style={{ maxHeight: "350px", overflowY: "auto" }}>
