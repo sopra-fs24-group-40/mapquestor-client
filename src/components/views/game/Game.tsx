@@ -23,7 +23,7 @@ const Game = () => {
         const lobbies = games.map(game => ({
           gamecode: game.gameCode,
           name: `Lobby ${game.gameCode}`,
-          details: `Currently ${game.playerCount}/${game.maxPlayers} Player/s in ${game.gameStatus}`,
+          details: `${game.playerCount}/${game.maxPlayers} MapQuestor/s in ${game.gameStatus}`,
           gamestatus: game.gameStatus
         }));
 
@@ -36,7 +36,7 @@ const Game = () => {
 
     fetchGamesAndUsers();
 
-    const intervalId = setInterval(fetchGamesAndUsers, 10000);
+    const intervalId = setInterval(fetchGamesAndUsers, 5000);
 
     return () => clearInterval(intervalId);
   }, []);
@@ -61,20 +61,6 @@ const Game = () => {
       setError("Error joining the game: " + (error.response?.data?.message || "Error joining the game!"));
     }
   };
-
-  // useEffect(() => {
-  //   async function fetchUsers() {
-  //     try {
-  //       const response = await api.get("/users");
-  //       setUsers(response.data);
-  //       console.log(response.data);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   }
-
-  //   fetchUsers();
-  // }, []);
 
   const handleSearchInputChange = (event) => {
     setSearchQuery(event.target.value);
@@ -109,7 +95,10 @@ const Game = () => {
           <h3>{lobby.name}</h3>
           <p>{lobby.details}</p>
           {lobby.gamestatus === "LOBBY" && (
-            <button className="join-button" onClick={() => doJoinGame(lobby.gamecode)}>Join Now</button>
+            <button 
+            className="btn btn-primary join-button"
+            // disabled={playerCount === maxPlayers}
+            onClick={() => doJoinGame(lobby.gamecode)}>Join</button>
           )}
         </div>
       </div>
