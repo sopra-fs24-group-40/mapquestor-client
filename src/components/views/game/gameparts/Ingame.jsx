@@ -54,6 +54,7 @@ const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, 
 
   useEffect(() => {
     setRevealedLetters(0);
+    setBlackoutMap(1);
   }, [round]);
 
   useEffect(() => {
@@ -195,6 +196,7 @@ const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, 
       sethintRemoveJoker(true);
     }
     setSafe(true);
+    onSendChat(localStorage.getItem("username"), "Used a Joker!", "CHAT_INGAME");
     onSendChat(localStorage.getItem("token"), number, "JOKER");
   };
 
