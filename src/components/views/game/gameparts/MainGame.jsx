@@ -210,13 +210,9 @@ export default function Game() {
       }
  
       setPlayers(prevPlayers => prevPlayers.filter(player => player.token !== payload.from));
-      setMessages(prevMessages => [...prevMessages, payload]);
-      // localStorage.removeItem("gameState");
-      // localStorage.removeItem("gameCode");
+      // setMessages(prevMessages => [...prevMessages, payload]);
     } else if (payload.type === "LEAVE_CREATOR") {
       localStorage.removeItem("gameCode");
-      // localStorage.removeItem("gameState");
-      // localStorage.removeItem("gameCode");
       navigate("/game");
     } else if (payload.type === "CHAT") {
       setMessages(prevMessages => [...prevMessages, payload]);
@@ -233,8 +229,8 @@ export default function Game() {
       setPlayers(payload.content);
     } else if (payload.type === "JOKER") {
       setMessagesGame(prevMessages => [...prevMessages, payload]);
-    // } else if (payload.type === "PLAY_AGAIN") {
-    //   setMessagesGame(prevMessages => [...prevMessages, payload]);
+    } else if (payload.type === "PLAY_AGAIN") {
+      // setMessagesGame(prevMessages => [...prevMessages, payload]);
     } else if (payload.type === "TIMER") {
       setRoundLength(payload.content);
       console.log("----->", payload.content);
