@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import PropTypes from "prop-types";
 import countdowns from "../../../../assets/countdowns.mp3";
 import { useNavigate } from "react-router-dom";
-
+ 
 function Lobby({
                  startGame,
                  onSendChat,
@@ -22,18 +22,18 @@ function Lobby({
   const [roundCount, setRoundCount] = useState(game.roundCount);
   const chatContainerRef = useRef(null);
   const navigate = useNavigate();
-
+ 
   useEffect(() => {
     const isCreator = localStorage.getItem("token") === game.creator;
     setCreator(isCreator);
   }, [game.creator]);
-
+ 
   useEffect(() => {
     if (countdownDuration > 0) {
       setCountdown(countdownDuration);
     }
   }, [countdownDuration]);
-
+ 
   useEffect(() => {
     if (countdown === 3 && !soundPlayed) {
       const countdownSound = new Audio(countdowns);
@@ -42,12 +42,12 @@ function Lobby({
         .then(() => setSoundPlayed(true))
         .catch(error => console.error("Fehler beim Abspielen des Sounds:", error));
     }
-
+ 
     if (countdownDuration > 0 && countdown === countdownDuration) {
       setSoundPlayed(false);
     }
   }, [countdown, countdownDuration, soundPlayed]);
-
+ 
   useEffect(() => {
     let intervalId;
     if (countdown > 0) {
@@ -61,35 +61,42 @@ function Lobby({
     }
     return () => clearInterval(intervalId);
   }, [countdown, startGame]);
-
+ 
   useEffect(() => {
     if (players.length === game.maxPlayers && countdown === null) {
       handleStartCountdown();
     }
   }, [players.length, game.maxPlayers, countdown]);
-
+ 
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
   }, [messages]);
-
+ 
   const handleSendMessage = () => {
     if (!currentMessage.trim()) return;
     onSendChat(localStorage.getItem("username"), currentMessage, "CHAT");
     setCurrentMessage("");
   };
-
+ 
   const handleLeaveGame = () => {
     localStorage.removeItem("gameCode");
-    handleLeave(localStorage.getItem("token"));
-    navigate("/game");
+    if (creator) {
+      onSendChat(localStorage.getItem("username"), "Left the match!", "CHAT");
+      onSendChat(localStorage.getItem("token"), "Left the match!", "LEAVE_CREATOR");
+      navigate("/game");
+    } else {
+      onSendChat(localStorage.getItem("username"), "Left the match!", "CHAT");
+      onSendChat(localStorage.getItem("token"), "Left the game!", "LEAVE");
+      navigate("/game");
+    }
   };
-
+ 
   const handleStartCountdown = () => {
     onSendChat(localStorage.getItem("token"), "Has started the countdown!", "START_COUNTDOWN");
   };
-
+ 
   return (
     <div className="row justify-content-center mt-5">
       <div className="col-md-3">
@@ -176,7 +183,7 @@ function Lobby({
     </div>
   );
 }
-
+ 
 Lobby.propTypes = {
   onSendChat: PropTypes.func.isRequired,
   startGame: PropTypes.func.isRequired,
@@ -203,5 +210,5 @@ Lobby.propTypes = {
     gameType: PropTypes.string.isRequired,
   }).isRequired,
 };
-
+ 
 export default Lobby;
