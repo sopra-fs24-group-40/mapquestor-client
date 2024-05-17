@@ -36,8 +36,10 @@ function Endgame({ game, onSendChat, messages, players, playAgain }) {
   const handleLeaveGame = () => {
     localStorage.removeItem("gameCode");
     if (creator) {
+      onSendChat(localStorage.getItem("username"), "Left the match!", "CHAT");
       onSendChat(localStorage.getItem("token"), "Left the match!", "LEAVE_CREATOR");
     } else {
+      onSendChat(localStorage.getItem("username"), "Left the match!", "CHAT");
       onSendChat(localStorage.getItem("token"), "Left the game!", "LEAVE");
     }
   };
@@ -47,6 +49,7 @@ function Endgame({ game, onSendChat, messages, players, playAgain }) {
     setButtonDisabled(true);
     setButtonClicked(true); // Set buttonClicked to true when button is clicked
     onSendChat(localStorage.getItem("token"), "Wants to play again!", "PLAY_AGAIN");
+    onSendChat(localStorage.getItem("username"), "Wants to play again!", "CHAT");
     setPlayAgainButton(true);
   };
  
