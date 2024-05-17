@@ -223,7 +223,7 @@ const InGame = ({
   return (
     <div className="row mt-5">
       <div className="col-md-3 text-center">
-        <div className="container-wrap bg-gray">
+        <div className="container-wrap bg-gray rounded-3"> {/* Add rounded class here */}
           <section id="leaderboard">
             <nav className="ladder-nav">
               <div className="ladder-title text-center">
@@ -238,18 +238,18 @@ const InGame = ({
                 width="100%"
               >
                 <thead>
-                <tr>
-                  <th className="text-dark">Name</th>
-                  <th className="text-dark">Points</th>
-                </tr>
+                  <tr>
+                    <th className="text-dark">Name</th>
+                    <th className="text-dark">Points</th>
+                  </tr>
                 </thead>
                 <tbody>
-                {leaderboard.map((player, index) => (
-                  <tr key={index}>
-                    <td>{player.username}</td>
-                    <td>{player.points}</td>
-                  </tr>
-                ))}
+                  {leaderboard.map((player, index) => (
+                    <tr key={index}>
+                      <td>{player.username}</td>
+                      <td>{player.points}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
@@ -258,20 +258,16 @@ const InGame = ({
       </div>
       <div className="col-md-6 justify-content-center text-center bg-gray">
         <h1>In Game</h1>
-
-        <div
-          className="timer-container mb-5">
+  
+        <div className="timer-container mb-5">
           Timer: {timer && timer} seconds <br />
           Round: {round} / {game.roundCount}
         </div>
-
-        <div
-          className="hint-lines-container"
-          style={{ display: "flex", justifyContent: "center" }}
-        >
+  
+        <div className="hint-lines-container" style={{ display: "flex", justifyContent: "center" }}>
           {hintLines}
         </div>
-
+  
         <div id="street-view" style={{ width: "100%", height: "400px", opacity: blackoutMap }}></div>
         <div className="button-wrapper">
           <button className="individual-button" style={{ fontSize: "20px" }}
@@ -286,9 +282,9 @@ const InGame = ({
           </button>
         </div>
       </div>
-
+  
       <div className="col-md-3 text-center">
-        <div className="container-wrap bg-gray">
+        <div className="container-wrap bg-gray rounded-3"> {/* Add rounded class here */}
           <section id="chat" className="">
             <nav className="ladder-nav">
               <div className="ladder-title">

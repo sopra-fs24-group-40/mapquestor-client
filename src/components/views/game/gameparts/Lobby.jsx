@@ -176,7 +176,7 @@ function Lobby({
             Game Type: {game.gameType}<br />
             Round Count: {game.roundCount}<br />
             Max Players: {game.maxPlayers}<br />
-            Round Length: {roundLength} seconds<br />
+            {/*Round Length: {roundLength} seconds<br />*/}
           </ul>
         </div>
       </div>
