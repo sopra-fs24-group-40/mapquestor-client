@@ -3,7 +3,16 @@ import PropTypes from "prop-types";
 import countdowns from "../../../../assets/countdowns.mp3";
 import { useNavigate } from "react-router-dom";
 
-function Lobby({ startGame, onSendChat, messages, players, game, countdownDuration, handleLeave, cityTest }) {
+function Lobby({
+                 startGame,
+                 onSendChat,
+                 messages,
+                 players,
+                 game,
+                 countdownDuration,
+                 handleLeave,
+                 roundLength,
+               }) {
   const [currentMessage, setCurrentMessage] = useState("");
   const [creator, setCreator] = useState(false);
   const [countdown, setCountdown] = useState(null);
@@ -11,11 +20,8 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
   const [gameType, setGameType] = useState(game.gameType);
   const [maxPlayers, setMaxPlayers] = useState(game.maxPlayers);
   const [roundCount, setRoundCount] = useState(game.roundCount);
-  const [showEditForm, setShowEditForm] = useState(false);
-  const [isLobbyFull, setIsLobbyFull] = useState(false);
   const chatContainerRef = useRef(null);
   const navigate = useNavigate();
-
 
   useEffect(() => {
     const isCreator = localStorage.getItem("token") === game.creator;
@@ -23,7 +29,6 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
   }, [game.creator]);
 
   useEffect(() => {
-
     if (countdownDuration > 0) {
       setCountdown(countdownDuration);
     }
@@ -32,6 +37,7 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
   useEffect(() => {
     if (countdown === 3 && !soundPlayed) {
       const countdownSound = new Audio(countdowns);
+      countdownSound.volume = 0.1;
       countdownSound.play()
         .then(() => setSoundPlayed(true))
         .catch(error => console.error("Fehler beim Abspielen des Sounds:", error));
@@ -41,7 +47,6 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
       setSoundPlayed(false);
     }
   }, [countdown, countdownDuration, soundPlayed]);
-
 
   useEffect(() => {
     let intervalId;
@@ -58,20 +63,12 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
   }, [countdown, startGame]);
 
   useEffect(() => {
-    // Check if the lobby is full
-    setIsLobbyFull(players.length === maxPlayers);
-  }, [players.length, maxPlayers]);
-
-  useEffect(() => {
-    console.log("isLobbyFull:", isLobbyFull);
-    if (isLobbyFull) {
-      console.log("Starting countdown...");
-      setCountdown(10);
+    if (players.length === game.maxPlayers && countdown === null) {
+      handleStartCountdown();
     }
-  }, [isLobbyFull]);
+  }, [players.length, game.maxPlayers, countdown]);
 
   useEffect(() => {
-    // Scroll chat container to bottom when messages change
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
@@ -86,16 +83,11 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
   const handleLeaveGame = () => {
     localStorage.removeItem("gameCode");
     handleLeave(localStorage.getItem("token"));
+    navigate("/game");
   };
 
   const handleStartCountdown = () => {
     onSendChat(localStorage.getItem("token"), "Has started the countdown!", "START_COUNTDOWN");
-  };
-
-  const handleUpdateGameSettings = (e) => {
-    e.preventDefault();
-    //api request
-    setShowEditForm(false);
   };
 
   return (
@@ -103,13 +95,13 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
       <div className="col-md-3">
         <div className="card">
           <div className="card-header">Users in lobby:</div>
-          <div className="user-container" style={{ maxHeight: "120px", overflowY: "auto" }}>
+          <div className="user-container" style={{ maxHeight: "250px", overflowY: "auto" }}>
             <ul className="list-group list-group-flush">
               {players.map((player, index) => (
                 <li
                   key={index}
                   className="list-group-item"
-                  style={{ color: creator ? "red" : "inherit" }}
+                  style={{ color: player.token === game.creator ? "red" : "inherit" }}
                 >
                   {player.username}
                 </li>
@@ -155,21 +147,18 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
               </div>
             ) : (
               creator && (
-                <button onClick={handleStartCountdown} className="btn btn-success mt-3">
+                <button
+                  onClick={handleStartCountdown}
+                  className="btn btn-success mt-3"
+                  disabled={players.length <= 1}
+                >
                   Start Countdown
                 </button>
               )
             )}
-            <button className="btn btn-danger mt-3 ms-3" onClick={() => {
-              handleLeaveGame();
-              navigate("/game");
-            }}>Leave Game
-            </button>
-            <button
-              onClick={() => setShowEditForm(!showEditForm)}
-              className="btn btn-primary mt-3 d-flex justify-content-end"
-              disabled={!creator}>Edit
-            </button>
+            <div>
+              <button className="btn btn-danger mt-3" onClick={handleLeaveGame}>Leave Game</button>
+            </div>
           </div>
         </div>
       </div>
@@ -177,45 +166,11 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
         <div className="card">
           <div className="card-header">Game</div>
           <ul className="list-group list-group-flush p-3">
-            {/* Creator: {game.creator}<br /> */}
             Game Type: {game.gameType}<br />
-            Round Count: {game.roundCount}
+            Round Count: {game.roundCount}<br />
+            Max Players: {game.maxPlayers}<br />
+            Round Length: {roundLength} seconds<br />
           </ul>
-          {showEditForm ? (
-            <form className="mt-3" onSubmit={handleUpdateGameSettings}>
-              <div className="form-group">
-                <label htmlFor="gameType">Game Type</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="gameType"
-                  value={gameType}
-                  onChange={(e) => setGameType(e.target.value)}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="maxPlayers">Max Players</label>
-                <input
-                  type="number"
-                  className="form-control"
-                  id="maxPlayers"
-                  value={maxPlayers}
-                  onChange={(e) => setMaxPlayers(e.target.value)}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="roundCount">Round Count</label>
-                <input
-                  type="number"
-                  className="form-control"
-                  id="roundCount"
-                  value={roundCount}
-                  onChange={(e) => setRoundCount(e.target.value)}
-                />
-              </div>
-              <button type="submit" className="btn btn-primary">Update Game Settings</button>
-            </form>
-          ) : null}
         </div>
       </div>
     </div>
@@ -225,7 +180,7 @@ function Lobby({ startGame, onSendChat, messages, players, game, countdownDurati
 Lobby.propTypes = {
   onSendChat: PropTypes.func.isRequired,
   startGame: PropTypes.func.isRequired,
-  cityTest: PropTypes.func.isRequired,
+  roundLength: PropTypes.number.isRequired,
   handleLeave: PropTypes.func.isRequired,
   countdownDuration: PropTypes.any,
   messages: PropTypes.arrayOf(

@@ -4,17 +4,19 @@ import { Link, useNavigate } from "react-router-dom";
 import User from "models/User";
 import "../../../styles/views/users.scss";
 import { Spinner } from "./gameparts/Spinner.jsx";
-
+ 
 const getStatusColor = (status) => {
   if (status === "ONLINE") {
     return "text-success";
-  } else {
+  } else if (status === "OFFLINE"){
     return "text-danger"
+  } else {
+    return "text-warning"
   }
 };
-
+ 
 const Player = ({ user }: { user: User }) => {
-
+ 
   const statusColorClass = getStatusColor(user.status);
   
   return (
@@ -31,12 +33,12 @@ const Player = ({ user }: { user: User }) => {
   </div>
   );
 };
-
+ 
 function Users() {
   const [users, setUsers] = useState([]);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
-
+ 
   useEffect(() => {
     async function fetchUsers() {
       setIsLoading(true);
@@ -49,10 +51,14 @@ function Users() {
         setIsLoading(false);
       }
     }
-
+ 
     fetchUsers();
+ 
+    const intervalId = setInterval(fetchUsers, 5000);
+ 
+    return () => clearInterval(intervalId);
   }, []);
-
+ 
   return (
     <div className="row justify-content-center">
     <div className="col-md-4 bg-light mt-3 border rounded">
@@ -76,5 +82,5 @@ function Users() {
   </div>
   );
 };
-
+ 
 export default Users;

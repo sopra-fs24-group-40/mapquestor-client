@@ -10,10 +10,10 @@ import Clone from "../../../assets/Clone.png";
 import Ren from "../../../assets/Ren.png";
 import Stormtrooper from "../../../assets/Stormtrooper.png";
 import { Spinner } from "../game/gameparts/Spinner.jsx";
-
+ 
 const USER_REGEX = /^.{4,}$/;
 const PWD_REGEX = /^.{4,}$/;
-
+ 
 function ProfilePage() {
   const navigate = useNavigate();
   const [user, setUser] = useState(new User());
@@ -33,7 +33,7 @@ function ProfilePage() {
   const [showAvatarEditForm, setShowAvatarEditForm] = useState(false);
   const [currentAvatarIndex, setCurrentAvatarIndex] = useState(0);
   const avatarOptions = [Fett, Vader, C3PO, Clone, Ren, Stormtrooper];
-
+ 
   useEffect(() => {
     async function fetchUser() {
       setIsLoading(true);
@@ -49,8 +49,12 @@ function ProfilePage() {
       }
     }
     fetchUser();
+ 
+    const intervalId = setInterval(fetchUser, 10000);
+ 
+    return () => clearInterval(intervalId);
   }, [id]);
-
+ 
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === "ArrowLeft" && currentAvatarIndex > 0) {
@@ -59,14 +63,14 @@ function ProfilePage() {
         setCurrentAvatarIndex(currentAvatarIndex + 1);
       }
     };
-
+ 
     window.addEventListener("keydown", handleKeyDown);
-
+ 
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [currentAvatarIndex, avatarOptions.length]);
-
+ 
   const handleUsernameChange = (e) => {
     const value = e.target.value;
     setUsername(value);
@@ -79,7 +83,7 @@ function ProfilePage() {
       setErrMsg("");
     }
   };
-
+ 
   const checkStatus = () => {
     if (user.status === "ONLINE") {
       return "text-success";
@@ -89,7 +93,7 @@ function ProfilePage() {
       return "text-warning";
     }
   };
-
+ 
   const checkUser = () => {
     if (logged_id === id) {
       return true;
@@ -97,7 +101,7 @@ function ProfilePage() {
       return false;
     }
   };
-
+ 
   const handleUsernameEditSubmit = async (e) => {
     e.preventDefault();
     if (!validName) {
@@ -123,7 +127,7 @@ function ProfilePage() {
       errRef.current.focus;
     }
   };
-
+ 
   const handleAvatarEditSubmit = async (e) => {
     e.preventDefault();
     
@@ -145,7 +149,7 @@ function ProfilePage() {
       errRef.current.focus;
     }
   }
-
+ 
   const showCorrectAvatar = () => {
     if(checkUser()) {
       const image = localStorage.getItem("avatar");
@@ -153,7 +157,7 @@ function ProfilePage() {
     }
     return resolveAvatar(user.avatar);
   };
-
+ 
   const resolveAvatar = (image) => {
     if (image === "0") {
       return Fett;
@@ -175,7 +179,7 @@ function ProfilePage() {
     }
     return avatar;
   };
-
+ 
   return (
     <div className="row">
       <div className="col bg-light mt-3 border rounded">
@@ -236,12 +240,12 @@ function ProfilePage() {
                 />
                 {!validName && <p id="uidnote" className={userFocus ? "instructions" : "offscreen"}>{usernameError}</p>}
             </div>
-            <button 
-                className="btn btn-primary mb-3 float-start" 
+            <button
+                className="btn btn-primary mb-3 float-start"
                 onClick={() => handleUsernameEditSubmit}>Save</button>
           </form>
-              <button 
-              className="btn btn-danger mb-3 float-end" 
+              <button
+              className="btn btn-danger mb-3 float-end"
               onClick={() => {
                 setShowUsernameEditForm(false)
                 setErrMsg("");
@@ -265,8 +269,8 @@ function ProfilePage() {
               </button>
               <p>←/→ to navigate</p>
             <div>
-              <button 
-                className="btn btn-danger mb-3 float-end" 
+              <button
+                className="btn btn-danger mb-3 float-end"
                 onClick={() => setShowAvatarEditForm(false)}>Exit</button>
             </div>
           </form>
@@ -285,5 +289,5 @@ function ProfilePage() {
     </div>
   );
 }
-
+ 
 export default ProfilePage;

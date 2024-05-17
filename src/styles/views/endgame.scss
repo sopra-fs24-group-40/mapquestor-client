@@ -1,5 +1,5 @@
 @import "../theme";
-
+ 
 .individual-button1 {
   background-color: green;
   color: white; /* Text color */
@@ -11,7 +11,7 @@
   border-radius: 10px;
   border: #77a381;
 }
-
+ 
 .individual-button2 {
   background-color: rgb(166, 15, 15);
   color: white; /* Text color */
@@ -22,21 +22,26 @@
   border-radius: 10px;
   border: #77a381;
 }
-
+ 
 .individual-button1:hover {
   background-color: darkgreen; /* Change color on hover if desired */
 }
-
+ 
+.individual-button1:disabled, .individual-button1:disabled:hover {
+  background-color: lightgreen;
+  color: lightgray;
+}
+ 
 .individual-button2:hover {
   background-color: darkred; /* Change color on hover if desired */
 }
-
+ 
 .ladder-title h1 {
   padding-right: 20px;
   padding-left: 20px;
   color: black;
 }
-
+ 
 .ladder-nav1 {
   display: flex;
   flex-wrap: wrap;
@@ -44,20 +49,20 @@
   background: transparent;
   padding: 10px 25px;
 }
-
+ 
 .ladder-title {
   flex: 2;
   padding-right: 20px;
   padding-left: 20px;
 }
-
+ 
 .ladder-title h1::after {
   content: "";
   display: block;
   border-bottom: 4px solid black; /* Adjust the thickness here */
   margin-top: -2px; /* Adjust the distance between text and underline */
 }
-
+ 
 .leaderboard-results thead th {
   padding-top: 0px;
   color: #747474;

@@ -2,10 +2,10 @@ import React, {useEffect, useState} from "react";
 import "../../../styles/views/game.scss";
 import {useNavigate} from "react-router-dom";
 import {api} from "../../../helpers/api";
-
-
+ 
+ 
 const Game = () => {
-
+ 
   const navigate = useNavigate();
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [error, setError] = useState(null);
@@ -18,54 +18,56 @@ const Game = () => {
       try {
         const gamesResponse = await api.get("/games");
         const usersResponse = await api.get("/users");
-
+ 
         const games = gamesResponse.data;
         const lobbies = games.map(game => ({
           gamecode: game.gameCode,
           name: `Lobby ${game.gameCode}`,
           details: `${game.playerCount}/${game.maxPlayers} MapQuestor/s in ${game.gameStatus}`,
-          gamestatus: game.gameStatus
+          gamestatus: game.gameStatus,
+          currentPlayers: game.playerCount,
+          maxPlayers: game.maxPlayers
         }));
-
+ 
         setActiveLobbies(lobbies);
         setUsers(usersResponse.data);
       } catch (error) {
         console.error("Error fetching games:", error);
       }
     };
-
+ 
     fetchGamesAndUsers();
-
+ 
     const intervalId = setInterval(fetchGamesAndUsers, 5000);
-
+ 
     return () => clearInterval(intervalId);
   }, []);
-
+ 
   const doJoinGame = async (gameCode) => {
     try {
-
+ 
       console.log("Joining game with code", gameCode, "and token", token);
-
+ 
       const requestBody = JSON.stringify({gameCode, token});
       const response = await api.post(`/games/${gameCode}/join`, requestBody);
-
+ 
       if (response.status === 200) {
         console.log("Game joined successfully", response.data);
         localStorage.setItem("gameCode", gameCode);
         navigate(`/game/${gameCode}`);
       }
-
+ 
     } catch (error) {
       console.error("Error joining the game:", error.response);
       console.log(error)
       setError("Error joining the game: " + (error.response?.data?.message || "Error joining the game!"));
     }
   };
-
+ 
   const handleSearchInputChange = (event) => {
     setSearchQuery(event.target.value);
   };
-
+ 
   const renderPlayerRow = (users) => {
     // Filter players based on searchQuery if it's not empty
     const filteredPlayers = searchQuery
@@ -73,10 +75,10 @@ const Game = () => {
           player.username.toLowerCase().startsWith(searchQuery.toLowerCase())
         )
       : users;
-
+ 
     // Sort players by their wonGames in descending order
     const sortedPlayers = filteredPlayers.sort((a, b) => b.wonGames - a.wonGames);
-
+ 
     return sortedPlayers.map((player, index) => (
       <tr key={player.token}>
         <td className="fs-2">{index + 1}</td>
@@ -87,7 +89,7 @@ const Game = () => {
   };
   // Eine Funktion, die eine Liste von aktiven Lobbies rendert
   const renderActiveLobbies = (activeLobbies) => {
-
+ 
     // Iteriere über alle aktiven Lobbies und rendere sie
     return activeLobbies.map(lobby => (
       <div key={lobby.gamecode} className="col-md-4 ml-4 mb-4">
@@ -95,16 +97,16 @@ const Game = () => {
           <h3>{lobby.name}</h3>
           <p>{lobby.details}</p>
           {lobby.gamestatus === "LOBBY" && (
-            <button 
+            <button
             className="btn btn-primary join-button"
-            // disabled={playerCount === maxPlayers}
+            disabled={lobby.currentPlayers === lobby.maxPlayers}
             onClick={() => doJoinGame(lobby.gamecode)}>Join</button>
           )}
         </div>
       </div>
     ));
   };
-
+ 
   return (
     <div className="row">
       <div className="col-md-6 text-center mt-5">
@@ -122,7 +124,7 @@ const Game = () => {
                   onChange={handleSearchInputChange}/>
               </div>
             </nav>
-            <div className="leaderboard-scrollable" style={{ maxHeight: "350px", overflowY: "auto" }}>
+            <div className="leaderboard-scrollable" style={{ maxHeight: "400px", overflowY: "auto" }}>
               <table id="rankings" className="table leaderboard-results">
                 <thead>
                   <tr>
@@ -141,6 +143,7 @@ const Game = () => {
         </div>
       </div>
       <div className="col-md-6 bg-transparent text-center mt-5">
+        <h1>Welcome {localStorage.getItem("username")}!</h1>
         <div className="button-wrapper justify-content-center">
           <button className="individual-button" onClick={() => navigate("/game/users")}>All Users</button>
         </div>
@@ -161,5 +164,5 @@ const Game = () => {
     </div>
   );
 };
-
+ 
 export default Game;

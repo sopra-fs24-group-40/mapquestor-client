@@ -1,8 +1,18 @@
-import React, {useEffect, useState, useRef} from "react";
-import {Loader} from "@googlemaps/js-api-loader";
+import React, { useEffect, useState, useRef } from "react";
+import { Loader } from "@googlemaps/js-api-loader";
 import PropTypes from "prop-types";
 
-const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, updateRound, correctGuesses, roundLength }) => {
+const InGame = ({
+                  round,
+                  onSendChat,
+                  messagesGame,
+                  players,
+                  game,
+                  updatePlayers,
+                  updateRound,
+                  correctGuesses,
+                  roundLength,
+                }) => {
   const [timer, setTimer] = useState(roundLength);
   const [location, setLocation] = useState(game.cities[round - 1]);
   const [currentMessage, setCurrentMessage] = useState("");
@@ -35,12 +45,12 @@ const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, 
       }, 1000);
     } else if (timer === 0) {
       clearInterval(intervalId);
-      updateRound(round + 1);
       setTimer(roundLength);
       setPointsAssigned(false);
+      updateRound(round + 1);
     }
     return () => clearInterval(intervalId);
-  }, [timer,  players.length]);
+  }, [timer, players.length]);
 
   useEffect(() => {
     if (timer % 10 === 0 && timer !== 0) {
@@ -71,7 +81,7 @@ const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, 
   const handleSendMessageInGame = () => {
     if (!currentMessage.trim()) return;
 
-    if(currentMessage === "/test") {
+    if (currentMessage === "/test") {
       onSendChat(localStorage.getItem("username"), currentMessage, "JS");
 
       return;
@@ -107,29 +117,30 @@ const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, 
   };
 
   useEffect(() => {
-    if(!safe) {
-    const len = messagesGame.length - 1;
-    if (messagesGame.length > 0 && messagesGame[len].type === "JOKER") { // Check if messagesGame is not empty
-      const num = messagesGame[len].content;
-      if (num === 1) {
-        const blackoutMessage = messagesGame[len].type === "JOKER" && messagesGame[len].from !== localStorage.getItem("token");
-        if (blackoutMessage) {
-          setBlackoutMap(0);
+    if (!safe) {
+      const len = messagesGame.length - 1;
+      if (messagesGame.length > 0 && messagesGame[len].type === "JOKER") { // Check if messagesGame is not empty
+        const num = messagesGame[len].content;
+        if (num === 1) {
+          const blackoutMessage = messagesGame[len].type === "JOKER" && messagesGame[len].from !== localStorage.getItem("token");
+          if (blackoutMessage) {
+            setBlackoutMap(0);
 
-          const timeoutId = setTimeout(() => {
-            setBlackoutMap(1);
-          }, 10000);
+            const timeoutId = setTimeout(() => {
+              setBlackoutMap(1);
+            }, 10000);
 
-          // return () => clearTimeout(timeoutId);
-        }
-      } else if (num === 2) {
-        const removeJoker = messagesGame[len].type === "JOKER" && messagesGame[len].from !== localStorage.getItem("token");
-        if (removeJoker) {
-          setRevealedLetters(0);
+            // return () => clearTimeout(timeoutId);
+          }
+        } else if (num === 2) {
+          const removeJoker = messagesGame[len].type === "JOKER" && messagesGame[len].from !== localStorage.getItem("token");
+          if (removeJoker) {
+            setRevealedLetters(0);
+          }
         }
       }
     }
-  }}, [messagesGame]);
+  }, [messagesGame]);
 
   useEffect(() => {
     let isMounted = true;
@@ -154,8 +165,8 @@ const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, 
         await loader.load();
         const streetView = new google.maps.StreetViewPanorama(
           document.getElementById("street-view"), {
-            position: {lat: newLocation.latitude, lng: newLocation.longitude},
-            pov: {heading: 165, pitch: 0},
+            position: { lat: newLocation.latitude, lng: newLocation.longitude },
+            pov: { heading: 165, pitch: 0 },
             zoom: 1,
           },
         );
@@ -201,7 +212,7 @@ const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, 
   const hintLines = (
     <div className="hint-line">
       {solution.split("").map((letter, index) => (
-        <span key={index} style={{marginRight: "5px", fontSize: "24px"}}>
+        <span key={index} style={{ marginRight: "5px", fontSize: "24px" }}>
           {index < revealedLetters ? letter : "_"}
         </span>
       ))}
@@ -216,29 +227,29 @@ const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, 
           <section id="leaderboard">
             <nav className="ladder-nav">
               <div className="ladder-title text-center">
-                <h1 style={{fontSize: "22px"}}>Leaderboard</h1>
+                <h1 style={{ fontSize: "22px" }}>Leaderboard</h1>
               </div>
               {location.name}
             </nav>
-            <div className="leaderboard-container text-center p-2" style={{ maxHeight: "120px", overflowY: "auto" }}>
+            <div className="leaderboard-container text-center p-2" style={{ maxHeight: "200px", overflowY: "auto" }}>
               <table
                 id="rankings"
                 className="leaderboard-results"
                 width="100%"
               >
                 <thead>
-                  <tr>
-                    <th className="text-dark">Name</th>
-                    <th className="text-dark">Points</th>
-                  </tr>
+                <tr>
+                  <th className="text-dark">Name</th>
+                  <th className="text-dark">Points</th>
+                </tr>
                 </thead>
                 <tbody>
-                  {leaderboard.map((player, index) => (
-                    <tr key={index}>
-                      <td>{player.username}</td>
-                      <td>{player.points}</td>
-                    </tr>
-                  ))}
+                {leaderboard.map((player, index) => (
+                  <tr key={index}>
+                    <td>{player.username}</td>
+                    <td>{player.points}</td>
+                  </tr>
+                ))}
                 </tbody>
               </table>
             </div>
@@ -250,25 +261,25 @@ const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, 
 
         <div
           className="timer-container mb-5">
-          Timer: {timer && timer} seconds <br/>
+          Timer: {timer && timer} seconds <br />
           Round: {round} / {game.roundCount}
         </div>
 
         <div
           className="hint-lines-container"
-          style={{display: "flex", justifyContent: "center"}}
+          style={{ display: "flex", justifyContent: "center" }}
         >
           {hintLines}
         </div>
 
-        <div id="street-view" style={{width: "100%", height: "400px", opacity: blackoutMap}}></div>
+        <div id="street-view" style={{ width: "100%", height: "400px", opacity: blackoutMap }}></div>
         <div className="button-wrapper">
-          <button className="individual-button" style={{fontSize: "20px"}}
+          <button className="individual-button" style={{ fontSize: "20px" }}
                   disabled={delayJoker}
                   onClick={() => handleJoker("delay")}>
             Delay Joker
           </button>
-          <button className="individual-button" style={{fontSize: "20px"}}
+          <button className="individual-button" style={{ fontSize: "20px" }}
                   disabled={hintRemoveJoker}
                   onClick={() => handleJoker("hintRemove")}>
             Hint remove Joker
@@ -281,11 +292,12 @@ const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, 
           <section id="chat" className="">
             <nav className="ladder-nav">
               <div className="ladder-title">
-                <h1 style={{fontSize: "22px"}}>Chat</h1>
+                <h1 style={{ fontSize: "22px" }}>Chat</h1>
               </div>
             </nav>
           </section>
-          <div className="chat-container text-start p-2" ref={chatContainerRef} style={{ maxHeight: "120px", overflowY: "auto" }}>
+          <div className="chat-container text-start p-2" ref={chatContainerRef}
+               style={{ maxHeight: "120px", overflowY: "auto" }}>
             <ul className="list-unstyled">
               {messagesGame.filter(msg => msg.type !== "JOKER").map((msg, index) => (
                 <li key={index}>
@@ -306,7 +318,7 @@ const InGame = ({round, onSendChat, messagesGame, players, game, updatePlayers, 
                   handleSendMessageInGame();
                 }
               }}
-              placeholder="Write a message..."
+              placeholder="Your guess..."
               disabled={pointsAssigned} // Disable input if points are already assigned
             />
             <button className="btn btn-primary" onClick={handleSendMessageInGame} disabled={pointsAssigned}>Send

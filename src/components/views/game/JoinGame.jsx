@@ -1,40 +1,40 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../../../helpers/api";
-
-
+ 
+ 
 function JoinGame(props) {
-
+ 
   const [gameCode, setGameCode] = useState("");
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [error, setError] = useState(null);
-
+ 
   const navigate = useNavigate();
   const userRef = useRef();
-
+ 
   useEffect(() => {
     userRef.current.focus();
   }, []);
-
+ 
   const doJoinGame = async () => {
     try {
-
+ 
       const requestBody = JSON.stringify({ gameCode, token });
       const response = await api.post(`/games/${gameCode}/join`, requestBody);
-
-
+ 
+ 
       if (response.status === 200) {
         localStorage.setItem("gameCode", gameCode);
         localStorage.setItem("gameState", "LOBBY");
         navigate(`/game/${gameCode}`);
       }
-
+ 
     } catch (error) {
       console.error("Error joining the game:", error.response);
       setError("Error joining the game: " + (error.response?.data?.message || "Error joining the game!"));
     }
   };
-
+ 
   return (
     <div className="row justify-content-center mt-5">
       <div className="col-md-5 justify-content-center rounded-4 p-4 login-container">
@@ -69,5 +69,5 @@ function JoinGame(props) {
     </div>
   );
 }
-
+ 
 export default JoinGame;
