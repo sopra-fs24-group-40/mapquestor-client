@@ -83,7 +83,7 @@ export default function Game() {
         handleMessage(payload);
       });
  
-      stompClient.subscribe(`/topic/logout`, (message) => {
+      stompClient.subscribe("/topic/logout", (message) => {
         const payload = JSON.parse(message.body);
         handleMessage(payload);
       });
@@ -97,7 +97,7 @@ export default function Game() {
       return () => {
         stompClient.unsubscribe(`${gameTopic}/gameState`);
         stompClient.unsubscribe(`${gameTopic}/chat`);
-        stompClient.unsubscribe(`/topic/logout`);
+        stompClient.unsubscribe("/topic/logout");
       };
     }
   }, [game, creator]);
