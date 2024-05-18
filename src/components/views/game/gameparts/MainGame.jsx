@@ -83,6 +83,11 @@ export default function Game() {
         handleMessage(payload);
       });
  
+      stompClient.subscribe(`/topic/logout`, (message) => {
+        const payload = JSON.parse(message.body);
+        handleMessage(payload);
+      });
+ 
       let joinMessage = { from: localStorage.getItem("token"), content: "Joined the Game!", type: "JOIN" };
       stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(joinMessage));
  
@@ -92,6 +97,7 @@ export default function Game() {
       return () => {
         stompClient.unsubscribe(`${gameTopic}/gameState`);
         stompClient.unsubscribe(`${gameTopic}/chat`);
+        stompClient.unsubscribe(`/topic/logout`);
       };
     }
   }, [game, creator]);
@@ -208,7 +214,7 @@ export default function Game() {
         const message = { from: payload.from, content: {}, type: "LEAVE_CREATOR" };
         stompClient && stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message));
       }
- 
+      console.log("-------------------------------", payload);
       setPlayers(prevPlayers => prevPlayers.filter(player => player.token !== payload.from));
       // setMessages(prevMessages => [...prevMessages, payload]);
     } else if (payload.type === "LEAVE_CREATOR") {
@@ -234,6 +240,12 @@ export default function Game() {
     } else if (payload.type === "TIMER") {
       setRoundLength(payload.content);
       console.log("----->", payload.content);
+    } else if (payload.type === "LOGOUT") {
+      if (payload.from === creator) {
+        const message = { from: payload.from, content: {}, type: "LEAVE_CREATOR" };
+        stompClient && stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message));
+      }
+      setPlayers(prevPlayers => prevPlayers.filter(player => player.token !== payload.from));
     }
   };
  
