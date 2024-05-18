@@ -24,8 +24,8 @@ const logout = (stompClient, navigate) => {
     if (gameCode) {
       const message1 = { from: localStorage.getItem("username"), content: "Left the game", type: "CHAT" };
       stompClient.send(`/app/${gameCode}/chat`, {}, JSON.stringify(message1));
-      const message = { from: localStorage.getItem("token"), content: "Left the game", type: "LEAVE" };
-      stompClient.send(`/app/${gameCode}/chat`, {}, JSON.stringify(message));
+      // const message = { from: localStorage.getItem("token"), content: "Left the game", type: "LEAVE" };
+      // stompClient.send(`/app/${gameCode}/chat`, {}, JSON.stringify(message));
     }
  
     let logoutMessage = {
