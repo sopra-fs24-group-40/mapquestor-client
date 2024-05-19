@@ -12,6 +12,7 @@ function Lobby({
                  countdownDuration,
                  handleLeave,
                  roundLength,
+                 updateCountdown
                }) {
   const [currentMessage, setCurrentMessage] = useState("");
   const [creator, setCreator] = useState(false);
@@ -53,6 +54,10 @@ function Lobby({
     if (countdown > 0) {
       intervalId = setInterval(() => {
         setCountdown(countdown - 1);
+        if (players.length  === 1){
+          setCountdown(null);
+          updateCountdown(null);
+        }
       }, 1000);
     } else if (countdown === 0) {
       clearInterval(intervalId);
@@ -188,6 +193,7 @@ Lobby.propTypes = {
   onSendChat: PropTypes.func.isRequired,
   startGame: PropTypes.func.isRequired,
   roundLength: PropTypes.number.isRequired,
+  updateCountdown: PropTypes.func.isRequired,
   handleLeave: PropTypes.func.isRequired,
   countdownDuration: PropTypes.any,
   messages: PropTypes.arrayOf(

@@ -137,6 +137,10 @@ export default function Game() {
     setRound(1);
     setCorrectGuesses(0);
   };
+
+  const updateCountdown = (countdown) => { 
+    setCountdownDuration(null);
+  };  
  
  
   const zeroPoints = () => {
@@ -264,7 +268,7 @@ export default function Game() {
   switch (gamePhase) {
     case "LOBBY":
       return <Lobby startGame={startGame} onSendChat={sendChatMessage} messages={messages} players={players} game={game}
-                    countdownDuration={countdownDuration} handleLeave={handleLeave} cityTest={cityTest} />;
+                    countdownDuration={countdownDuration} handleLeave={handleLeave} cityTest={cityTest} updateCountdown = {updateCountdown} />;
     case "INGAME":
       return <Ingame round={round} onSendChat={sendChatMessageGame} messagesGame={messagesGame} players={players}
                      game={game} updatePlayers={updatePlayers} updateRound={updateRound} handleLeave={handleLeave}
