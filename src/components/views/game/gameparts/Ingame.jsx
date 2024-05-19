@@ -223,19 +223,16 @@ const InGame = ({
   return (
     <div className="row mt-5">
       <div className="col-md-3 text-center">
-        <div className="container-wrap bg-gray rounded-3"> {/* Add rounded class here */}
+        <div className="container-wrap bg-gray rounded-3 p-3">
           <section id="leaderboard">
-            <nav className="ladder-nav">
-              <div className="ladder-title text-center">
-                <h1 style={{ fontSize: "22px" }}>Leaderboard</h1>
-              </div>
-              {location.name}
-            </nav>
-            <div className="leaderboard-container text-center p-2" style={{ maxHeight: "200px", overflowY: "auto" }}>
+            <div className="text-center">
+              <h2 className="text-center">Leaderboard</h2>
+            </div>
+            {location.name}
+            <div className="leaderboard-container text-center p-2 overflow-auto" style={{ maxHeight: "200px" }}>
               <table
                 id="rankings"
-                className="leaderboard-results"
-                width="100%"
+                className="table leaderboard-results w-100"
               >
                 <thead>
                   <tr>
@@ -256,26 +253,26 @@ const InGame = ({
           </section>
         </div>
       </div>
-      <div className="col-md-6 justify-content-center text-center bg-gray">
-        <h1>In Game</h1>
+      <div className="col-md-6 text-center bg-gray p-3 rounded-3">
+        <h1 className="text-center">In Game</h1>
   
         <div className="timer-container mb-5">
           Timer: {timer && timer} seconds <br />
           Round: {round} / {game.roundCount}
         </div>
   
-        <div className="hint-lines-container" style={{ display: "flex", justifyContent: "center" }}>
+        <div className="hint-lines-container d-flex justify-content-center">
           {hintLines}
         </div>
   
-        <div id="street-view" style={{ width: "100%", height: "400px", opacity: blackoutMap }}></div>
-        <div className="button-wrapper">
-          <button className="individual-button" style={{ fontSize: "20px" }}
+        <div id="street-view" className="w-100" style={{ height: "400px", opacity: blackoutMap }}></div>
+        <div className="button-wrapper mt-3">
+          <button className="btn btn-primary mx-1"
                   disabled={delayJoker}
                   onClick={() => handleJoker("delay")}>
             Delay Joker
           </button>
-          <button className="individual-button" style={{ fontSize: "20px" }}
+          <button className="btn btn-primary mx-1"
                   disabled={hintRemoveJoker}
                   onClick={() => handleJoker("hintRemove")}>
             Hint remove Joker
@@ -284,16 +281,13 @@ const InGame = ({
       </div>
   
       <div className="col-md-3 text-center">
-        <div className="container-wrap bg-gray rounded-3"> {/* Add rounded class here */}
-          <section id="chat" className="">
-            <nav className="ladder-nav">
-              <div className="ladder-title">
-                <h1 style={{ fontSize: "22px" }}>Chat</h1>
-              </div>
-            </nav>
+        <div className="container-wrap bg-gray rounded-3 p-3">
+          <section id="chat">
+            <div className="text-center">
+              <h2 className="text-center">Chat</h2>
+            </div>
           </section>
-          <div className="chat-container text-start p-2" ref={chatContainerRef}
-               style={{ maxHeight: "120px", overflowY: "auto" }}>
+          <div className="chat-container text-start p-2 overflow-auto" ref={chatContainerRef} style={{ maxHeight: "120px" }}>
             <ul className="list-unstyled">
               {messagesGame.filter(msg => msg.type !== "JOKER").map((msg, index) => (
                 <li key={index}>
@@ -317,8 +311,7 @@ const InGame = ({
               placeholder="Your guess..."
               disabled={pointsAssigned} // Disable input if points are already assigned
             />
-            <button className="btn btn-primary" onClick={handleSendMessageInGame} disabled={pointsAssigned}>Send
-            </button>
+            <button className="btn btn-primary" onClick={handleSendMessageInGame} disabled={pointsAssigned}>Send</button>
           </div>
         </div>
       </div>
