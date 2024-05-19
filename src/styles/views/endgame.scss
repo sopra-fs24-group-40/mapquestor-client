@@ -26,10 +26,9 @@
 .individual-button1:hover {
   background-color: darkgreen; /* Change color on hover if desired */
 }
- 
+
 .individual-button1:disabled, .individual-button1:disabled:hover {
-  background-color: lightgreen;
-  color: lightgray;
+  background-color: #015001;
 }
  
 .individual-button2:hover {
@@ -68,4 +67,24 @@
   color: #747474;
   font-size: 20px;
   font-weight: bold;
+}
+
+.timer-container1{
+  background-color: rgb(216, 216, 216, 0.9);
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  font-size: 20px;
+}
+
+.playagain-container{
+  background-color: rgb(216, 216, 216, 0.6);
+  border-radius: 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  font-size: 20px;
 }
