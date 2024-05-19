@@ -71,6 +71,7 @@ export default function Game() {
         if (gameState.status === "LOBBY") {
           setCorrectGuesses(0);
           setRound(1);
+          setCountdownDuration(null);
           let logoutMessage = {
             from: localStorage.getItem("token"),
             content: localStorage.getItem("gameCode"),

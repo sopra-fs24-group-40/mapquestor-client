@@ -62,11 +62,11 @@ function Lobby({
     return () => clearInterval(intervalId);
   }, [countdown, startGame]);
  
-  useEffect(() => {
-    if (players.length === game.maxPlayers && countdown === null) {
-      handleStartCountdown();
-    }
-  }, [players.length, game.maxPlayers, countdown]);
+  // useEffect(() => {
+  //   if (players.length === game.maxPlayers && countdown === null) {
+  //     handleStartCountdown();
+  //   }
+  // }, [players.length, game.maxPlayers, countdown]);
  
   useEffect(() => {
     if (chatContainerRef.current) {
