@@ -139,8 +139,8 @@ Endgame.propTypes = {
   playAgain: PropTypes.func,
   messages: PropTypes.arrayOf(
     PropTypes.shape({
-      from: PropTypes.string.isRequired,
-      content: PropTypes.string.isRequired,
+      from: PropTypes.string,
+      content: PropTypes.string,
     }),
   ).isRequired,
   players: PropTypes.arrayOf(

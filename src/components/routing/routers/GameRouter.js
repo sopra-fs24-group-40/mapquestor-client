@@ -1,5 +1,5 @@
 import React from "react";
-import {Route, Routes} from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import PropTypes from "prop-types";
 import GameLayout from "../../layouts/GameLayout";
 import Game from "../../views/game/Game";
@@ -9,7 +9,7 @@ import Users from "../../views/game/Users";
 import JoinGame from "../../views/game/JoinGame";
 import ProfilePage from "../../views/user/ProfilePage";
 import Endgame from "../../views/game/gameparts/Endgame";
-import Ingame from "../../views/game/gameparts/Ingame";
+import { GameGuard } from "../routeProtectors/GameGuard";
 
 const GameRouter = () => {
   return (
@@ -17,20 +17,19 @@ const GameRouter = () => {
       <Routes>
         <Route path="" element={<GameLayout/>}>
           <Route index element={<Game/>}/>
-          <Route path="create" element={<CreateGame/>}/>
-          <Route path="users" element={<Users/>}/>
-          <Route path="users/:id" element={<ProfilePage/>}/>
-          <Route path="join" element={<JoinGame/>}/>
-          <Route path=":id" element={<MainGame/>}/>
-          <Route path="endgame" element={<Endgame/>}/>
+          <Route element={<GameGuard />}>
+            <Route path="create" element={<CreateGame/>}/>
+            <Route path="users" element={<Users/>}/>
+            <Route path="users/:id" element={<ProfilePage/>}/>
+            <Route path="join" element={<JoinGame/>}/>
+            <Route path=":id" element={<MainGame/>}/>
+            <Route path="endgame" element={<Endgame/>}/>
+          </Route>
         </Route>
       </Routes>
     </div>
   );
 };
-/*
-* Don't forget to export your component!
- */
 
 GameRouter.propTypes = {
   base: PropTypes.string,
