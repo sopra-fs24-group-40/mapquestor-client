@@ -124,7 +124,7 @@ function ProfilePage() {
       } else {
         setErrMsg("Edit failed!");
       }
-      errRef.current.focus;
+      errRef.current.focus();
     }
   };
  
@@ -146,7 +146,7 @@ function ProfilePage() {
       } else {
         setErrMsg("Edit failed!");
       }
-      errRef.current.focus;
+      errRef.current.focus();
     }
   }
  

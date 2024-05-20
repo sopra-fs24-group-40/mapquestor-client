@@ -112,7 +112,7 @@ function Endgame({ game, onSendChat, messages, players, playAgain }) {
       <div className="col-md-6 bg-transparent text-center mt-5">
         <div
           className="timer-container1 mb-5">
-          Timer: {timer && timer} seconds <br />
+          Timer: {timer} seconds <br />
         </div>
         <div className="button-wrapper justify-content-center">
           {buttonClicked &&
