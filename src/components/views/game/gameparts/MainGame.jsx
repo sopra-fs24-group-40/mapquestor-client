@@ -74,7 +74,7 @@ export default function Game() {
           setCountdownDuration(null);
           let logoutMessage = {
             from: localStorage.getItem("token"),
-            content: localStorage.getItem("gameCode"),
+            content: localStorage.getItem("gameCode"), 
             type: "CITY",
           };
 
