@@ -57,7 +57,7 @@ export default function Game() {
     if (stompClient && creator) {
       const gameTopic = `/topic/${id}`;
  
-      stompClient.subscribe("/topic/cities", (message) => {
+      stompClient.subscribe("${gameTopic}/cities", (message) => {
         const payload = JSON.parse(message.body);
         console.log("--------------------", message);
         console.log("payload", payload);
@@ -105,7 +105,7 @@ export default function Game() {
       return () => {
         stompClient.unsubscribe(`${gameTopic}/gameState`);
         stompClient.unsubscribe(`${gameTopic}/chat`);
-        stompClient.unsubscribe("/topic/logout");
+        stompClient.unsubscribe("${gameTopic}/cities");
       };
     }
   }, [game, creator]);
