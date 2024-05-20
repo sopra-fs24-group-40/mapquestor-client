@@ -58,6 +58,7 @@ function Login(props) {
             placeholder="What's your name?"
             ref={userRef}
             autoComplete="off"
+            maxLength={20}
             onChange={(e) => setUsername(e.target.value)}
             required
           />
@@ -70,6 +71,7 @@ function Login(props) {
             type="password"
             id="password"
             placeholder="Top secret!"
+            maxLength={20}
             onChange={(e) => setPassword(e.target.value)}
             required
           />

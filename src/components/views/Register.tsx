@@ -102,6 +102,7 @@ function Register(props) {
               aria-describedby="uidnote"
               onFocus={() => setUserFocus(true)}
               onBlur={() => setUserFocus(false)}
+              maxLength={20}
             />
             <p id="uidnote" className={userFocus && user && !validName ? "instructions" : "offscreen"}>
               Username has wrong format! (Needs at least 4 characters)
@@ -120,6 +121,7 @@ function Register(props) {
               aria-describedby="pwdnote"
               onFocus={() => setPwdFocus(true)}
               onBlur={() => setPwdFocus(false)}
+              maxLength={20}
             />
             <p id="pwdnote" className={pwdFocus && pwd && !validPwd ? "instructions" : "offscreen"}>
               Password has wrong format! (Needs at least 4 characters)
@@ -138,6 +140,7 @@ function Register(props) {
               aria-describedby="confirmnote"
               onFocus={() => setMatchFocus(true)}
               onBlur={() => setMatchFocus(false)}
+              maxLength={20}
             />
           </div>
           <p id="confirmnote" className={matchFocus && matchPwd && !validMatch ? "instructions" : "offscreen"}>
