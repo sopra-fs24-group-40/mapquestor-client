@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Loader } from "@googlemaps/js-api-loader";
 import PropTypes from "prop-types";
+import config from "../../../../helpers/config";
  
 const InGame = ({
                   round,
@@ -157,7 +158,7 @@ const InGame = ({
       }
  
       const apiOptions = {
-        apiKey: "AIzaSyDKZd3AoAgVQyvXXGptbGAnpmBBzLbXG0A",
+        apiKey: config.googleMapsApiKey,
       };
  
       const loader = new Loader(apiOptions);

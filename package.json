@@ -8,6 +8,7 @@
     "axios": "^1.6.7",
     "bootstrap": "^5.3.3",
     "classnames": "^2.5.1",
+    "dotenv": "^16.4.5",
     "eslint-config-react-app": "^7.0.1",
     "net": "^1.0.2",
     "prop-types": "^15.8.1",
