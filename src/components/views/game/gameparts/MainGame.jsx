@@ -6,8 +6,8 @@ import Ingame from "./Ingame";
 import Endgame from "./Endgame";
 import { GameContext } from "../../../layouts/GameLayout";
 import countdowns from "../../../../assets/countdownv2.mp3";
- 
- 
+
+
 export default function Game() {
   const location = useLocation();
   const { stompClient, user, navigate, logout } = useContext(GameContext);
@@ -22,52 +22,51 @@ export default function Game() {
   const [round, setRound] = useState(1);
   const [correctGuesses, setCorrectGuesses] = useState(0);
   const [roundLength, setRoundLength] = useState(location.state ? location.state.roundLength : 60);
- 
- 
+
+
   useEffect(() => {
     const fetchGameData = async () => {
       try {
         const response = await api.get(`/games/${id}`);
         const gameData = response.data;
- 
+
         if (!gameData.players.some(player => player.token === localStorage.getItem("token"))) {
           navigate("/game/join");
           return;
         }
- 
+
         setGame(gameData);
         setCreator(gameData.creator);
         setPlayers(gameData.players || []);
- 
+
         setGamePhase(gameData.status || "LOBBY");
       } catch (error) {
         console.error("Error fetching game data:", error);
         navigate("/game/join");
       }
     };
- 
+
     fetchGameData();
- 
+
   }, [id, navigate]);
- 
- 
+
+
   useEffect(() => {
- 
- 
+
+
     if (stompClient && creator) {
       const gameTopic = `/topic/${id}`;
- 
+
       stompClient.subscribe(`${gameTopic}/cities`, (message) => {
         const payload = JSON.parse(message.body);
         console.log("--------------------", message);
         console.log("payload", payload);
         handleMessage(payload);
       });
- 
- 
+
+
       stompClient.subscribe(`${gameTopic}/gameState`, (message) => {
         const gameState = JSON.parse(message.body);
-        // localStorage.setItem("gameState", gameState.status);
         if (gameState.status === "LOBBY") {
           setCorrectGuesses(0);
           setRound(1);
@@ -81,29 +80,31 @@ export default function Game() {
           if (game.creator === localStorage.getItem("token")) {
             stompClient.send(`/app/${id}/cities`, {}, JSON.stringify(logoutMessage));
           }
+        } else if (gameState.status === "ENDGAME") {
+          setRound(1);
         }
         setGamePhase(gameState.status);
- 
+
       });
- 
+
       stompClient.subscribe(`${gameTopic}/chat`, (message) => {
         const payload = JSON.parse(message.body);
         handleMessage(payload);
       });
- 
+
       stompClient.subscribe("/topic/logout", (message) => {
         const payload = JSON.parse(message.body);
-        if(payload.content === localStorage.getItem("gameCode")){
+        if (payload.content === localStorage.getItem("gameCode")) {
           handleMessage(payload);
         }
       });
- 
+
       let joinMessage = { from: localStorage.getItem("token"), content: "Joined the Game!", type: "JOIN" };
       stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(joinMessage));
- 
+
       let joinMessage2 = { from: localStorage.getItem("username"), content: "Joined the Game!", type: "CHAT" };
       stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(joinMessage2));
- 
+
       return () => {
         stompClient.unsubscribe(`${gameTopic}/gameState`);
         stompClient.unsubscribe(`${gameTopic}/chat`);
@@ -112,40 +113,40 @@ export default function Game() {
       };
     }
   }, [game, creator]);
- 
+
   useEffect(() => {
     setCreator(game.creator);
   }, [game]);
- 
- 
+
+
   const sendChatMessage = (from, content, type) => {
     const message = { from, content, type };
     stompClient && stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message));
   };
- 
+
   const sendChatMessageGame = (from, content, type) => {
     const message = { from, content, type };
     stompClient && stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message));
   };
- 
+
   const startGame = () => {
     let message = { status: "INGAME" };
     stompClient && stompClient.send(`/app/${id}/gameState`, {}, JSON.stringify(message));
   };
- 
+
   const playAgain = () => {
-    zeroPoints(); // Reset players' points
+    zeroPoints();
     let message = { status: "LOBBY" };
     stompClient && stompClient.send(`/app/${id}/gameState`, {}, JSON.stringify(message));
     setRound(1);
     setCorrectGuesses(0);
   };
 
-  const updateCountdown = (countdown) => { 
+  const updateCountdown = (countdown) => {
     setCountdownDuration(null);
-  };  
- 
- 
+  };
+
+
   const zeroPoints = () => {
     const updatedPlayers = players.map(player => {
       return {
@@ -155,18 +156,18 @@ export default function Game() {
     });
     updatePlayers(updatedPlayers);
   };
- 
- 
+
+
   const updatePlayers = (updatedPlayers) => {
     setPlayers(updatedPlayers);
     console.log("updatedPlayers", updatedPlayers); // Log the updated players
     const message = { from: localStorage.getItem("token"), content: updatedPlayers, type: "POINTS" };
     stompClient && stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message));
   };
- 
- 
+
+
   const updateRound = (round) => {
- 
+
     const maxRounds = game.roundCount;
     if (round > maxRounds) {
       const sortedPlayers = [...players].sort((a, b) => b.points - a.points);
@@ -184,9 +185,9 @@ export default function Game() {
       setCorrectGuesses(0);
     }
   };
- 
+
   const handleLeave = (player) => {
- 
+
     if (player === game.creator) {
       const message = { from: player, content: {}, type: "LEAVE_CREATOR" };
       stompClient && stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message));
@@ -195,20 +196,20 @@ export default function Game() {
       stompClient && stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message));
     }
   };
- 
+
   const cityTest = () => {
     let cityMessage = { roundCount: game.roundCount };
     stompClient.send("/app/cities", {}, JSON.stringify(cityMessage));
   };
- 
+
   const doSomething = () => {
     const countdownSound = new Audio(countdowns);
     countdownSound.play()
       .then(() => (console.log("Sound abgespielt!")))
       .catch(error => console.error("Fehler beim Abspielen des Sounds:", error));
   };
- 
- 
+
+
   const handleMessage = (payload) => {
     if (payload.type === "JOIN") {
       if (game.creator === localStorage.getItem("token")) {
@@ -224,7 +225,7 @@ export default function Game() {
         }
       });
     } else if (payload.type === "LEAVE") {
- 
+
       if (payload.from === creator) {
         const message = { from: payload.from, content: {}, type: "LEAVE_CREATOR" };
         stompClient && stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message));
@@ -250,16 +251,14 @@ export default function Game() {
       setPlayers(payload.content);
     } else if (payload.type === "JOKER") {
       setMessagesGame(prevMessages => [...prevMessages, payload]);
-    } else if (payload.type === "PLAY_AGAIN") {
-      // setMessagesGame(prevMessages => [...prevMessages, payload]);
     } else if (payload.type === "TIMER") {
       setRoundLength(payload.content);
       console.log("----->", payload.content);
     } else if (payload.type === "CITY") {
-      console.log("----->", payload.content);
+      console.log(payload.content);
+      setRound(1);
       game.cities = payload.content;
-      console.log("----->", game.cities);
-    }else if (payload.type === "LOGOUT") {
+    } else if (payload.type === "LOGOUT") {
       if (payload.from === creator) {
         const message = { from: payload.from, content: {}, type: "LEAVE_CREATOR" };
         stompClient && stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message));
@@ -267,11 +266,12 @@ export default function Game() {
       setPlayers(prevPlayers => prevPlayers.filter(player => player.token !== payload.from));
     }
   };
- 
+
   switch (gamePhase) {
     case "LOBBY":
       return <Lobby startGame={startGame} onSendChat={sendChatMessage} messages={messages} players={players} game={game}
-                    countdownDuration={countdownDuration} handleLeave={handleLeave} cityTest={cityTest} updateCountdown = {updateCountdown} />;
+                    countdownDuration={countdownDuration} handleLeave={handleLeave}
+                    updateCountdown={updateCountdown} />;
     case "INGAME":
       return <Ingame round={round} onSendChat={sendChatMessageGame} messagesGame={messagesGame} players={players}
                      game={game} updatePlayers={updatePlayers} updateRound={updateRound} handleLeave={handleLeave}

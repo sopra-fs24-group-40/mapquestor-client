@@ -80,56 +80,57 @@ function Endgame({ game, onSendChat, messages, players, playAgain }) {
     }
   }, [timerReachedZero.current, playAgainButton]);
 
-  
-return (
-  <div className="row">
-    <div className="col-md-6 text-center mt-5">
-      <div className="container-wrap">
-        <section id="leaderboard">
-          <nav className="ladder-nav1">
-            <div className="ladder-title m-1 justify-content-center text-center">
-              <h1>Leaderboard</h1>
-            </div>
-          </nav>
-          <div className="leaderboard-scrollable" style={{ maxHeight: "180px", overflowY: "auto" }}>
-            <table id="rankings" className="leaderboard-results" width="100%">
-              <thead>
+
+  return (
+    <div className="row">
+      <div className="col-md-6 text-center mt-5">
+        <div className="container-wrap">
+          <section id="leaderboard">
+            <nav className="ladder-nav1">
+              <div className="ladder-title m-1 justify-content-center text-center">
+                <h1>Leaderboard</h1>
+              </div>
+            </nav>
+            <div className="leaderboard-scrollable" style={{ maxHeight: "180px", overflowY: "auto" }}>
+              <table id="rankings" className="leaderboard-results" width="100%">
+                <thead>
                 <tr>
                   <th>Rank</th>
                   <th>Name</th>
                   <th>Total</th>
                 </tr>
-              </thead>
-              <tbody className="text-center bg-transparent">
+                </thead>
+                <tbody className="text-center bg-transparent">
                 {renderPlayerRow(players)}
-              </tbody>
-            </table>
-          </div>
-        </section>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
       </div>
-    </div>
 
-    <div className="col-md-6 bg-transparent text-center mt-5">
-      <div
-        className="timer-container1 mb-5">
-        Timer: {timer && timer} seconds <br />
-      </div>
-      <div className="button-wrapper justify-content-center">
-        {buttonClicked &&
-          <p className="playagain-container">Please wait for the timer!  <br /> You may join if the creator decides to play again as well!</p>}
-        <button className="individual-button1" onClick={() => handlePlayAgain()} disabled={buttonDisabled}>Play
-          Again
-        </button>
-      </div>
-      <div className="button-wrapper">
-        <button className="individual-button2" onClick={() => {
-          handleLeaveGame();
-          navigate("/game");
-        }}>Main Menu
-        </button>
+      <div className="col-md-6 bg-transparent text-center mt-5">
+        <div
+          className="timer-container1 mb-5">
+          Timer: {timer && timer} seconds <br />
+        </div>
+        <div className="button-wrapper justify-content-center">
+          {buttonClicked &&
+            <p className="playagain-container">Please wait for the timer! <br /> You may join if the creator decides to
+              play again as well!</p>}
+          <button className="individual-button1" onClick={() => handlePlayAgain()} disabled={buttonDisabled}>Play
+            Again
+          </button>
+        </div>
+        <div className="button-wrapper">
+          <button className="individual-button2" onClick={() => {
+            handleLeaveGame();
+            navigate("/game");
+          }}>Main Menu
+          </button>
+        </div>
       </div>
     </div>
-  </div>
   );
 }
 
