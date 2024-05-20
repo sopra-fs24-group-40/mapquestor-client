@@ -109,60 +109,59 @@ const Game = () => {
  
   return (
     <div className="row">
-      <div className="col-md-6 text-center mt-5">
-        <div className="container-wrap">
+      <div className="col-md-6 mt-5 rounded-3">
+        <div className="container-wrap p-2">
           <section id="leaderboard">
-            <nav className="ladder-nav">
-              <div className="ladder-title">
-                <h1>Leaderboard</h1>
-              </div>
-              <div className="ladder-search">
-                <input
-                  type="text"
-                  placeholder="Search by username..."
-                  value={searchQuery}
-                  onChange={handleSearchInputChange}/>
-              </div>
-            </nav>
-            <div className="leaderboard-scrollable" style={{ maxHeight: "400px", overflowY: "auto" }}>
-              <table id="rankings" className="table leaderboard-results">
-                <thead>
-                  <tr>
-                    <th>Rank</th>
-                    <th>Name</th>
-                    <th>Wins</th>
-                  </tr>
-                </thead>
-                <tbody className="text-center bg-transparent">
-                  {/* Render player rows directly within tbody */}
-                  {renderPlayerRow(users)}
-                </tbody>
-              </table>
+            <div className="d-flex justify-content-between align-items-center">
+              <h1>Leaderboard</h1>
+              <input
+                className="form-control" style={{ width: "200px" }}
+                type="text"
+                placeholder="Search by username..."
+                value={searchQuery}
+                onChange={handleSearchInputChange}
+              />
             </div>
           </section>
         </div>
+        <div className="header bg-light">
+          <div className="row fs-3 text-center">
+            <div className="col">Rank</div>
+            <div className="col">Name</div>
+            <div className="col">Wins</div>
+          </div>
+        </div>
+        <div className="table-responsive" style={{ maxHeight: "350px", overflowY: "auto" }}>
+          <table id="rankings" className="table table-striped table-hover">
+            <tbody className="text-center">
+              {renderPlayerRow(users)}
+            </tbody>
+          </table>
+        </div>
       </div>
-      <div className="col-md-6 bg-transparent text-center mt-5">
+      <div className="col-md-6 bg-transparent text-center mt-5 p-2">
         <h1>Welcome {localStorage.getItem("username")}!</h1>
-        <div className="button-wrapper justify-content-center">
-          <button className="individual-button" onClick={() => navigate("/game/users")}>All Users</button>
-        </div>
-        <div className="button-wrapper">
-          <button className="individual-button" onClick={() => navigate("/game/join")}>Join Lobby</button>
-        </div>
-        <div className="button-wrapper">
-          <button className="individual-button" onClick={() => navigate("/game/create")}>Create Game</button>
+        <div className="d-grid gap-2 d-md-block mt-5">
+          <div className="mb-4">
+            <button className="btn btn-success fs-3 rounded-3" style={{ width: "200px", height: "90px" }} onClick={() => navigate("/game/users")}>All Users</button>
+          </div>
+          <div className="mb-4">
+            <button className="btn btn-success fs-3 rounded-3" style={{ width: "200px", height: "90px" }} onClick={() => navigate("/game/join")}>Join Lobby</button>
+          </div>
+          <div>
+            <button className="btn btn-success fs-3 rounded-3" style={{ width: "200px", height: "90px" }} onClick={() => navigate("/game/create")}>Create Game</button>
+          </div>
         </div>
       </div>
-      {/* Bereich für aktive Lobbies, renderActiveLobbies wird aufgerufen */}
-      <div className="activeLobbies col-md-12 mt-5 pb-0 pt-2" style={{ maxHeight: "250px", overflowY: "auto" }}>
-        <h2 className="p-2 mb-2 pb-0">Active Games</h2>
-        <div className="row">
+      <div className="col-md-12 bg-gray mt-5 pb-0 pt-2 rounded-3">
+        <h1 className="p-2 mb-2">Active Games</h1>
+        <div className="row bg-light mb-3 mx-1" style={{ maxHeight: "180px", overflowY: "auto" }}>
           {renderActiveLobbies(activeLobbies)}
         </div>
       </div>
     </div>
   );
+
 };
  
 export default Game;
