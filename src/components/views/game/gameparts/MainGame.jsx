@@ -79,7 +79,7 @@ export default function Game() {
           };
 
           if (game.creator === localStorage.getItem("token")) {
-            stompClient.send("/app/cities", {}, JSON.stringify(logoutMessage));
+            stompClient.send(`/app/${id}/cities`, {}, JSON.stringify(logoutMessage));
           }
         }
         setGamePhase(gameState.status);
