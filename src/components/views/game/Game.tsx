@@ -142,14 +142,14 @@ const Game = () => {
       <div className="col-md-6 bg-transparent text-center mt-5 p-2">
         <h1>Welcome {localStorage.getItem("username")}!</h1>
         <div className="d-grid gap-2 d-md-block mt-5">
-          <div className="mb-5">
-            <button className="btn btn-success fs-3 rounded-3" style={{ width: "200px", height: "80px", backgroundColor: "#28a745", borderColor: "#28a745" }} onClick={() => navigate("/game/users")}>All Users</button>
+          <div className="mb-4">
+            <button className="btn btn-success fs-3 rounded-3" style={{ width: "200px", height: "90px" }} onClick={() => navigate("/game/users")}>All Users</button>
           </div>
-          <div className="mb-5">
-            <button className="btn btn-success fs-3 rounded-3" style={{ width: "200px", height: "80px", backgroundColor: "#28a745", borderColor: "#28a745" }} onClick={() => navigate("/game/join")}>Join Lobby</button>
+          <div className="mb-4">
+            <button className="btn btn-success fs-3 rounded-3" style={{ width: "200px", height: "90px" }} onClick={() => navigate("/game/join")}>Join Lobby</button>
           </div>
           <div>
-            <button className="btn btn-success fs-3 rounded-3" style={{ width: "200px", height: "80px", backgroundColor: "#28a745", borderColor: "#28a745" }} onClick={() => navigate("/game/create")}>Create Game</button>
+            <button className="btn btn-success fs-3 rounded-3" style={{ width: "200px", height: "90px" }} onClick={() => navigate("/game/create")}>Create Game</button>
           </div>
         </div>
       </div>
