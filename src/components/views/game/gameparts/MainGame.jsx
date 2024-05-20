@@ -74,7 +74,7 @@ export default function Game() {
           setCountdownDuration(null);
           let logoutMessage = {
             from: localStorage.getItem("token"),
-            content: localStorage.getItem("gameCode"), 
+            content: localStorage.getItem("gameCode"),
             type: "CITY",
           };
 
@@ -93,7 +93,9 @@ export default function Game() {
  
       stompClient.subscribe("/topic/logout", (message) => {
         const payload = JSON.parse(message.body);
-        handleMessage(payload);
+        if(payload.content === localStorage.getItem("gameCode")){
+          handleMessage(payload);
+        }
       });
  
       let joinMessage = { from: localStorage.getItem("token"), content: "Joined the Game!", type: "JOIN" };
@@ -106,6 +108,7 @@ export default function Game() {
         stompClient.unsubscribe(`${gameTopic}/gameState`);
         stompClient.unsubscribe(`${gameTopic}/chat`);
         stompClient.unsubscribe(`${gameTopic}/cities`);
+        stompClient.unsubscribe("/topic/logout");
       };
     }
   }, [game, creator]);
