@@ -50,7 +50,7 @@ function ProfilePage() {
     }
     fetchUser();
  
-    const intervalId = setInterval(fetchUser, 10000);
+    const intervalId = setInterval(fetchUser, 120000);
  
     return () => clearInterval(intervalId);
   }, [id]);
