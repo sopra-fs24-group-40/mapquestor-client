@@ -1,66 +1,108 @@
-# SoPra FS24 - Client Template with build pack
+# MapQuestor
+<div style="text-align: justify">
+*picture*
 
-## Getting started
+Have you ever wanted to travel the world, but lack the money and time? That's where MapQuestor comes in mind... What are you waiting for? Become a MapQuestor!
+P.S. go check out our back-end implementation [here](https://github.com/sopra-fs24-group-40/mapquestor-server).
 
-Read and go through these Tutorials. It will make your life easier:)
+## 📜 Table of Contents
 
-- Read the React [Docs](https://react.dev/learn)
-- Do this React [Getting Started](https://react.dev/learn/tutorial-tic-tac-toe) Tutorial (it doesn't assume any existing React knowledge)
-- Get an Understanding of [CSS](https://www.w3schools.com/Css/), [SCSS](https://sass-lang.com/documentation/syntax), and [HTML](https://www.w3schools.com/html/html_intro.asp)!
+1. [👋 Introduction](#introduction)
+2. [🛠️ Technologies](#️technologies)
+3. [🧭 High-level components](#high-level-components)
+4. [🏎️ Launch & Deployment](#️launch-and-deployment)
+5. [🩻 Illustrations](#illustrations)
+6. [🛣️ Roadmap](#️roadmap)
+7. [👔 Authors and acknowledgment](#authors-and-acknowledgment)
+8. [📝 License](#license)
 
-Next, there are two other technologies that you should look at:
+## 👋 Introduction <a id="introduction"></a>
 
-* [react-router-dom](https://reactrouter.com/en/main/start/concepts) offers declarative routing for React. It is a collection of navigational components that fit nicely with the application. 
-* [react-hooks](https://blog.logrocket.com/using-hooks-react-router/) let you access the router's state and perform navigation from inside your components.
+To give people a fun way of learning about potential sightseeing destinations, we introduce a game called MapQuestor. It is playable by multiple users at once, this will increase engagement and raise a competitive spirit. A picture of a place of interest will be shown to the players and they must guess which city or country it is from.
 
-## Prerequisites and Installation
-For your local development environment, you will need Node.js.\
-We urge you to install the exact version **v20.11.0** which comes with the npm package manager. You can download it [here](https://nodejs.org/download/release/v20.11.0/).\
-If you are confused about which download to choose, feel free to use these direct links:
+## 🛠️ Technologies <a id="technologies"></a>
 
-- **MacOS:** [node-v20.11.0.pkg](https://nodejs.org/download/release/v20.11.0/node-v20.11.0.pkg)
-- **Windows 32-bit:** [node-v20.11.0-x86.msi](https://nodejs.org/download/release/v20.11.0/node-v20.11.0-x86.msi)
-- **Windows 64-bit:** [node-v20.11.0-x64.msi](https://nodejs.org/download/release/v20.11.0/node-v20.11.0-x64.msi)
-- **Linux:** [node-v20.11.0.tar.xz](https://nodejs.org/dist/v20.11.0/node-v20.11.0.tar.xz) (use this [installation guide](https://medium.com/@tgmarinho/how-to-install-node-js-via-binary-archive-on-linux-ab9bbe1dd0c2) if you are new to Linux)
+For the devolopment of the client, we relied on the following technologies:
 
-If you happen to have a package manager the following commands can be used:
+* [JavaScript]() - Programming language
+* [TypeScript]() - Programming language
+* [REACT](https://reactjs.org/) - Front-end TypeScript Library
+* bootstrap???
+* [MUI](https://mui.com/material-ui/react-alert/) - React UI framework used mainly for Alert components ???
+* [Axios API](https://axios-http.com/docs/api_intro) - Used for REST-based communication with the server
+* [Stomp](https://stomp-js.github.io/stomp-websocket/) - Used for websocket communication with the server
+* [Google Maps Streetview API](https://developers.google.com/maps/documentation/javascript/streetview?hl=de) - Used to embed streetview into the game
 
-- **Homebrew:** `brew install node@20.11.0`
-- **Chocolatey:** `choco install nodejs-lts --version=20.11.0`
+## 🧭 High-level components <a id="high-level-components"></a>
 
-After the installation, update the npm package manager to **10.4.0** by running ```npm install -g npm@10.4.0```\
-You can ensure the correct version of node and npm by running ```node -v``` and ```npm --version```, which should give you **v20.11.0** and **10.4.0** respectively.\
-Before you start your application for the first time, run this command to install all other dependencies, including React:
+Below you can see our main components.
 
-```npm install```
+### 🎮 Game
 
-Next, you can start the app with:
+[Game](https://github.com/sopra-fs24-group-40/mapquestor-client/blob/main/src/components/views/game/Game.tsx) is the first view after logging in or registering. Users can view the leaderboard on the left hand side and below the leaderboard they can see what games are active, if there are any. If a lobby is not full yet, they will have the opportunity to join. On the right hand side, users can navigate through different pages, e.g. if they want to view all registered users, join a lobby via game code or create a game. On top they can search for a user, go direct to their profile page, or log out.
 
-```npm run dev```
+### 🛋️ Create Game
 
-Now you can open [http://localhost:3000](http://localhost:3000) to view it in the browser.\
-Notice that the page will reload if you make any edits. You will also see any lint errors in the console (use a Chrome-based browser).\
-The client will send HTTP requests to the server which can be found [here](https://github.com/HASEL-UZH/sopra-fs24-template-server).\
-In order for these requests to work, you need to install and start the server as well.
+A user can create a [Lobby](https://github.com/sopra-fs24-group-40/mapquestor-client/blob/main/src/components/views/game/CreateGame.jsx) and becomes the creator of the game. The user can make a game for 2 to 5 people, assign the round cound from 2 to 10, and choose round length between 30s, 60s, or 90s. In the end, the creator will have the opportunity to choose the mode, whether they want to guess the country or city name. After creating, user will be directed to the corresponding lobby, where other users can join and chat with eachother.
 
-### Testing
-Testing is optional, and you can run the tests with `npm run test`\
-This launches the test runner in an interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 🕹️ Main Game
 
-> For macOS user running into a 'fsevents' error: https://github.com/jest-community/vscode-jest/issues/423
+[Main Game](https://github.com/sopra-fs24-group-40/mapquestor-client/blob/main/src/components/views/game/gameparts/MainGame.jsx) is used as a communicator between client and server. Lobby, Ingame, and Endgame all communicate via the Main Game. All websocket requests are handled inside this file as well as responses from the server. It handles joining a game in lobby, updating points after a round, concluding a game after finishing it, leaving a game, whether it is a user or creator, and many more. Some of these functionalities are passed in either Lobby, Ingame, or Endgame.
 
-### Build
-Finally, `npm run build` builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance:\
-The build is minified, and the filenames include hashes.<br>
+## 🏎️ Launch & Deployment <a id="launch-and-deployment"></a>
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+The following steps are needed for a new developer joining our team.
 
-## Learn More
+### 🗺️ Prerequisites and Installation
 
-To learn React, check out the [React documentation](https://react.dev/).
+- For the development environment, Node.js is needed. We worked with the exact version [**v20.11.0**](https://nodejs.org/download/release/v20.11.0/) which comes with the npm package manager.
+- Update the npm package manager to **10.4.0** by running ```npm install -g npm@10.4.0```. Check the correct version by running ```node -v``` and ```npm --version```, which should give you **v20.11.0** and **10.4.0** respectively.
+- Run this command to install all other dependencies, including React by running ```npm install```
+- Furthermore, you need to install Google Maps by running ```npm install @googlemaps/js-api-loader```
 
+### 🔨 Build and Run
 
-> Thanks to Lucas Pelloni Kyrill Hux and Marco Leder for working on the template. 
-D
+- Build the app by running ```npm run build```
+- Start the app by running ```npm run dev```
+- Open [localhost](http://localhost:3000) to view it in browser. _We recommend you to use Google Chrome._
+
+### 📈 Testing
+
+- Run tests by running ```npm run test```
+    - _For macOS user with a 'fsevents' error --> https://github.com/jest-community/vscode-jest/issues/423_
+
+### 💡 External dependencies
+
+Both client and server have to be running for the application to behave as expected.
+
+### ✉️ Releases
+
+We stronlgy recommend to follow this [tutorial](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository) and to properly document and comment your release.
+
+## 🩻 Illustrations <a id="illustrations"></a>
+
+_screenshots_
+
+## 🛣️ Roadmap <a id="roadmap"></a>
+
+- _Global leaderboard_ --> Leaderboard could be filterable by metrics (e.g. time or mode).
+- _Joker assignment_ --> Assign jokers depending on points after each round (e.g. player with least points gets a joker).
+- _Worldwide_ --> Include more cities and countries from other continents and game modes (e.g. City-Europe, Country-South-America, etc.).
+
+## 👔 Authors and acknowledgment <a id="authors-and-acknowledgment"></a>
+
+Authors of MapQuestor:
+
+- [Branislav Milutinović](https://github.com/B-M)
+- [Shanthos Magendran](https://github.com/LaughingF0x)
+- [Benjamin Halfar](https://github.com/bhalf)
+- [Nikola Stevanović](https://github.com/nik-stev)
+- [Arbër Markaj](https://github.com/domeniku7)
+
+We want to use this opportunity to thank our teaching assistant [Louis Caerts](https://github.com/LouisCaerts). His guidance and assistance were helpful and we really appreciate it.
+
+## 📝 License <a id="license"></a>
+
+This project is licensed under the Apache License Version 2.0.
+
+</div>
