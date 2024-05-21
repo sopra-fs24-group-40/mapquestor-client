@@ -7,14 +7,14 @@ P.S. go check out our back-end implementation [here](https://github.com/sopra-fs
 
 ## 📜 Table of Contents
 
-1. [👋 Introduction](#introduction)
-2. [🛠️ Technologies](#️technologies)
-3. [🧭 High-level components](#high-level-components)
-4. [🏎️ Launch & Deployment](#️launch-and-deployment)
-5. [🩻 Illustrations](#illustrations)
-6. [🛣️ Roadmap](#️roadmap)
-7. [👔 Authors and acknowledgment](#authors-and-acknowledgment)
-8. [📝 License](#license)
+1. [👋 Introduction](#-introduction)
+2. [🛠️ Technologies](#️-technologies)
+3. [🧭 High-level components](#-high-level-components)
+4. [🏎️ Launch & Deployment](#️-launch--deployment)
+5. [🩻 Illustrations](#-illustrations)
+6. [🛣️ Roadmap](#️-roadmap)
+7. [👔 Authors and acknowledgment](#-authors-and-acknowledgment)
+8. [📝 License](#-license)
 
 ## 👋 Introduction <a id="introduction"></a>
 
@@ -26,9 +26,8 @@ For the devolopment of the client, we relied on the following technologies:
 
 * [JavaScript]() - Programming language
 * [TypeScript]() - Programming language
-* [REACT](https://reactjs.org/) - Front-end TypeScript Library
-* bootstrap???
-* [MUI](https://mui.com/material-ui/react-alert/) - React UI framework used mainly for Alert components ???
+* [REACT](https://reactjs.org/) - Front-end TypeScript library
+* [Bootstrap](https://getbootstrap.com/) - Front-end library
 * [Axios API](https://axios-http.com/docs/api_intro) - Used for REST-based communication with the server
 * [Stomp](https://stomp-js.github.io/stomp-websocket/) - Used for websocket communication with the server
 * [Google Maps Streetview API](https://developers.google.com/maps/documentation/javascript/streetview?hl=de) - Used to embed streetview into the game
@@ -49,7 +48,7 @@ A user can create a [Lobby](https://github.com/sopra-fs24-group-40/mapquestor-cl
 
 [Main Game](https://github.com/sopra-fs24-group-40/mapquestor-client/blob/main/src/components/views/game/gameparts/MainGame.jsx) is used as a communicator between client and server. Lobby, Ingame, and Endgame all communicate via the Main Game. All websocket requests are handled inside this file as well as responses from the server. It handles joining a game in lobby, updating points after a round, concluding a game after finishing it, leaving a game, whether it is a user or creator, and many more. Some of these functionalities are passed in either Lobby, Ingame, or Endgame.
 
-## 🏎️ Launch & Deployment <a id="launch-and-deployment"></a>
+## 🏎️ Launch & Deployment <a id="launch--deployment"></a>
 
 The following steps are needed for a new developer joining our team.
 
