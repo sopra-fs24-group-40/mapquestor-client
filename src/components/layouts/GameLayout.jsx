@@ -24,8 +24,6 @@ const logout = (stompClient, navigate) => {
     if (gameCode) {
       const message1 = { from: localStorage.getItem("username"), content: "Left the game", type: "CHAT" };
       stompClient.send(`/app/${gameCode}/chat`, {}, JSON.stringify(message1));
-      // const message = { from: localStorage.getItem("token"), content: "Left the game", type: "LEAVE" };
-      // stompClient.send(`/app/${gameCode}/chat`, {}, JSON.stringify(message));
     }
  
     let logoutMessage = {
@@ -78,9 +76,7 @@ function GameLayout(props) {
     localStompClient.connect({}, function (frame) {
       setStompClient(localStompClient);
  
- 
       localStompClient.subscribe("/topic/logout", (message) => {
- 
         const payload = JSON.parse(message.body);
         if (payload.from === localStorage.getItem("token")) {
           localStorage.removeItem("token");
@@ -113,6 +109,20 @@ function GameLayout(props) {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, [stompClient, navigate]);
+ 
+  // UseEffect to disable the back button
+  useEffect(() => {
+    const handlePopState = (event) => {
+      navigate(1); // Forward to prevent back navigation
+    };
+ 
+    window.history.pushState(null, null, window.location.href);
+    window.addEventListener("popstate", handlePopState);
+ 
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [navigate]);
  
   useEffect(() => {
     showGameLayout();
@@ -172,6 +182,7 @@ function GameLayout(props) {
       setShowLayout(true);
     }
   };
+ 
  
   return (
     <GameContext.Provider value={contextValue}>
