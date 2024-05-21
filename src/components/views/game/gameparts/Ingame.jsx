@@ -230,7 +230,6 @@ const InGame = ({
               <div className="ladder-title text-center">
                 <h1 style={{ fontSize: "22px" }}>Leaderboard</h1>
               </div>
-              {location.name}
             </nav>
             <div className="leaderboard-container text-center p-2" style={{ maxHeight: "200px", overflowY: "auto" }}>
               <table
