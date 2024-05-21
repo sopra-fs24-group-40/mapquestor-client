@@ -131,7 +131,7 @@ const Game = () => {
             <div className="col">Wins</div>
           </div>
         </div>
-        <div className="table-responsive" style={{ maxHeight: "350px", overflowY: "auto" }}>
+        <div className="table-responsive mb-3" style={{ maxHeight: "350px", overflowY: "auto" }}>
           <table id="rankings" className="table table-striped table-hover">
             <tbody className="text-center">
               {renderPlayerRow(users)}

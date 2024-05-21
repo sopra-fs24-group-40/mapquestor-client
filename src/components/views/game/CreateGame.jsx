@@ -39,8 +39,8 @@ function CreateGame() {
   return (
     <div className="row justify-content-center mt-5">
       <div className="col-md-6 p-3">
-        <h1 className="text-center mb-4">Create Game</h1>
-        <form onSubmit={handleSubmit} className="bg-light p-4 border rounded">
+        <h1 className="text-center">Create Game</h1>
+        <form onSubmit={handleSubmit} className="bg-light p-4">
           {error && (
             <div className="alert alert-danger" role="alert">
               {error}
@@ -92,40 +92,41 @@ function CreateGame() {
               <option value="90">90 seconds</option>
             </select>
           </div>
-          <div className="row justify-content-left mb-5">
-            <div className="col-lg-6 fs-5">
-              <div className="text-left">
-                <label htmlFor="gameType" className="form-label fs-5">Game Mode</label>
-                <div className="btn-group mb-3" role="group" aria-label="Game Type">
-                  <button
-                    type="button"
-                    className={`btn ${gameType === "COUNTRY" ? "btn-primary" : "btn-secondary"} btn-lg rounded-3 me-2`}
-                    onClick={() => setGameType("COUNTRY")}
-                    style={{ background: gameType === "COUNTRY" ? "green" : "" }}
-                  >
-                    Country Mode
-                  </button>
-                  <button
-                    type="button"
-                    className={`btn ${gameType === "CITY" ? "btn-primary" : "btn-secondary"} btn-lg rounded-3`}
-                    onClick={() => setGameType("CITY")}
-                    style={{ background: gameType === "CITY" ? "green" : "" }}
-                  >
-                    City Mode
-                  </button>
-                </div>
-              </div>
+          <div className="mb-3">
+            <label htmlFor="gameType" className="form-label fs-5">Game Mode</label>
+            <div className="btn-group w-100" role="group" aria-label="Game Type">
+              <button
+                type="button"
+                className={`btn ${gameType === "COUNTRY" ? "btn-success" : "btn-secondary"} w-50`}
+                style={{ height: "70px" }}
+                onClick={() => setGameType("COUNTRY")}
+              >
+                Country Mode
+              </button>
+              <button
+                type="button"
+                className={`btn ${gameType === "CITY" ? "btn-success" : "btn-secondary"} w-50`}
+                style={{ height: "70px" }}
+                onClick={() => setGameType("CITY")}
+              >
+                City Mode
+              </button>
             </div>
           </div>
- 
- 
           <div className="row">
             <div className="col-6">
-              <button onClick={handleSubmit} type="submit" className="btn btn-primary">Create Game</button>
+              <button type="submit" className="btn btn-primary"
+              style={{ width: "150px" }}>
+                Create Game</button>
             </div>
             <div className="col-6 d-flex justify-content-end">
               <button
-                className="btn btn-danger" onClick={() => navigate("/game")}>Back
+                type="button"
+                className="btn btn-danger"
+                style={{ width: "75px" }}
+                onClick={() => navigate("/game")}
+              >
+                Back
               </button>
             </div>
           </div>
@@ -133,6 +134,7 @@ function CreateGame() {
       </div>
     </div>
   );
+
 }
  
 export default CreateGame;
