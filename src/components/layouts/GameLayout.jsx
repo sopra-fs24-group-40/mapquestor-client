@@ -124,7 +124,7 @@ function GameLayout(props) {
     };
   }, [navigate]);
  
-  useEffect(() => {
+  useEffect(() => { 
     showGameLayout();
   });
  
