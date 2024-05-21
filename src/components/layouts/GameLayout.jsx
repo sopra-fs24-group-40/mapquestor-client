@@ -87,7 +87,7 @@ function GameLayout(props) {
         }
       });
     });
- 
+  
     return () => {
       if (intervalId) {
         clearInterval(intervalId);
