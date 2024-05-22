@@ -1,9 +1,7 @@
 # MapQuestor
 <div style="text-align: justify">
 
-<div align="center">
-    <img (src/assets/LOGO1.png)>
-</div>
+![Image](src/assets/LOGO1.png)
 
 Have you ever wanted to travel the world, but lack the money and time? That's where MapQuestor comes in mind... What are you waiting for? Become a MapQuestor!
 P.S. go check out our back-end implementation [here](https://github.com/sopra-fs24-group-40/mapquestor-server).
@@ -88,9 +86,20 @@ We stronlgy recommend to follow this [tutorial](https://docs.github.com/en/repos
 <a id="illustrations"></a>
 ## 🩻 Illustrations
 
+The first screen after logging in is the Game screen.
+
 ![Image](src/assets/GAME.png)
+
+After we have created a game in the Create Game you will be forwarded to the Lobby, in here you can start the game or just chat.
+
 ![Image](src/assets/LOBBY.png)
+
+Now we have strted a game and all users in the Lobby are now seeing the Ingame screen. In the middle there is the map, on the left there is the leaderboard and on the right there is the chat where we can input our guesses.
+
 ![Image](src/assets/INGAME.png)
+
+After finishing a game we will see the Endgame view. On the left is the final leaderboard of this game, as a user you can decide if you want to play again or go back to the Game screen (Main Menu button). If the creator leaves the game all users will be kicked and the play again will function if the creator stays in the game.
+
 ![Image](src/assets/EDNGAME.png)
 
 
