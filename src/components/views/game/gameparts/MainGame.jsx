@@ -81,8 +81,20 @@ export default function Game() {
             stompClient.send(`/app/${id}/cities`, {}, JSON.stringify(logoutMessage));
           }
         } else if (gameState.status === "ENDGAME") {
+
+          const sortedPlayers = [...players].sort((a, b) => b.points - a.points);
+          if (sortedPlayers[0].token === localStorage.getItem("token")) {
+            const message2 = { from: localStorage.getItem("token"), content: "WON", type: "PLAYED" };
+            stompClient && stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message2));
+          } else {
+            const message1 = { from: localStorage.getItem("token"), content: "FINISHED!", type: "PLAYED" };
+            stompClient && stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message1));
+
+          }
+
           setRound(1);
         }
+
         setGamePhase(gameState.status);
 
       });
@@ -167,24 +179,15 @@ export default function Game() {
 
 
   const updateRound = (round) => {
-
     const maxRounds = game.roundCount;
     if (round > maxRounds) {
-      const sortedPlayers = [...players].sort((a, b) => b.points - a.points);
-      if (sortedPlayers[0].token === localStorage.getItem("token")) {
-        const message2 = { from: localStorage.getItem("token"), content: "WON", type: "PLAYED" };
-        stompClient && stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message2));
-      } else {
-        const message1 = { from: localStorage.getItem("token"), content: "FINISHED!", type: "PLAYED" };
-        stompClient && stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message1));
-      }
       let message = { status: "ENDGAME" };
       stompClient && stompClient.send(`/app/${id}/gameState`, {}, JSON.stringify(message));
     } else {
       setRound(round);
       setCorrectGuesses(0);
     }
-  }; 
+  };
 
   const handleLeave = (player) => {
 
