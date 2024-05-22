@@ -209,6 +209,7 @@ function GameLayout(props) {
                   name="q"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
+                  maxLength={12}
                 />
                 <button className="btn btn-primary mt-2" onClick={handleSearch}>Search</button>
                 {searchResult === "not found" && <p style={{ color: "red" }}>User not found</p>}

@@ -116,6 +116,7 @@ const Game = () => {
                 placeholder="Search by username..."
                 value={searchQuery}
                 onChange={handleSearchInputChange}
+                maxLength={12}
               />
             </div>
           </section>
