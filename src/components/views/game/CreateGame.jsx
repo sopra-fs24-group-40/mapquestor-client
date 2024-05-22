@@ -38,9 +38,9 @@ function CreateGame() {
  
   return (
     <div className="row justify-content-center mt-5">
-      <div className="col-md-6 p-3">
-        <h1 className="text-center">Create Game</h1>
-        <form onSubmit={handleSubmit} className="bg-light p-4">
+      <div className="col-md-6 bg-gray rounded">
+        <h1 className="text-center mt-2">Create Game</h1>
+        <form onSubmit={handleSubmit} className="bg-light p-3 mb-3 mx-1">
           {error && (
             <div className="alert alert-danger" role="alert">
               {error}
@@ -116,14 +116,14 @@ function CreateGame() {
           <div className="row">
             <div className="col-6">
               <button type="submit" className="btn btn-primary"
-              style={{ width: "150px" }}>
+              style={{ width: "175px" }}>
                 Create Game</button>
             </div>
             <div className="col-6 d-flex justify-content-end">
               <button
                 type="button"
                 className="btn btn-danger"
-                style={{ width: "75px" }}
+                style={{ width: "125px" }}
                 onClick={() => navigate("/game")}
               >
                 Back
@@ -134,6 +134,7 @@ function CreateGame() {
       </div>
     </div>
   );
+
 
 }
  

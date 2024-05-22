@@ -37,37 +37,39 @@ function JoinGame(props) {
  
   return (
     <div className="row justify-content-center mt-5">
-      <div className="col-md-5 justify-content-center rounded-4 p-4 login-container">
-        <h1 className="text-center fw-bold">Join Game</h1>
-        <div className="form-group">
-          {error && (
-            <div className="alert alert-danger" role="alert">
-              {error}
-            </div>
-          )}
-          <label htmlFor="gameCode">Game Code</label>
-          <input
-            className="form-control"
-            type="text"
-            id="gameCode"
-            ref={userRef}
-            autoComplete="off"
-            onChange={(e) => setGameCode(e.target.value)}
-            required
-          />
-        </div>
-        <hr />
-        <div className="row">
-          <div className="col-6">
-            <button className="btn btn-danger" onClick={() => doJoinGame()} disabled={!gameCode}>Join Game</button>
+      <div className="col-md-4 bg-gray rounded">
+        <h1 className="text-center mt-2">Join Game</h1>
+        <div className="bg-light mx-1 mb-3 p-2">
+          <div className="form-group p-2">
+            {error && (
+              <div className="alert alert-danger" role="alert">
+                {error}
+              </div>
+            )}
+            <label htmlFor="gameCode" className="h5">Game Code</label>
+            <input
+              className="form-control"
+              type="text"
+              id="gameCode"
+              ref={userRef}
+              autoComplete="off"
+              onChange={(e) => setGameCode(e.target.value)}
+              required
+            />
           </div>
-          <div className="col-6 d-flex justify-content-end"> {/* This line aligns the "Back" button to the right */}
-            <button className="btn btn-danger" onClick={() => navigate("/game")}>Back</button>
+          <div className="row p-2">
+            <div className="col-6">
+              <button className="btn btn-success" style={{ width: "175px" }} onClick={() => doJoinGame()} disabled={!gameCode}>Join Game</button>
+            </div>
+            <div className="col-6 d-flex justify-content-end">
+              <button className="btn btn-danger" style={{ width: "125px" }} onClick={() => navigate("/game")}>Back</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
   );
+
 }
  
 export default JoinGame;

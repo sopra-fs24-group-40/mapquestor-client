@@ -109,10 +109,10 @@ const Game = () => {
  
   return (
     <div className="row">
-      <div className="col-md-6 mt-5 rounded-3">
-        <div className="container-wrap p-2">
+      <div className="col-md-6 mt-5 bg-gray rounded">
+        <div className="container-wrap">
           <section id="leaderboard">
-            <div className="d-flex justify-content-between align-items-center">
+            <div className="d-flex justify-content-between align-items-center mt-2 mx-1">
               <h1>Leaderboard</h1>
               <input
                 className="form-control" style={{ width: "200px" }}
@@ -124,14 +124,14 @@ const Game = () => {
             </div>
           </section>
         </div>
-        <div className="header bg-light">
+        <div className="header bg-light p-2 mx-1">
           <div className="row fs-3 text-center">
             <div className="col">Rank</div>
             <div className="col">Name</div>
             <div className="col">Wins</div>
           </div>
         </div>
-        <div className="table-responsive mb-3" style={{ maxHeight: "350px", overflowY: "auto" }}>
+        <div className="table-responsive mb-2 mx-1" style={{ maxHeight: "350px", overflowY: "auto" }}>
           <table id="rankings" className="table table-striped table-hover">
             <tbody className="text-center">
               {renderPlayerRow(users)}
@@ -139,28 +139,29 @@ const Game = () => {
           </table>
         </div>
       </div>
-      <div className="col-md-6 bg-transparent text-center mt-5 p-2">
-        <h1>Welcome {localStorage.getItem("username")}!</h1>
-        <div className="d-grid gap-2 d-md-block mt-5">
+      <div className="col-md-6 bg-transparent text-center mt-5">
+        <h1 className="mt-2">Welcome {localStorage.getItem("username")}!</h1>
+        <div className="d-grid gap-2 d-md-block mt-4">
           <div className="mb-4">
-            <button className="btn btn-success fs-3 rounded-3" style={{ width: "200px", height: "90px" }} onClick={() => navigate("/game/users")}>All Users</button>
+            <button className="btn btn-success fs-3 rounded" style={{ width: "200px", height: "90px" }} onClick={() => navigate("/game/users")}>All Users</button>
           </div>
           <div className="mb-4">
-            <button className="btn btn-success fs-3 rounded-3" style={{ width: "200px", height: "90px" }} onClick={() => navigate("/game/join")}>Join Lobby</button>
+            <button className="btn btn-success fs-3 rounded" style={{ width: "200px", height: "90px" }} onClick={() => navigate("/game/join")}>Join Lobby</button>
           </div>
           <div>
-            <button className="btn btn-success fs-3 rounded-3" style={{ width: "200px", height: "90px" }} onClick={() => navigate("/game/create")}>Create Game</button>
+            <button className="btn btn-success fs-3 rounded" style={{ width: "200px", height: "90px" }} onClick={() => navigate("/game/create")}>Create Game</button>
           </div>
         </div>
       </div>
-      <div className="col-md-12 bg-gray mt-5 pb-0 pt-2 rounded-3">
-        <h1 className="p-2 mb-2">Active Games</h1>
+      <div className="col-md-12 bg-gray mt-5 rounded">
+        <h1 className="mt-2 mx-1 ">Active Games</h1>
         <div className="row bg-light mb-3 mx-1" style={{ maxHeight: "180px", overflowY: "auto" }}>
           {renderActiveLobbies(activeLobbies)}
         </div>
       </div>
     </div>
   );
+
 
 };
  
