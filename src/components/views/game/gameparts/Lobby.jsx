@@ -12,7 +12,8 @@ function Lobby({
                  countdownDuration,
                  handleLeave,
                  roundLength,
-                 updateCountdown
+                 updateCountdown,
+                 playAgain
                }) {
   const [currentMessage, setCurrentMessage] = useState("");
   const [creator, setCreator] = useState(false);
@@ -58,6 +59,7 @@ function Lobby({
             clearInterval(intervalIdRef.current);
             countdownRef.current = null;
             updateCountdown(null); // Optional: to trigger UI update
+            playAgain();
             return;
           }
 

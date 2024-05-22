@@ -274,7 +274,7 @@ export default function Game() {
     case "LOBBY":
       return <Lobby startGame={startGame} onSendChat={sendChatMessage} messages={messages} players={players} game={game}
                     countdownDuration={countdownDuration} handleLeave={handleLeave}
-                    updateCountdown={updateCountdown} />;
+                    updateCountdown={updateCountdown} playAgain = {playAgain} />;
     case "INGAME":
       return <Ingame round={round} onSendChat={sendChatMessageGame} messagesGame={messagesGame} players={players}
                      game={game} updatePlayers={updatePlayers} updateRound={updateRound} handleLeave={handleLeave}
