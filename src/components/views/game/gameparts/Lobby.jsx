@@ -110,7 +110,7 @@ function Lobby({
               {players.map((player, index) => (
                 <li
                   key={index}
-                  className={`list-group-item ${player.token === game.creator ? 'text-danger' : ''}`}
+                  className={`list-group-item ${player.token === game.creator ? "text-danger" : ""}`}
                 >
                   {player.username}
                 </li>
