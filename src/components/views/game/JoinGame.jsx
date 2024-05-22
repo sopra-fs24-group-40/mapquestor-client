@@ -16,25 +16,26 @@ function JoinGame(props) {
     userRef.current.focus();
   }, []);
  
-  const doJoinGame = async () => {
+  const doJoinGame = async (gameCode) => {
     try {
- 
-      const requestBody = JSON.stringify({ gameCode, token });
+
+      console.log("Joining game with code", gameCode, "and token", token);
+
+      const requestBody = JSON.stringify({gameCode, token});
       const response = await api.post(`/games/${gameCode}/join`, requestBody);
- 
- 
+
       if (response.status === 200) {
+        console.log("Game joined successfully", response.data);
         localStorage.setItem("gameCode", gameCode);
-        localStorage.setItem("gameState", "LOBBY");
         navigate(`/game/${gameCode}`);
       }
- 
+
     } catch (error) {
       console.error("Error joining the game:", error.response);
+      console.log(error)
       setError("Error joining the game: " + (error.response?.data?.message || "Error joining the game!"));
     }
   };
- 
   return (
     <div className="row justify-content-center mt-5">
       <div className="col-md-4 bg-gray rounded">

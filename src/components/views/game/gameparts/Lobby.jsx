@@ -54,6 +54,13 @@ function Lobby({
     if (countdownRef.current > 0) {
       intervalIdRef.current = setInterval(() => {
         if (countdownRef.current > 1) {
+          if (players.length <= 1) { 
+            clearInterval(intervalIdRef.current);
+            countdownRef.current = null;
+            updateCountdown(null); // Optional: to trigger UI update
+            return;
+          }
+
           countdownRef.current -= 1;
           updateCountdown(countdownRef.current); // Optional: to trigger UI update
         } else {
