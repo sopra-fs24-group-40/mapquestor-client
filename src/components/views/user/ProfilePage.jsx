@@ -72,15 +72,15 @@ function ProfilePage() {
   }, [currentAvatarIndex, avatarOptions.length]);
  
   const handleUsernameChange = (e) => {
+    setErrMsg("");
     const value = e.target.value;
     setUsername(value);
+
+    // Update the error message based on the input length
     if (value.length < 4) {
-      setValidName(false);
       setUsernameError("Username should be at least 4 characters.");
     } else {
-      setValidName(true);
-      setUsernameError("");
-      setErrMsg("");
+      setUsernameError(""); // Clear the error message if the input is valid
     }
   };
  
@@ -104,25 +104,30 @@ function ProfilePage() {
  
   const handleUsernameEditSubmit = async (e) => {
     e.preventDefault();
-    if (!validName) {
-      setErrMsg("Username should be at least 4 characters.");
-      return;
+  
+    // Check if the username matches the regex pattern
+    if (!USER_REGEX.test(username)) {
+      setUsernameError("Username should be at least 4 characters."); // Set the custom error message
+      return; // Exit the function early if the validation fails
     }
-    
+  
+    setUsernameError("");
+    setErrMsg("");
+  
     try {
       const requestBody = JSON.stringify({ username });
       const response = await api.put(`/users/${id}`, requestBody);
-      setUser({ ...user, username: username });
+      setUser({...user, username: username });
       localStorage.setItem("username", username);
       setShowUsernameEditForm(false);
       setSuccess(true);
     } catch (err) {
-        if (!err?.response) {
+      if (!err?.response) {
         setErrMsg("No Server Response");
       } else if (err.response?.status === 409) {
-        setErrMsg(err.response.data.message);
+        setErrMsg(err.response.data.message); // Use the server-provided error message
       } else {
-        setErrMsg("Edit failed!");
+        setErrMsg("Edit failed!"); // Default error message
       }
       errRef.current.focus();
     }
