@@ -108,8 +108,8 @@ function Endgame({ game, onSendChat, messages, players, playAgain }) {
       </div>
 
       <div className="col-md-6 bg-transparent text-center mt-5">
-        <div className="bg-gray rounded-2 p-2 mb-5">
-          <span className="fs-4 fw-bolder">Timer: {timer} seconds</span>
+        <div className="bg-transparent rounded-2 p-2 mb-5">
+          <span className="h1">One More Game?: {timer} seconds</span>
         </div>
         <div className="button-wrapper justify-content-center">
           {buttonClicked &&
@@ -117,7 +117,7 @@ function Endgame({ game, onSendChat, messages, players, playAgain }) {
               play again as well!</p>}
           <div className="d-flex justify-content-center">
             <button className="btn btn-success fs-3 rounded mx-2" onClick={() => handlePlayAgain()} disabled={buttonDisabled}>Play Again</button>
-            <button className="btn btn-success fs-3 rounded mx-2" onClick={() => {
+            <button className="btn btn-danger fs-3 rounded mx-2" onClick={() => {
               handleLeaveGame();
               navigate("/game");
             }}>Main Menu</button>
