@@ -16,11 +16,13 @@ P.S. go check out our back-end implementation [here](https://github.com/sopra-fs
 7. [👔 Authors and acknowledgment](#authorsandacknowledgment)
 8. [📝 License](#license)
 
-## 👋 Introduction <a id="introduction"></a>
+<a id="introduction"></a>
+## 👋 Introduction
 
 To give people a fun way of learning about potential sightseeing destinations, we introduce a game called MapQuestor. It is playable by multiple users at once, this will increase engagement and raise a competitive spirit. A picture of a place of interest will be shown to the players and they must guess which city or country it is from.
 
-## 🛠️ Technologies <b id="technologies"></b>
+<a id="technologies"></a>
+## 🛠️ Technologies
 
 For the devolopment of the client, we relied on the following technologies:
 
@@ -32,7 +34,8 @@ For the devolopment of the client, we relied on the following technologies:
 * [Stomp](https://stomp-js.github.io/stomp-websocket/) - Used for websocket communication with the server
 * [Google Maps Streetview API](https://developers.google.com/maps/documentation/javascript/streetview?hl=de) - Used to embed streetview into the game
 
-## 🧭 High-level components <c id="highlevelcomponents"></c>
+<a id="highlevelcomponents"></a>
+## 🧭 High-level components
 
 Below you can see our main components.
 
@@ -48,7 +51,8 @@ A user can create a [Lobby](https://github.com/sopra-fs24-group-40/mapquestor-cl
 
 [Main Game](https://github.com/sopra-fs24-group-40/mapquestor-client/blob/main/src/components/views/game/gameparts/MainGame.jsx) is used as a communicator between client and server. Lobby, Ingame, and Endgame all communicate via the Main Game. All websocket requests are handled inside this file as well as responses from the server. It handles joining a game in lobby, updating points after a round, concluding a game after finishing it, leaving a game, whether it is a user or creator, and many more. Some of these functionalities are passed in either Lobby, Ingame, or Endgame.
 
-## 🏎️ Launch & Deployment <d id="launchanddeployment"></d>
+<a id="launchanddeployment"></a>
+## 🏎️ Launch & Deployment
 
 The following steps are needed for a new developer joining our team.
 
@@ -78,17 +82,20 @@ Both client and server have to be running for the application to behave as expec
 
 We stronlgy recommend to follow this [tutorial](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository) and to properly document and comment your release.
 
-## 🩻 Illustrations <e id="illustrations"></e>
+<a id="illustrations"></a>
+## 🩻 Illustrations
 
 _screenshots_
 
-## 🛣️ Roadmap <f id="roadmap"></f>
+<a id="roadmap"></a>
+## 🛣️ Roadmap
 
 - _Global leaderboard_ --> Leaderboard could be filterable by metrics (e.g. time or mode).
 - _Joker assignment_ --> Assign jokers depending on points after each round (e.g. player with least points gets a joker).
 - _Worldwide_ --> Include more cities and countries from other continents and game modes (e.g. City-Europe, Country-South-America, etc.).
 
-## 👔 Authors and acknowledgment <g id="authorsandacknowledgment"></g>
+<a id="authorsandacknowledgment"></a>
+## 👔 Authors and acknowledgment
 
 Authors of MapQuestor:
 
@@ -100,7 +107,8 @@ Authors of MapQuestor:
 
 We want to use this opportunity to thank our teaching assistant [Louis Caerts](https://github.com/LouisCaerts). His guidance and assistance were helpful and we really appreciate it.
 
-## 📝 License <h id="license"></h>
+<a id="license"></a>
+## 📝 License
 
 This project is licensed under the Apache License Version 2.0.
 
