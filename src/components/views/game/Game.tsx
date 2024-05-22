@@ -2,23 +2,22 @@ import React, {useEffect, useState} from "react";
 import "../../../styles/views/game.scss";
 import {useNavigate} from "react-router-dom";
 import {api} from "../../../helpers/api";
- 
- 
+
 const Game = () => {
- 
+
   const navigate = useNavigate();
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [error, setError] = useState(null);
   const [activeLobbies, setActiveLobbies] = useState([]);
   const [users, setUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  
+
   useEffect(() => {
     const fetchGamesAndUsers = async () => {
       try {
         const gamesResponse = await api.get("/games");
         const usersResponse = await api.get("/users");
- 
+
         const games = gamesResponse.data;
         const lobbies = games.map(game => ({
           gamecode: game.gameCode,
@@ -28,69 +27,66 @@ const Game = () => {
           currentPlayers: game.playerCount,
           maxPlayers: game.maxPlayers
         }));
- 
+
         setActiveLobbies(lobbies);
         setUsers(usersResponse.data);
       } catch (error) {
         console.error("Error fetching games:", error);
       }
     };
- 
+
     fetchGamesAndUsers();
- 
+
     const intervalId = setInterval(fetchGamesAndUsers, 5000);
- 
+
     return () => clearInterval(intervalId);
   }, []);
- 
+
   const doJoinGame = async (gameCode) => {
     try {
- 
+
       console.log("Joining game with code", gameCode, "and token", token);
- 
+
       const requestBody = JSON.stringify({gameCode, token});
       const response = await api.post(`/games/${gameCode}/join`, requestBody);
- 
+
       if (response.status === 200) {
         console.log("Game joined successfully", response.data);
         localStorage.setItem("gameCode", gameCode);
         navigate(`/game/${gameCode}`);
       }
- 
+
     } catch (error) {
       console.error("Error joining the game:", error.response);
       console.log(error)
       setError("Error joining the game: " + (error.response?.data?.message || "Error joining the game!"));
     }
   };
- 
+
   const handleSearchInputChange = (event) => {
     setSearchQuery(event.target.value);
   };
- 
+
   const renderPlayerRow = (users) => {
-    // Filter players based on searchQuery if it's not empty
     const filteredPlayers = searchQuery
       ? users.filter((player) =>
-          player.username.toLowerCase().startsWith(searchQuery.toLowerCase())
-        )
+        player.username.toLowerCase().includes(searchQuery.toLowerCase())
+      )
       : users;
- 
-    // Sort players by their wonGames in descending order
+
     const sortedPlayers = filteredPlayers.sort((a, b) => b.wonGames - a.wonGames);
- 
+
     return sortedPlayers.map((player, index) => (
-      <tr key={player.token}>
+      <tr key={player.username}>
         <td className="fs-2">{index + 1}</td>
         <td className="fs-2">{player.username}</td>
         <td className="fs-2">{player.wonGames}</td>
       </tr>
     ));
   };
-  // Eine Funktion, die eine Liste von aktiven Lobbies rendert
   const renderActiveLobbies = (activeLobbies) => {
- 
-    // Iteriere über alle aktiven Lobbies und rendere sie
+
+
     return activeLobbies.map(lobby => (
       <div key={lobby.gamecode} className="col-md-4 ml-4 mb-4">
         <div className="lobby p-3">
@@ -98,15 +94,15 @@ const Game = () => {
           <p>{lobby.details}</p>
           {lobby.gamestatus === "LOBBY" && (
             <button
-            className="btn btn-primary join-button"
-            disabled={lobby.currentPlayers === lobby.maxPlayers}
-            onClick={() => doJoinGame(lobby.gamecode)}>Join</button>
+              className="btn btn-primary join-button"
+              disabled={lobby.currentPlayers === lobby.maxPlayers}
+              onClick={() => doJoinGame(lobby.gamecode)}>Join</button>
           )}
         </div>
       </div>
     ));
   };
- 
+
   return (
     <div className="row">
       <div className="col-md-6 mt-5 bg-gray rounded">
@@ -134,7 +130,7 @@ const Game = () => {
         <div className="table-responsive mb-3 mx-1" style={{ maxHeight: "350px", overflowY: "auto" }}>
           <table id="rankings" className="table table-striped table-hover">
             <tbody className="text-center">
-              {renderPlayerRow(users)}
+            {renderPlayerRow(users)}
             </tbody>
           </table>
         </div>
@@ -164,5 +160,5 @@ const Game = () => {
 
 
 };
- 
+
 export default Game;
