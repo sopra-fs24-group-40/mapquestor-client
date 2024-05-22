@@ -1,7 +1,7 @@
 # MapQuestor
 <div style="text-align: justify">
 
-![Image](.src/assets/LOGO1.png)
+![Image](src/assets/LOGO1.png)
 
 Have you ever wanted to travel the world, but lack the money and time? That's where MapQuestor comes in mind... What are you waiting for? Become a MapQuestor!
 P.S. go check out our back-end implementation [here](https://github.com/sopra-fs24-group-40/mapquestor-server).
@@ -86,10 +86,10 @@ We stronlgy recommend to follow this [tutorial](https://docs.github.com/en/repos
 <a id="illustrations"></a>
 ## 🩻 Illustrations
 
-![Image](.src/assets/GAME.png)
-![Image](.src/assets/LOBBY.png)
-![Image](.src/assets/INGAME.png)
-![Image](.src/assets/EDNGAME.png)
+![Image](src/assets/GAME.png)
+![Image](src/assets/LOBBY.png)
+![Image](src/assets/INGAME.png)
+![Image](src/assets/EDNGAME.png)
 
 
 <a id="roadmap"></a>
