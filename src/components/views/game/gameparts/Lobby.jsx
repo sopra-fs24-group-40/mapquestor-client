@@ -102,16 +102,15 @@ function Lobby({
 
   return (
     <div className="row justify-content-center mt-5">
-      <div className="col-md-3">
+      <div className="col-md-3 rounded">
         <div className="card">
-          <div className="card-header">Users in lobby:</div>
-          <div className="user-container" style={{ maxHeight: "250px", overflowY: "auto" }}>
-            <ul className="list-group list-group-flush">
+          <div className="card-header mt-2 mx-1 h3">Users in lobby: {players.length} / {game.maxPlayers}</div>
+          <div className="user-container overflow-auto" style={{ maxHeight: "250px" }}>
+            <ul className="list-group list-group-flush p-3">
               {players.map((player, index) => (
                 <li
                   key={index}
-                  className="list-group-item"
-                  style={{ color: player.token === game.creator ? "red" : "inherit" }}
+                  className={`list-group-item ${player.token === game.creator ? 'text-danger' : ''}`}
                 >
                   {player.username}
                 </li>
@@ -120,13 +119,12 @@ function Lobby({
           </div>
         </div>
       </div>
-      <div className="col-md-6 p-3">
-        <div className="card">
+      <div className="col-md-6">
+      <h2 className="card-title mt-2 mx-1 h1 mb-1">Lobby {localStorage.getItem("gameCode")}</h2>
+        <div className="card mb-3 mx-1 rounded-0">
           <div className="card-body">
-            <h2 className="card-title">Lobby {localStorage.getItem("gameCode")}</h2>
-            <hr />
-            <h4>Players: {players.length} / {game.maxPlayers}</h4>
-            <div className="chat-container" ref={chatContainerRef} style={{ maxHeight: "120px", overflowY: "auto" }}>
+            <h4>Chat</h4>
+            <div className="chat-container overflow-auto" ref={chatContainerRef} style={{ maxHeight: "160px" }}>
               <ul className="list-unstyled">
                 {messages.map((msg, index) => (
                   <li key={index}>
@@ -172,13 +170,13 @@ function Lobby({
           </div>
         </div>
       </div>
-      <div className="col-md-3">
+      <div className="col-md-3 rounded">
         <div className="card">
-          <div className="card-header">Game</div>
+          <div className="card-header mt-2 mx-1 h3">Game</div>
           <ul className="list-group list-group-flush p-3">
-            Game Type: {game.gameType}<br />
-            Round Count: {game.roundCount}<br />
-            Max Players: {game.maxPlayers}<br />
+            <li className="list-group-item">Game Mode: {game.gameType}</li>
+            <li className="list-group-item">Round Count: {game.roundCount}</li>
+            <li className="list-group-item">Max Players: {game.maxPlayers}</li>
           </ul>
         </div>
       </div>
