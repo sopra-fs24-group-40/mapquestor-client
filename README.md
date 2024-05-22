@@ -98,7 +98,7 @@ Now we have strted a game and all users in the Lobby are now seeing the Ingame s
 
 ![Image](src/assets/INGAME.png)
 
-After finishing a game we will see the Endgame view. On the left is the final leaderboard of this game, as a user you can decide if you want to play again or go back to the Game screen (Main Menu button). If the creator leaves the game all users will be kicked and the play again will function if the creator stays in the game.
+After finishing a game we will see the Endgame view. On the left is the final leaderboard of this game, as a user you can decide if you want to play again or go back to the Game screen (Main Menu button).
 
 ![Image](src/assets/EDNGAME.png)
 
