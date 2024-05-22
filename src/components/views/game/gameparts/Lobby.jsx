@@ -59,7 +59,7 @@ function Lobby({
             clearInterval(intervalIdRef.current);
             countdownRef.current = null;
             updateCountdown(null); // Optional: to trigger UI update
-            playAgain();
+            onSendChat(localStorage.getItem("token"), "", "LEAVE_CREATOR");
             return;
           }
 
