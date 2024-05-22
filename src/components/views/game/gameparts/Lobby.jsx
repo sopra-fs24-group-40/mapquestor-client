@@ -199,6 +199,7 @@ Lobby.propTypes = {
   roundLength: PropTypes.number.isRequired,
   updateCountdown: PropTypes.func.isRequired,
   handleLeave: PropTypes.func.isRequired,
+  playAgain: PropTypes.func.isRequired,
   countdownDuration: PropTypes.any,
   messages: PropTypes.arrayOf(
     PropTypes.shape({
