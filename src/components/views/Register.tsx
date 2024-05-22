@@ -102,7 +102,7 @@ function Register(props) {
               aria-describedby="uidnote"
               onFocus={() => setUserFocus(true)}
               onBlur={() => setUserFocus(false)}
-              maxLength={20}
+              maxLength={12}
             />
             <p id="uidnote" className={userFocus && user && !validName ? "instructions" : "offscreen"}>
               Username has wrong format! (Needs at least 4 characters)
