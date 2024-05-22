@@ -94,7 +94,7 @@ After we have created a game in the Create Game you will be forwarded to the Lob
 
 ![Image](src/assets/LOBBY.png)
 
-Now we have strted a game and all users in the Lobby are now seeing the Ingame screen. In the middle there is the map, on the left there is the leaderboard and on the right there is the chat where we can input our guesses.
+Now we have started a game and all users in the Lobby are now seeing the Ingame screen. In the middle there is the map, on the left there is the leaderboard and on the right there is the chat where we can input our guesses.
 
 ![Image](src/assets/INGAME.png)
 
