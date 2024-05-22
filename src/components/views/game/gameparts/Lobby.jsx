@@ -120,7 +120,7 @@ function Lobby({
         </div>
       </div>
       <div className="col-md-6">
-      <h2 className="card-title mt-2 mx-1 h1 mb-1">Lobby {localStorage.getItem("gameCode")}</h2>
+      <h2 className="card-title text-center mt-2 mx-1 h1 mb-1">Lobby {localStorage.getItem("gameCode")}</h2>
         <div className="card mb-3 mx-1 rounded-0">
           <div className="card-body">
             <h4>Chat</h4>

@@ -223,77 +223,73 @@ const InGame = ({
  
   return (
     <div className="row mt-5">
-      <div className="col-md-3 text-center">
-        <div className="container-wrap bg-gray rounded-3"> {/* Add rounded class here */}
-          <section id="leaderboard">
-            <nav className="ladder-nav">
-              <div className="ladder-title text-center">
-                <h1 style={{ fontSize: "22px" }}>Leaderboard</h1>
-              </div>
-            </nav>
-            <div className="leaderboard-container text-center p-2" style={{ maxHeight: "200px", overflowY: "auto" }}>
-              <table
-                id="rankings"
-                className="leaderboard-results"
-                width="100%"
-              >
-                <thead>
-                  <tr>
-                    <th className="text-dark">Name</th>
-                    <th className="text-dark">Points</th>
+      <div className="col-md-3 rounded">
+        <div className="card">
+          <div className="text-center card-header mt-2 mx-1 h3">Leaderboard</div>  
+          <div className="leaderboard-container text-center p-3">
+            <table
+              id="rankings"
+              className="table leaderboard-results w-100"
+            >
+              <thead>
+                <tr>
+                  <th className="text-dark h5">Name</th>
+                  <th className="text-dark h5">Points</th>
+                </tr>
+              </thead>
+              <tbody>
+                {leaderboard.map((player, index) => (
+                  <tr key={index}>
+                    <td>{player.username}</td>
+                    <td>{player.points}</td>
                   </tr>
-                </thead>
-                <tbody>
-                  {leaderboard.map((player, index) => (
-                    <tr key={index}>
-                      <td>{player.username}</td>
-                      <td>{player.points}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </section>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
-      <div className="col-md-6 justify-content-center text-center bg-gray">
-        <h1>In Game</h1>
- 
-        <div className="timer-container mb-5">
-          Timer: {timer && timer} seconds <br />
-          Round: {round} / {game.roundCount}
-        </div>
- 
-        <div className="hint-lines-container" style={{ display: "flex", justifyContent: "center" }}>
-          {hintLines}
-        </div>
- 
-        <div id="street-view" style={{ width: "100%", height: "400px", opacity: blackoutMap }}></div>
-        <div className="button-wrapper">
-          <button className="individual-button" style={{ fontSize: "20px" }}
-                  disabled={delayJoker}
-                  onClick={() => handleJoker("delay")}>
-            Delay Joker
-          </button>
-          <button className="individual-button" style={{ fontSize: "20px" }}
-                  disabled={hintRemoveJoker}
-                  onClick={() => handleJoker("hintRemove")}>
-            Hint remove Joker
-          </button>
-        </div>
-      </div>
- 
-      <div className="col-md-3 text-center">
-        <div className="container-wrap bg-gray rounded-3"> {/* Add rounded class here */}
-          <section id="chat" className="">
-            <nav className="ladder-nav">
-              <div className="ladder-title">
-                <h1 style={{ fontSize: "22px" }}>Chat</h1>
+      <div className="col-md-6">
+        <h1 className="text-center mt-2">{game.gameType} MODE</h1>
+        <div className="bg-light mx-1 mb-3">
+          <div className="row">
+            <div className="col-md-6 bg-transparent">
+              <div className="bg-transparent mx-1">
+                <div className="text-start h5 m-3">
+                  Timer: {timer && timer} seconds
+                </div>
               </div>
-            </nav>
-          </section>
-          <div className="chat-container text-start p-2" ref={chatContainerRef}
-               style={{ maxHeight: "120px", overflowY: "auto" }}>
+            </div>
+            <div className="col-md-6 bg-transparent">
+              <div className="bg-transparent mx-1">
+                <div className="text-end h5 m-3">
+                  Round: {round} / {game.roundCount}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-md-12">
+              <div className="hint-lines-container d-flex justify-content-center">
+                {hintLines}
+              </div>
+            </div>
+          </div>
+          <div id="street-view" className="w-100" style={{ height: "400px", opacity: blackoutMap }}></div>
+          <div className="button-wrapper mt-3 d-flex justify-content-center">
+            <button className="btn btn-success mx-2 mb-3" style={{ width: "175px" }} disabled={delayJoker} onClick={() => handleJoker("delay")}>
+              Delay Joker
+            </button>
+            <button className="btn btn-success mx-2 mb-3" style={{ width: "175px" }} disabled={hintRemoveJoker} onClick={() => handleJoker("hintRemove")}>
+              Hint remove Joker
+            </button>
+          </div>
+        </div>
+      </div>
+      <div className="col-md-3 rounded">
+        <div className="card">
+          <div className="text-center card-header mt-2 mx-1 h3">Chat</div>
+          <div className="chat-container text-start mt-3 p-3 overflow-auto" ref={chatContainerRef} style={{ maxHeight: "175px" }}>
             <ul className="list-unstyled">
               {messagesGame.filter(msg => msg.type !== "JOKER").map((msg, index) => (
                 <li key={index}>
@@ -302,7 +298,7 @@ const InGame = ({
               ))}
             </ul>
           </div>
-          <div className="input-group mt-3">
+          <div className="input-group p-3">
             <input
               type="text"
               className="form-control"
@@ -317,8 +313,7 @@ const InGame = ({
               placeholder="Your guess..."
               disabled={pointsAssigned} // Disable input if points are already assigned
             />
-            <button className="btn btn-primary" onClick={handleSendMessageInGame} disabled={pointsAssigned}>Send
-            </button>
+            <button className="btn btn-primary" onClick={handleSendMessageInGame} disabled={pointsAssigned}>Send</button>
           </div>
         </div>
       </div>
