@@ -61,7 +61,7 @@ function Users() {
  
   return (
     <div className="row justify-content-center mt-5">
-      <div className="col-md-4 bg-gray rounded">
+      <div className="col-md-5 bg-gray rounded">
         <h1 className="text-center mt-2">Users</h1>
         <div className="bg-light p-2 mx-1 mb-3">
           <div className="d-flex flex-column align-items-center" style={{ maxHeight: "270px", overflowY: "auto" }}>
@@ -77,9 +77,9 @@ function Users() {
               ))
             )}
           </div>
-          <div className="p-2 d-flex justify-content-end">
-            <button className="btn btn-danger" style={{ width: "125px" }} onClick={() => navigate("/game")}>Back</button>
-          </div>
+        </div>
+        <div className="d-flex justify-content-center mb-3">
+          <button className="btn btn-danger" style={{ width: "125px" }} onClick={() => navigate("/game")}>Back</button>
         </div>
       </div>
     </div>
