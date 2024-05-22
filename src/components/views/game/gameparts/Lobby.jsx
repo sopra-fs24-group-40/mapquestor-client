@@ -102,91 +102,88 @@ function Lobby({
 
   return (
     <div className="row justify-content-center mt-5">
-      <div className="col-md-12 bg-gray rounded mx-1">
-        <div className="row">
-          <div className="col-md-3">
-            <h1 className="text-center mt-2">Players</h1>
-            <div className="bg-light mx-1 p-2 mb-3">
-              <h5 className="p-2"> Users in Lobby: <span className="fw-bold">{players.length} / {game.maxPlayers}</span></h5>
-              <ul className="list-group list-group-flush rounded-3">
-                {players.map((player, index) => (
-                  <li
-                    key={index}
-                    className={`list-group-item ${player.token === game.creator ? "text-danger" : ""}`}
-                  >
-                    {player.username}
+      <div className="col-md-3">
+        <div className="card">
+          <div className="card-header">Users in lobby:</div>
+          <div className="user-container" style={{ maxHeight: "250px", overflowY: "auto" }}>
+            <ul className="list-group list-group-flush">
+              {players.map((player, index) => (
+                <li
+                  key={index}
+                  className="list-group-item"
+                  style={{ color: player.token === game.creator ? "red" : "inherit" }}
+                >
+                  {player.username}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div className="col-md-6 p-3">
+        <div className="card">
+          <div className="card-body">
+            <h2 className="card-title">Lobby {localStorage.getItem("gameCode")}</h2>
+            <hr />
+            <h4>Players: {players.length} / {game.maxPlayers}</h4>
+            <div className="chat-container" ref={chatContainerRef} style={{ maxHeight: "120px", overflowY: "auto" }}>
+              <ul className="list-unstyled">
+                {messages.map((msg, index) => (
+                  <li key={index}>
+                    <strong>{msg.from}</strong>: {msg.content}
                   </li>
                 ))}
               </ul>
             </div>
-          </div>
-  
-          <div className="col-md-6 bg-transparent">
-            <h1 className="text-center mt-2">Lobby {localStorage.getItem("gameCode")}</h1>
-            <div className="bg-light mb-3 p-2">
-              <h5 className="p-2 mx-1 fw-bold">Chat:</h5>
-              <div className="chat-container bg-white rounded-3 mx-2 p-2" ref={chatContainerRef} style={{ maxHeight: "170px", overflowY: "auto" }}>
-                <ul className="list-unstyled">
-                  {messages.map((msg, index) => (
-                    <li key={index}>
-                      <strong>{msg.from}</strong>: {msg.content}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="input-group p-2">
-                <input
-                  type="text"
-                  className="form-control"
-                  value={currentMessage}
-                  onChange={(e) => setCurrentMessage(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      e.preventDefault();
-                      handleSendMessage();
-                    }
-                  }}
-                  placeholder="Write a message..."
-                />
-                <button className="btn btn-primary" onClick={handleSendMessage}>Send</button>
-              </div>
-              {countdown !== null ? (
-                <div className="alert alert-info mt-3" role="alert">
-                  Game starts in: {countdown} Seconds...
-                </div>
-              ) : (
-                creator && (
-                  <div className="p-2">
-                    <button
-                      onClick={handleStartCountdown}
-                      className="btn btn-success"
-                      disabled={players.length <= 1}
-                      style={{ width: "125px" }}
-                    >
-                      Start Game
-                    </button>
-                  </div>
-                )
-              )}
-              <div className="p-2">
-                <button className="btn btn-danger" style={{ width: "125px" }} onClick={handleLeaveGame}>Leave Game</button>
-              </div>
+            <div className="input-group mt-3">
+              <input
+                type="text"
+                className="form-control"
+                value={currentMessage}
+                onChange={(e) => setCurrentMessage(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleSendMessage();
+                  }
+                }}
+                placeholder="Write a message..."
+              />
+              <button className="btn btn-primary" onClick={handleSendMessage}>Send</button>
             </div>
-          </div>
-  
-          <div className="col-md-3">
-            <h1 className="text-center mt-2">Game</h1>
-            <div className="bg-light mb-3 mx-1 p-3">
-              <h5>Game Type: <span className="fw-bold">{game.gameType}</span></h5>
-              <h5>Round Count: <span className="fw-bold">{game.roundCount}</span></h5>
-              <h5>Max Players: <span className="fw-bold">{game.maxPlayers}</span></h5>
+            {countdownRef.current !== null ? (
+              <div className="alert alert-info mt-5" role="alert">
+                Game starts in: {countdownRef.current} Seconds...
+              </div>
+            ) : (
+              creator && (
+                <button
+                  onClick={handleStartCountdown}
+                  className="btn btn-success mt-3"
+                  disabled={players.length <= 1}
+                >
+                  Start Countdown
+                </button>
+              )
+            )}
+            <div>
+              <button className="btn btn-danger mt-3" onClick={handleLeaveGame}>Leave Game</button>
             </div>
           </div>
         </div>
       </div>
+      <div className="col-md-3">
+        <div className="card">
+          <div className="card-header">Game</div>
+          <ul className="list-group list-group-flush p-3">
+            Game Type: {game.gameType}<br />
+            Round Count: {game.roundCount}<br />
+            Max Players: {game.maxPlayers}<br />
+          </ul>
+        </div>
+      </div>
     </div>
   );
-
 }
 
 Lobby.propTypes = {
