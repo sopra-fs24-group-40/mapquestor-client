@@ -247,7 +247,7 @@ export default function Game() {
       setMessagesGame(prevMessages => [...prevMessages, payload]);
       setCorrectGuesses(prev => prev + 1);
     } else if (payload.type === "START_COUNTDOWN") {
-      setCountdownDuration(10);
+      setCountdownDuration(5);
     } else if (payload.type === "JS") {
       doSomething();
     } else if (payload.type === "POINTS") {

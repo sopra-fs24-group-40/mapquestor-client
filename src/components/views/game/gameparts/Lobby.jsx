@@ -151,7 +151,7 @@ function Lobby({
             </div>
             {countdownRef.current !== null ? (
               <div className="alert alert-info mt-5" role="alert">
-                Game starts in: {countdownRef.current} Seconds...
+                Game starts in a few seconds!
               </div>
             ) : (
               creator && (
