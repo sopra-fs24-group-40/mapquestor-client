@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import countdowns from "../../../../assets/countdowns.mp3";
 import { useNavigate } from "react-router-dom";
- 
+
 function Lobby({
                  startGame,
                  onSendChat,
@@ -16,75 +16,73 @@ function Lobby({
                }) {
   const [currentMessage, setCurrentMessage] = useState("");
   const [creator, setCreator] = useState(false);
-  const [countdown, setCountdown] = useState(null);
   const [soundPlayed, setSoundPlayed] = useState(false);
   const [gameType, setGameType] = useState(game.gameType);
   const [maxPlayers, setMaxPlayers] = useState(game.maxPlayers);
   const [roundCount, setRoundCount] = useState(game.roundCount);
   const chatContainerRef = useRef(null);
+  const countdownRef = useRef(countdownDuration);
   const navigate = useNavigate();
- 
+  const intervalIdRef = useRef(null);
+
   useEffect(() => {
     const isCreator = localStorage.getItem("token") === game.creator;
     setCreator(isCreator);
   }, [game.creator]);
- 
+
   useEffect(() => {
     if (countdownDuration > 0) {
-      setCountdown(countdownDuration);
+      countdownRef.current = countdownDuration;
     }
   }, [countdownDuration]);
- 
+
   useEffect(() => {
-    if (countdown === 3 && !soundPlayed) {
+    if (countdownRef.current === 3 && !soundPlayed) {
       const countdownSound = new Audio(countdowns);
       countdownSound.volume = 0.1;
       countdownSound.play()
         .then(() => setSoundPlayed(true))
-        .catch(error => console.error("Fehler beim Abspielen des Sounds:", error));
+        .catch(error => console.error("Error playing the sound:", error));
     }
- 
-    if (countdownDuration > 0 && countdown === countdownDuration) {
+
+    if (countdownDuration > 0 && countdownRef.current === countdownDuration) {
       setSoundPlayed(false);
     }
-  }, [countdown, countdownDuration, soundPlayed]);
- 
+  }, [countdownRef.current, countdownDuration, soundPlayed]);
+
   useEffect(() => {
-    let intervalId;
-    if (countdown > 0) {
-      intervalId = setInterval(() => {
-        setCountdown(countdown - 1);
-        if (players.length  === 1){
-          setCountdown(null);
-          updateCountdown(null);
+    if (countdownRef.current > 0) {
+      intervalIdRef.current = setInterval(() => {
+        if (countdownRef.current > 1) {
+          countdownRef.current -= 1;
+          updateCountdown(countdownRef.current); // Optional: to trigger UI update
+        } else {
+          clearInterval(intervalIdRef.current);
+          startGame();
+          countdownRef.current = null;
         }
       }, 1000);
-    } else if (countdown === 0) {
-      clearInterval(intervalId);
+    } else if (countdownRef.current === 0) {
+      clearInterval(intervalIdRef.current);
       startGame();
-      setCountdown(null);
+      countdownRef.current = null;
     }
-    return () => clearInterval(intervalId);
-  }, [countdown, startGame]);
- 
-  // useEffect(() => {
-  //   if (players.length === game.maxPlayers && countdown === null) {
-  //     handleStartCountdown();
-  //   }
-  // }, [players.length, game.maxPlayers, countdown]);
- 
+
+    return () => clearInterval(intervalIdRef.current);
+  }, [startGame]);
+
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
   }, [messages]);
- 
+
   const handleSendMessage = () => {
     if (!currentMessage.trim()) return;
     onSendChat(localStorage.getItem("username"), currentMessage, "CHAT");
     setCurrentMessage("");
   };
- 
+
   const handleLeaveGame = () => {
     localStorage.removeItem("gameCode");
     if (creator) {
@@ -97,11 +95,11 @@ function Lobby({
       navigate("/game");
     }
   };
- 
+
   const handleStartCountdown = () => {
     onSendChat(localStorage.getItem("token"), "Has started the countdown!", "START_COUNTDOWN");
   };
- 
+
   return (
     <div className="row justify-content-center mt-5">
       <div className="col-md-3">
@@ -153,9 +151,9 @@ function Lobby({
               />
               <button className="btn btn-primary" onClick={handleSendMessage}>Send</button>
             </div>
-            {countdown !== null ? (
+            {countdownRef.current !== null ? (
               <div className="alert alert-info mt-5" role="alert">
-                Game starts in: {countdown} Seconds...
+                Game starts in: {countdownRef.current} Seconds...
               </div>
             ) : (
               creator && (
@@ -187,7 +185,7 @@ function Lobby({
     </div>
   );
 }
- 
+
 Lobby.propTypes = {
   onSendChat: PropTypes.func.isRequired,
   startGame: PropTypes.func.isRequired,
@@ -215,5 +213,5 @@ Lobby.propTypes = {
     gameType: PropTypes.string.isRequired,
   }).isRequired,
 };
- 
+
 export default Lobby;

@@ -83,13 +83,14 @@ export default function Game() {
         } else if (gameState.status === "ENDGAME") {
 
           const sortedPlayers = [...players].sort((a, b) => b.points - a.points);
+          console.log(sortedPlayers[0])
+
           if (sortedPlayers[0].token === localStorage.getItem("token")) {
             const message2 = { from: localStorage.getItem("token"), content: "WON", type: "PLAYED" };
             stompClient && stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message2));
           } else {
             const message1 = { from: localStorage.getItem("token"), content: "FINISHED!", type: "PLAYED" };
             stompClient && stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message1));
-
           }
 
           setRound(1);
