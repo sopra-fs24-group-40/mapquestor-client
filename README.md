@@ -20,7 +20,7 @@ P.S. go check out our back-end implementation [here](https://github.com/sopra-fs
 <a id="introduction"></a>
 ## 👋 Introduction
 
-To give people a fun way of learning about potential sightseeing destinations, we introduce a game called MapQuestor. It is playable by multiple users at once, this will increase engagement and raise a competitive spirit. A picture of a place of interest will be shown to the players and they must guess which city or country it is from.
+To give people a fun way of learning about potential sightseeing destinations, we introduce a game called MapQuestor. It is playable by multiple users at once, this will increase engagement and raise a competitive spirit. A picture of a place of interest will be shown to the players and they must guess which city or country it is from. 
 
 <a id="technologies"></a>
 ## 🛠️ Technologies
