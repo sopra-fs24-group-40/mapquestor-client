@@ -136,7 +136,7 @@ const Game = () => {
         </div>
       </div>
       <div className="col-md-6 bg-transparent text-center mt-5">
-        <h1 className="mt-2">Welcome {localStorage.getItem("username")}!</h1>
+        <h1 className="mt-2 fw-bolder">Welcome {localStorage.getItem("username")}!</h1>
         <div className="d-grid gap-2 d-md-block mt-4">
           <div className="mb-4">
             <button className="btn btn-success fs-3 rounded" style={{ width: "200px", height: "90px" }} onClick={() => navigate("/game/users")}>All Users</button>
