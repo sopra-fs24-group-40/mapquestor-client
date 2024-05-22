@@ -46,7 +46,7 @@ function Login(props) {
 
   return (
     <div className="row justify-content-center">
-      <div className="col-md-5 justify-content-center rounded-4 p-4 login-container transparent-background">
+      <div className="col-md-5 justify-content-center rounded p-3 login-container transparent-background">
         <h1 className="text-center fw-bold">Login</h1>
 
         <div className="form-group">
