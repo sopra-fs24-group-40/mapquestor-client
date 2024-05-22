@@ -237,7 +237,7 @@ function ProfilePage() {
                   aria-describedby="uidnote"
                   onFocus={() => setUserFocus(true)}
                   onBlur={() => setUserFocus(false)}
-                  maxLength={12}
+                  maxLength={12} 
                 />
                 {!validName && <p id="uidnote" className={userFocus ? "instructions" : "offscreen"}>{usernameError}</p>}
             </div>

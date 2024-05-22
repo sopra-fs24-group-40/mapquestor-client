@@ -58,7 +58,7 @@ function Login(props) {
             placeholder="What's your name?"
             ref={userRef}
             autoComplete="off"
-            maxLength={12}
+            maxLength={12} 
             onChange={(e) => setUsername(e.target.value)}
             required
           />
