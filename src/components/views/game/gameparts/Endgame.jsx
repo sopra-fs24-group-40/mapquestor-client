@@ -8,7 +8,7 @@ function Endgame({ game, onSendChat, messages, players, playAgain }) {
   const navigate = useNavigate();
   const [creator, setCreator] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(false);
-  const [timer, setTimer] = useState(10);
+  const [timer, setTimer] = useState(100);
   const [playAgainButton, setPlayAgainButton] = useState(false);
   const [buttonClicked, setButtonClicked] = useState(false);
 
@@ -83,51 +83,45 @@ function Endgame({ game, onSendChat, messages, players, playAgain }) {
 
   return (
     <div className="row">
-      <div className="col-md-6 text-center mt-5">
+      <div className="col-md-6 mt-5 bg-gray rounded">
         <div className="container-wrap">
           <section id="leaderboard">
-            <nav className="ladder-nav1">
-              <div className="ladder-title m-1 justify-content-center text-center">
-                <h1>Leaderboard</h1>
-              </div>
-            </nav>
-            <div className="leaderboard-scrollable" style={{ maxHeight: "180px", overflowY: "auto" }}>
-              <table id="rankings" className="leaderboard-results" width="100%">
-                <thead>
-                <tr>
-                  <th>Rank</th>
-                  <th>Name</th>
-                  <th>Total</th>
-                </tr>
-                </thead>
-                <tbody className="text-center bg-transparent">
-                {renderPlayerRow(players)}
-                </tbody>
-              </table>
+            <div className="d-flex justify-content-between align-items-center mt-2 mx-1">
+              <h1>Leaderboard</h1>
             </div>
           </section>
+        </div>
+        <div className="header bg-light p-1 mx-1">
+          <div className="row fs-3 text-center">
+            <div className="col">Rank</div>
+            <div className="col">Name</div>
+            <div className="col">Points</div>
+          </div>
+        </div>
+        <div className="table-responsive mb-3 mx-1" style={{ maxHeight: "350px", overflowY: "auto" }}>
+          <table id="rankings" className="table table-striped table-hover">
+            <tbody className="text-center">
+            {renderPlayerRow(players)}
+            </tbody>
+          </table>
         </div>
       </div>
 
       <div className="col-md-6 bg-transparent text-center mt-5">
-        <div
-          className="timer-container1 mb-5">
-          Timer: {timer} seconds <br />
+        <div className="bg-gray rounded-2 p-2 mb-5">
+          <span className="fs-4 fw-bolder">Timer: {timer} seconds</span>
         </div>
         <div className="button-wrapper justify-content-center">
           {buttonClicked &&
-            <p className="playagain-container">Please wait for the timer! <br /> You may join if the creator decides to
+            <p className="bg-gray rounded-2 p-2 mb-4">Please wait for the timer! <br /> You may join if the creator decides to
               play again as well!</p>}
-          <button className="individual-button1" onClick={() => handlePlayAgain()} disabled={buttonDisabled}>Play
-            Again
-          </button>
-        </div>
-        <div className="button-wrapper">
-          <button className="individual-button2" onClick={() => {
-            handleLeaveGame();
-            navigate("/game");
-          }}>Main Menu
-          </button>
+          <div className="d-flex justify-content-center">
+            <button className="btn btn-success fs-3 rounded mx-2" onClick={() => handlePlayAgain()} disabled={buttonDisabled}>Play Again</button>
+            <button className="btn btn-success fs-3 rounded mx-2" onClick={() => {
+              handleLeaveGame();
+              navigate("/game");
+            }}>Main Menu</button>
+          </div>
         </div>
       </div>
     </div>
