@@ -4,8 +4,8 @@ import User from "models/User";
 import { api } from "helpers/api";
 
 
-const USER_REGEX = /^.{1,}$/;
-const PWD_REGEX = /^.{1,}$/;
+const USER_REGEX = /^.{4,}$/;
+const PWD_REGEX = /^.{4,}$/;
 
 
 function Register(props) {
