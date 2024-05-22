@@ -85,6 +85,7 @@ export default function Game() {
           const sortedPlayers = [...players].sort((a, b) => b.points - a.points);
           const winner = sortedPlayers[0];
           const currentUserToken = localStorage.getItem("token");
+          console.log(winner)
 
           if (winner.token === currentUserToken) {
             const message2 = { from: currentUserToken, content: "WON", type: "PLAYED" };
