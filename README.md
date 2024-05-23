@@ -27,8 +27,8 @@ To give people a fun way of learning about potential sightseeing destinations, w
 
 For the devolopment of the client, we relied on the following technologies:
 
-* [JavaScript]() - Programming language
-* [TypeScript]() - Programming language
+* [JavaScript](https://devdocs.io/javascript/) - Programming language
+* [TypeScript](https://www.typescriptlang.org/docs/) - Programming language
 * [REACT](https://reactjs.org/) - Front-end TypeScript library
 * [Bootstrap](https://getbootstrap.com/) - Front-end library
 * [Axios API](https://axios-http.com/docs/api_intro) - Used for REST-based communication with the server
