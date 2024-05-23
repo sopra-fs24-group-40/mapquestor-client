@@ -46,7 +46,7 @@ Below you can see our main components.
 
 ### 🛋️ Create Game
 
-A user can create a [Lobby](https://github.com/sopra-fs24-group-40/mapquestor-client/blob/main/src/components/views/game/CreateGame.jsx) and become the creator of the game. The user can make a game for 2 to 5 people, assign the round cound from 2 to 10, and choose round length between 30s, 60s, or 90s. In the end, the creator will have the opportunity to choose the mode, whether they want to guess the country or city name. After creating, user will be directed to the corresponding lobby, where other users can join and chat with eachother.
+A user can create a Lobby via [Create Game](https://github.com/sopra-fs24-group-40/mapquestor-client/blob/main/src/components/views/game/CreateGame.jsx) and become the creator of the game. The user can make a game for 2 to 5 people, assign the round cound from 2 to 10, and choose round length between 30s, 60s, or 90s. In the end, the creator will have the opportunity to choose the mode, whether they want to guess the country or city name. After creating, user will be directed to the corresponding lobby, where other users can join and chat with eachother.
 
 ### 🕹️ Main Game
 
