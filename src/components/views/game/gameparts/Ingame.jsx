@@ -140,7 +140,7 @@ const InGame = ({
               setBlackoutMap(1);
             }, 10000);
  
-            return () => clearTimeout(timeoutId);
+            // return () => clearTimeout(timeoutId);
           }
         } else if (num === 2) {
           const removeJoker = jokerGame[len].type === "JOKER" && jokerGame[len].from !== localStorage.getItem("token");
