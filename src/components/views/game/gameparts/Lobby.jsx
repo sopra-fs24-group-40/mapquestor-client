@@ -105,7 +105,7 @@ function Lobby({
   };
 
   const handleStartCountdown = () => {
-    onSendChat(localStorage.getItem("token"), "Has started the countdown!", "START_COUNTDOWN");
+    onSendChat(localStorage.getItem("token"), game.cities, "START_COUNTDOWN");
   };
 
   return (
@@ -146,6 +146,7 @@ function Lobby({
                 type="text"
                 className="form-control"
                 value={currentMessage}
+                maxLength={50}
                 onChange={(e) => setCurrentMessage(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
@@ -218,6 +219,7 @@ Lobby.propTypes = {
     maxPlayers: PropTypes.number.isRequired,
     roundCount: PropTypes.number.isRequired,
     gameType: PropTypes.string.isRequired,
+    cities: PropTypes.string.isRequired,
   }).isRequired,
 };
 

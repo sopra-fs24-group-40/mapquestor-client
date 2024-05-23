@@ -310,6 +310,7 @@ const InGame = ({
               type="text"
               className="form-control"
               value={currentMessage}
+              maxLength={50}
               onChange={(e) => setCurrentMessage(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {

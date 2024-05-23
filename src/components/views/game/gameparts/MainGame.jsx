@@ -237,14 +237,10 @@ export default function Game() {
       setPlayers(prevPlayers => prevPlayers.filter(player => player.token !== payload.from));
       // setMessages(prevMessages => [...prevMessages, payload]);
     } else if (payload.type === "LEAVE_CREATOR") {
+      localStorage.removeItem("gameCode");
       console.log("Creator has left the game!");
       navigate("/game");
       // Add a delay to ensure the alert is triggered after navigation
-      if(localStorage.getItem("gameCode")){
-        setTimeout(() => {
-          alert("Game has been closed. The creator left or there are to few users to play.");
-          localStorage.removeItem("gameCode");
-        }, 100);}
     } else if (payload.type === "CHAT") {
       setMessages(prevMessages => [...prevMessages, payload]);
     } else if (payload.type === "CHAT_INGAME") {
@@ -253,6 +249,7 @@ export default function Game() {
       setMessagesGame(prevMessages => [...prevMessages, payload]);
       setCorrectGuesses(prev => prev + 1);
     } else if (payload.type === "START_COUNTDOWN") {
+      game.cities = payload.content;
       setCountdownDuration(5);
     } else if (payload.type === "JS") {
       doSomething();
