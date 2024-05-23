@@ -100,7 +100,7 @@ After starting a game, all users in the Lobby are now seeing the Ingame screen. 
 
 After finishing a game users will see the Endgame view. The Final leaderboard of this game can be viewed and users can decide if they want to play again or go back to the Game screen (Main Menu button).
 
-![Image](src/assets/EDNGAME.png)
+![Image](src/assets/ENDGAME.png)
 
 
 <a id="roadmap"></a>
