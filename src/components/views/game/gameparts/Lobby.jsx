@@ -37,19 +37,19 @@ function Lobby({
     }
   }, [countdownDuration]);
 
-  useEffect(() => {
-    if (countdownRef.current === 3 && !soundPlayed) {
-      const countdownSound = new Audio(countdowns);
-      countdownSound.volume = 0.1;
-      countdownSound.play()
-        .then(() => setSoundPlayed(true))
-        .catch(error => console.error("Error playing the sound:", error));
-    }
+  // useEffect(() => {
+  //   if (countdownRef.current === 3 && !soundPlayed) {
+  //     const countdownSound = new Audio(countdowns);
+  //     countdownSound.volume = 0.1;
+  //     countdownSound.play()
+  //       .then(() => setSoundPlayed(true))
+  //       .catch(error => console.error("Error playing the sound:", error));
+  //   }
 
-    if (countdownDuration > 0 && countdownRef.current === countdownDuration) {
-      setSoundPlayed(false);
-    }
-  }, [countdownRef.current, countdownDuration, soundPlayed]);
+  //   if (countdownDuration > 0 && countdownRef.current === countdownDuration) {
+  //     setSoundPlayed(false);
+  //   }
+  // }, [countdownRef.current, countdownDuration, soundPlayed]);
 
   useEffect(() => {
     if (countdownRef.current > 0) {
