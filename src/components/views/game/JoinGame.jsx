@@ -60,7 +60,7 @@ function JoinGame(props) {
           </div>
           <div className="row p-2">
             <div className="col-6">
-              <button className="btn btn-success" style={{ width: "175px" }} onClick={() => doJoinGame()} disabled={!gameCode}>Join Game</button>
+            <button className="btn btn-success" style={{ width: "175px" }} onClick={() => doJoinGame(gameCode)} disabled={!gameCode}>Join Game</button>
             </div>
             <div className="col-6 d-flex justify-content-end">
               <button className="btn btn-danger" style={{ width: "125px" }} onClick={() => navigate("/game")}>Back</button>
