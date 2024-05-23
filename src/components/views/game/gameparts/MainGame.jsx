@@ -227,23 +227,25 @@ export default function Game() {
         }
       });
     } else if (payload.type === "LEAVE") {
- 
+      if(payload.from === localStorage.getItem("token")){
+        localStorage.removeItem("gameCode");
+      }
       if (payload.from === creator) {
         const message = { from: payload.from, content: {}, type: "LEAVE_CREATOR" };
         stompClient && stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message));
       }
       console.log("-------------------------------", payload);
       setPlayers(prevPlayers => prevPlayers.filter(player => player.token !== payload.from));
-      localStorage.removeItem("gameCode");
       // setMessages(prevMessages => [...prevMessages, payload]);
     } else if (payload.type === "LEAVE_CREATOR") {
       console.log("Creator has left the game!");
-      localStorage.removeItem("gameCode");
       navigate("/game");
       // Add a delay to ensure the alert is triggered after navigation
-      setTimeout(() => {
-        alert("Game has been closed. The creator left or there are to few users to play.");
-      }, 100);
+      if(localStorage.getItem("gameCode")){
+        setTimeout(() => {
+          alert("Game has been closed. The creator left or there are to few users to play.");
+          localStorage.removeItem("gameCode");
+        }, 100);}
     } else if (payload.type === "CHAT") {
       setMessages(prevMessages => [...prevMessages, payload]);
     } else if (payload.type === "CHAT_INGAME") {

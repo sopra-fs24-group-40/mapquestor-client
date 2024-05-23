@@ -30,7 +30,6 @@ function Endgame({ game, onSendChat, messages, players, playAgain }) {
   };
 
   const handleLeaveGame = () => {
-    localStorage.removeItem("gameCode");
     if (creator) {
       onSendChat(localStorage.getItem("username"), "Left the match!", "CHAT");
       onSendChat(localStorage.getItem("token"), "Left the match!", "LEAVE_CREATOR");
