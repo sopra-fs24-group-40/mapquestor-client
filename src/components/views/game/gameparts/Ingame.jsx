@@ -13,6 +13,7 @@ const InGame = ({
                   updateRound,
                   correctGuesses,
                   roundLength,
+                  jokerGame,
                 }) => {
   const [timer, setTimer] = useState(roundLength);
   const [location, setLocation] = useState(game.cities[round - 1]);
@@ -37,13 +38,13 @@ const InGame = ({
   useEffect(() => {
     updateLeaderboard();
   }, [players]);
-
+ 
   useEffect(() => {
     if (players.length <=1) {
       onSendChat(localStorage.getItem("token"), "", "LEAVE_CREATOR");
     }
   }, [players]);
-
+ 
  
   useEffect(() => {
     let intervalId;
@@ -126,11 +127,11 @@ const InGame = ({
  
   useEffect(() => {
     if (!safe) {
-      const len = messagesGame.length - 1;
-      if (messagesGame.length > 0 && messagesGame[len].type === "JOKER") { // Check if messagesGame is not empty
-        const num = messagesGame[len].content;
+      const len = jokerGame.length - 1;
+      if (jokerGame.length > 0 && jokerGame[len].type === "JOKER") { // Check if jokerGame is not empty
+        const num = jokerGame[len].content;
         if (num === 1) {
-          const blackoutMessage = messagesGame[len].type === "JOKER" && messagesGame[len].from !== localStorage.getItem("token");
+          const blackoutMessage = jokerGame[len].type === "JOKER" && jokerGame[len].from !== localStorage.getItem("token");
           if (blackoutMessage) {
             setBlackoutMap(0);
  
@@ -141,14 +142,15 @@ const InGame = ({
             // return () => clearTimeout(timeoutId);
           }
         } else if (num === 2) {
-          const removeJoker = messagesGame[len].type === "JOKER" && messagesGame[len].from !== localStorage.getItem("token");
+          const removeJoker = jokerGame[len].type === "JOKER" && jokerGame[len].from !== localStorage.getItem("token");
           if (removeJoker) {
             setRevealedLetters(0);
           }
         }
       }
     }
-  }, [messagesGame]);
+  }, [jokerGame]);
+
  
   useEffect(() => {
     let isMounted = true;
@@ -362,6 +364,13 @@ InGame.propTypes = {
     })).isRequired,
   }).isRequired,
   updatePlayers: PropTypes.func.isRequired,
+  jokerGame: PropTypes.arrayOf(
+    PropTypes.shape({
+      from: PropTypes.string.isRequired,
+      content: PropTypes.string.isRequired,
+      type: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
 };
  
 export default InGame;

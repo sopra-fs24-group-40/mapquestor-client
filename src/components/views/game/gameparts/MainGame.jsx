@@ -14,6 +14,7 @@ export default function Game() {
   const [gamePhase, setGamePhase] = useState("LOBBY");
   const [messages, setMessages] = useState([]);
   const [messagesGame, setMessagesGame] = useState([]);
+  const [jokerGame, setJokerGame] = useState([]);
   const [players, setPlayers] = useState([]);
   const [game, setGame] = useState({});
   const [creator, setCreator] = useState(null);
@@ -22,7 +23,6 @@ export default function Game() {
   const [round, setRound] = useState(1);
   const [correctGuesses, setCorrectGuesses] = useState(0);
   const [roundLength, setRoundLength] = useState(location.state ? location.state.roundLength : 60);
- 
  
   useEffect(() => {
     const fetchGameData = async () => {
@@ -210,7 +210,7 @@ export default function Game() {
       .then(() => (console.log("Sound abgespielt!")))
       .catch(error => console.error("Fehler beim Abspielen des Sounds:", error));
   };
- 
+
   const handleMessage = (payload) => {
     if (payload.type === "JOIN") {
       if (game.creator === localStorage.getItem("token")) {
@@ -256,7 +256,7 @@ export default function Game() {
     } else if (payload.type === "POINTS") {
       setPlayers(payload.content);
     } else if (payload.type === "JOKER") {
-      setMessagesGame(prevMessages => [...prevMessages, payload]);
+      setJokerGame(prevJoker => [...prevJoker, payload]);
     } else if (payload.type === "TIMER") {
       setRoundLength(payload.content);
       console.log("----->", payload.content);
@@ -281,7 +281,7 @@ export default function Game() {
     case "INGAME":
       return <Ingame round={round} onSendChat={sendChatMessageGame} messagesGame={messagesGame} players={players}
                      game={game} updatePlayers={updatePlayers} updateRound={updateRound} handleLeave={handleLeave}
-                     correctGuesses={correctGuesses} roundLength={roundLength} />;
+                     correctGuesses={correctGuesses} roundLength={roundLength} jokerGame = {jokerGame} />;
     case "ENDGAME":
       return <Endgame game={game} onSendChat={sendChatMessage} messages={messages} players={players}
                       handleLeave={handleLeave} playAgain={playAgain} />;
