@@ -32,7 +32,7 @@ function Register(props) {
 
   useEffect(() => {
     userRef.current.focus();
-  }, []);
+  }, []); 
 
   useEffect(() => {
     const result = USER_REGEX.test(user);
