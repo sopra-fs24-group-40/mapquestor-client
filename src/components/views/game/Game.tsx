@@ -102,22 +102,27 @@ const Game = () => {
       </div>
     ));
   };
-
+  
   return (
     <div className="row">
       <div className="col-md-6 mt-5 bg-gray rounded">
         <div className="container-wrap">
           <section id="leaderboard">
-            <div className="d-flex justify-content-between align-items-center mt-2 mx-1">
-              <h1>Leaderboard</h1>
-              <input
-                className="form-control" style={{ width: "200px" }}
-                type="text"
-                placeholder="Search by username..."
-                value={searchQuery}
-                onChange={handleSearchInputChange}
-                maxLength={12}
-              />
+            <div className="row mt-2 mx-1">
+              <div className="col-12 col-md-6 bg-transparent">
+                <h1>Leaderboard</h1>
+              </div>
+              <div className="col-md-2"></div>
+              <div className="col-md-4 mt-2 bg-transparent">
+                <input
+                  className="form-control"
+                  type="text"
+                  placeholder="Search by username..."
+                  value={searchQuery}
+                  onChange={handleSearchInputChange}
+                  maxLength={12}
+                />
+              </div>
             </div>
           </section>
         </div>
@@ -131,7 +136,7 @@ const Game = () => {
         <div className="table-responsive mb-3 mx-1" style={{ maxHeight: "350px", overflowY: "auto" }}>
           <table id="rankings" className="table table-striped table-hover">
             <tbody className="text-center">
-            {renderPlayerRow(users)}
+              {renderPlayerRow(users)}
             </tbody>
           </table>
         </div>
@@ -151,14 +156,13 @@ const Game = () => {
         </div>
       </div>
       <div className="col-md-12 bg-gray mt-5 rounded">
-        <h1 className="mt-2 mx-1 ">Active Games</h1>
+        <h1 className="mt-2 mx-1">Active Games</h1>
         <div className="row bg-light mb-3 mx-1" style={{ maxHeight: "180px", overflowY: "auto" }}>
           {renderActiveLobbies(activeLobbies)}
         </div>
       </div>
     </div>
   );
-
 };
 
 export default Game;
