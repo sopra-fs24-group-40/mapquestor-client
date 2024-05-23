@@ -250,7 +250,7 @@ export default function Game() {
       setCorrectGuesses(prev => prev + 1);
     } else if (payload.type === "START_COUNTDOWN") {
       game.cities = payload.content;
-      setCountdownDuration(10);
+      setCountdownDuration(5);
     } else if (payload.type === "JS") {
       doSomething();
     } else if (payload.type === "POINTS") {
