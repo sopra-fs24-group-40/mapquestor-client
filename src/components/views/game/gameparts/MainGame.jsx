@@ -180,6 +180,7 @@ export default function Game() {
         stompClient && stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message1));
       }
       console.log("Endgame trigger ->")
+      setJokerGame([]);
       let message = { status: "ENDGAME" };
       stompClient && stompClient.send(`/app/${id}/gameState`, {}, JSON.stringify(message));
     } else {
