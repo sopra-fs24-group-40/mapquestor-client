@@ -17,6 +17,7 @@ import SockJS from "sockjs-client";
 import Stomp from "stompjs";
  
 export const GameContext = React.createContext();
+
  
 const logout = (stompClient, navigate) => {
   if (stompClient) {
@@ -51,6 +52,7 @@ function GameLayout(props) {
   const [user, setUser] = useState(null);
   const [stompClient, setStompClient] = useState(null);
   const [showLayout, setShowLayout] = useState(true);
+  const [dropdownVisible, setDropdownVisible] = useState(false);
  
   useEffect(() => {
     async function fetchUsers() {
@@ -183,7 +185,6 @@ function GameLayout(props) {
     }
   };
  
- 
   return (
     <GameContext.Provider value={contextValue}>
       <div className="container-fluid">
@@ -199,8 +200,58 @@ function GameLayout(props) {
             </div>
           </div>
           <div className="col d-flex justify-content-end align-items-center">
-            {showLayout ? (
-              <div className="container-search-bar col-auto p-3 pb-2 d-flex flex-column align-items-start">
+            {showLayout && (
+              <div className="col-auto mt-5">
+                <div className="dropdown">
+                  <button
+                    className="btn btn-success mt-4 dropdown-toggle"
+                    style={{ width: "100px" }}
+                    onClick={() => setDropdownVisible(!dropdownVisible)}
+                  >
+                    Rules
+                  </button>
+                  {dropdownVisible && (
+                    <div className="dropdown-menu show p-3" style={{ minWidth: "625px" }}>
+                                  <h2>Objective</h2>
+            <p>The goal is to locate the country or city displayed on the map. You can walk around, zoom in and out, and use the hints provided to identify the location.</p>
+
+            <h2>Gameplay</h2>
+            <ul>
+              <li>A 360-degree view of a country or city is displayed.</li>
+              <li>Hint lines appear above the map, with as many lines as there are letters in the country or city name.</li>
+              <li>Every 10 seconds, a letter from the country or city name will be revealed.</li>
+              <li>Enter your guess in the chat container on the right side. Regular chatting is also allowed here.</li>
+              <li>If you guess correctly, a message will appear stating: <strong>Username</strong> guessed the correct answer.</li>
+              <li>The next round starts when all players have guessed correctly or time runs out.</li>
+            </ul>
+
+            <h2>Joker Buttons</h2>
+            <div>
+              <p><strong>Delay Joker:</strong> Makes the map invisible for other players for a short period. You become immune to jokers used by other players for one round.</p>
+              <p><strong>Hint Remove Joker:</strong> Removes already revealed letters from the hint fields. You become immune to jokers used by other players for one round.</p>
+              <p>Each joker is only usable once per game.</p>
+            </div>
+
+            <h2>Scoring</h2>
+            <p>For each correct guess, you will get as many points as the time left on the timer for that round. The player with the most points at the end of the game wins.</p>
+
+            <h2>End of Game</h2>
+            <p>After the game ends, you can choose to play again or return to the main page.</p>
+
+            <h2>Important Notes</h2>
+            <ul>
+              <li>Closing the tab, reloading or changing the URL will result in a logout.</li>
+              <li>If you are the creator of the game and you leave the lobby or the game, the game will end for all players and everyone will be returned to the main page.</li>
+              <li>If the game has already started, other players leave and only one player remains in the game, the game will end and the remaining player gets
+            returned to the main page as well.</li>
+            </ul>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+            {showLayout && (
+              <div className="container-search-bar col-auto p-3 pb-3 d-flex flex-column align-items-start">
                 <label htmlFor="site-search">Search Users: </label>
                 <input
                   type="search"
@@ -211,21 +262,20 @@ function GameLayout(props) {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   maxLength={12}
                 />
-                <button className="btn btn-primary mt-2" onClick={handleSearch}>Search</button>
+                <button className="btn btn-primary mt-2" style={{ width: "100px" }} onClick={handleSearch}>Search</button>
                 {searchResult === "not found" && <p style={{ color: "red" }}>User not found</p>}
               </div>
-            ) : (null)}
+            )}
             <div className="col-auto p-3">
-              <figure className="container-avatar">
-                <img src={showCorrectAvatar()} width={50} alt="" /></figure>
-              {showLayout ? (
-                <button className="btn btn-primary" onClick={() => user && navigate(`/game/users/${user.id}`)}>My
-                  Profile
-                </button>
-              ) : (null)}
+              <figure className="container-avatar mt-2">
+                <img src={showCorrectAvatar()} width={50} alt="" />
+              </figure>
+              {showLayout && (
+                <button className="btn btn-primary mx-1" style={{ width: "100px" }} onClick={() => user && navigate(`/game/users/${user.id}`)}>My Profile</button>
+              )}
             </div>
-            <div className="col-auto p-3">
-              <button className="btn btn-danger" onClick={() => logout(stompClient, navigate)}>Logout</button>
+            <div className="col-auto mt-5">
+              <button className="btn btn-danger mx-3 mt-4" style={{ width: "100px" }} onClick={() => logout(stompClient, navigate)}>Logout</button>
             </div>
           </div>
         </div>
