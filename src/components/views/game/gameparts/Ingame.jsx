@@ -37,6 +37,13 @@ const InGame = ({
   useEffect(() => {
     updateLeaderboard();
   }, [players]);
+
+  useEffect(() => {
+    if (players.length <=1) {
+      onSendChat(localStorage.getItem("token"), "", "LEAVE_CREATOR");
+    }
+  }, [players]);
+
  
   useEffect(() => {
     let intervalId;
