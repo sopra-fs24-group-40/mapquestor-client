@@ -168,7 +168,7 @@ function Lobby({
                   className="btn btn-success mt-3"
                   disabled={players.length <= 1}
                 >
-                  Start Countdown
+                  Start Game
                 </button>
               )
             )}
