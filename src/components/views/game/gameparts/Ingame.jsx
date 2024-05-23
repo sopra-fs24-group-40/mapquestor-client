@@ -127,6 +127,7 @@ const InGame = ({
  
   useEffect(() => {
     if (!safe) {
+      console.log(jokerGame); 
       const len = jokerGame.length - 1;
       if (jokerGame.length > 0 && jokerGame[len].type === "JOKER") { // Check if jokerGame is not empty
         const num = jokerGame[len].content;
@@ -139,7 +140,7 @@ const InGame = ({
               setBlackoutMap(1);
             }, 10000);
  
-            // return () => clearTimeout(timeoutId);
+            return () => clearTimeout(timeoutId);
           }
         } else if (num === 2) {
           const removeJoker = jokerGame[len].type === "JOKER" && jokerGame[len].from !== localStorage.getItem("token");

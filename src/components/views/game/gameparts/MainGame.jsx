@@ -71,6 +71,7 @@ export default function Game() {
           setCorrectGuesses(0);
           setRound(1);
           setCountdownDuration(null);
+          setJokerGame([]);
           let logoutMessage = {
             from: localStorage.getItem("token"),
             content: localStorage.getItem("gameCode"),
@@ -139,6 +140,7 @@ export default function Game() {
     stompClient && stompClient.send(`/app/${id}/gameState`, {}, JSON.stringify(message));
     setRound(1);
     setCorrectGuesses(0);
+    setJokerGame([]);
   };
  
   const updateCountdown = (countdown) => {
