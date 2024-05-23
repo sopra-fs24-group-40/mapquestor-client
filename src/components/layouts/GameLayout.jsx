@@ -204,14 +204,14 @@ function GameLayout(props) {
               <div className="col-auto mt-5">
                 <div className="dropdown">
                   <button
-                    className="btn btn-success mt-4 dropdown-toggle"
+                    className="btn btn-success mt-4 mb-2 dropdown-toggle"
                     style={{ width: "100px" }}
                     onClick={() => setDropdownVisible(!dropdownVisible)}
                   >
                     Rules
                   </button>
                   {dropdownVisible && (
-                    <div className="dropdown-menu show p-3" style={{ minWidth: "625px" }}>
+                    <div className="dropdown-menu show p-3" style={{ maxHeight: "715px", minWidth: "617px", overflowY: "auto" }}>
                                   <h2>Objective</h2>
             <p>The goal is to locate the country or city displayed on the map. You can walk around, zoom in and out, and use the hints provided to identify the location.</p>
 
@@ -262,7 +262,7 @@ function GameLayout(props) {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   maxLength={12}
                 />
-                <button className="btn btn-primary mt-2" style={{ width: "100px" }} onClick={handleSearch}>Search</button>
+                <button className="btn btn-primary mt-2 mb-2" style={{ width: "100px" }} onClick={handleSearch}>Search</button>
                 {searchResult === "not found" && <p style={{ color: "red" }}>User not found</p>}
               </div>
             )}
@@ -271,11 +271,11 @@ function GameLayout(props) {
                 <img src={showCorrectAvatar()} width={50} alt="" />
               </figure>
               {showLayout && (
-                <button className="btn btn-primary mx-1" style={{ width: "100px" }} onClick={() => user && navigate(`/game/users/${user.id}`)}>My Profile</button>
+                <button className="btn btn-primary mx-1 mb-2" style={{ width: "100px" }} onClick={() => user && navigate(`/game/users/${user.id}`)}>My Profile</button>
               )}
             </div>
             <div className="col-auto mt-5">
-              <button className="btn btn-danger mx-3 mt-4" style={{ width: "100px" }} onClick={() => logout(stompClient, navigate)}>Logout</button>
+              <button className="btn btn-danger mx-3 mt-4 mb-2" style={{ width: "100px" }} onClick={() => logout(stompClient, navigate)}>Logout</button>
             </div>
           </div>
         </div>
