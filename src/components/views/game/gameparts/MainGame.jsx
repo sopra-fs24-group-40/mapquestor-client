@@ -109,7 +109,6 @@ export default function Game() {
         stompClient.unsubscribe(`${gameTopic}/gameState`);
         stompClient.unsubscribe(`${gameTopic}/chat`);
         stompClient.unsubscribe(`${gameTopic}/cities`);
-        stompClient.unsubscribe("/topic/logout");
       };
     }
   }, [game, creator]);
