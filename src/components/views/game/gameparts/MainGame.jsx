@@ -263,7 +263,6 @@ export default function Game() {
       setJokerGame(prevJoker => [...prevJoker, payload]);
     } else if (payload.type === "TIMER") {
       setRoundLength(payload.content);
-      console.log("----->", payload.content);
     } else if (payload.type === "CITY") {
       console.log(payload.content);
       setRound(1);
