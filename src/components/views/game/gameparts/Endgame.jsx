@@ -44,6 +44,7 @@ function Endgame({ game, onSendChat, messages, players, playAgain }) {
   const handlePlayAgain = () => {
     setButtonDisabled(true);
     setButtonClicked(true);
+    localStorage.setItem("playAgain", true);
     onSendChat(localStorage.getItem("token"), "Wants to play again!", "PLAY_AGAIN");
     onSendChat(localStorage.getItem("username"), "Wants to play again!", "CHAT");
     setPlayAgainButton(true);
@@ -71,6 +72,10 @@ function Endgame({ game, onSendChat, messages, players, playAgain }) {
 
   useEffect(() => {
     if (timerReachedZero.current) {
+      if(!localStorage.getItem("playAgain")) {
+        handleLeaveGame();
+        return;
+      }
       if (!playAgainButton) {
         handleLeaveGame();
       } else {

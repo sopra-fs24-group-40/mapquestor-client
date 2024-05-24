@@ -79,6 +79,8 @@ export default function Game() {
           if (game.creator === localStorage.getItem("token")) {
             stompClient.send(`/app/${id}/cities`, {}, JSON.stringify(logoutMessage));
           }
+          let joinMessage2 = { from: localStorage.getItem("token"), content: "", type: "PLAYERS" };
+          stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(joinMessage2));
         } else if (gameState.status === "ENDGAME") {
           setRound(1);
         }
@@ -133,9 +135,11 @@ export default function Game() {
   };
 
   const playAgain = () => {
-    zeroPoints();
+    // zeroPoints();
     let message = { status: "LOBBY" };
     stompClient && stompClient.send(`/app/${id}/gameState`, {}, JSON.stringify(message));
+    let joinMessage2 = { from: localStorage.getItem("token"), content: "", type: "PLAYERS" };
+    stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(joinMessage2));
     setRound(1);
     setCorrectGuesses(0);
     setJokerGame([]);
@@ -223,10 +227,6 @@ export default function Game() {
         }
       });
     } else if (payload.type === "LEAVE") {
-      if (payload.from === localStorage.getItem("token")) {
-        localStorage.removeItem("gameCode");
-      }
-      
       if (payload.from === creator) {
         const message = { from: payload.from, content: {}, type: "LEAVE_CREATOR" };
         stompClient && stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message));
@@ -262,6 +262,9 @@ export default function Game() {
     } else if (payload.type === "CITY") {
       setRound(1);
       game.cities = payload.content;
+    } else if (payload.type === "PLAYERS") {
+      console.log("Players updated", payload.content);
+      setPlayers(payload.content);
     } else if (payload.type === "LOGOUT") {
       if (payload.from === creator) {
         const message = { from: payload.from, content: {}, type: "LEAVE_CREATOR" };
