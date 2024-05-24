@@ -30,7 +30,7 @@ function Endgame({ game, onSendChat, messages, players, playAgain }) {
   };
 
   const handleLeaveGame = () => {
-    if (creator) {
+    if (game.creator === localStorage.getItem("token")) {
       onSendChat(localStorage.getItem("username"), "Left the match!", "CHAT");
       onSendChat(localStorage.getItem("token"), "Left the match!", "LEAVE_CREATOR");
     } else {
@@ -41,7 +41,7 @@ function Endgame({ game, onSendChat, messages, players, playAgain }) {
 
   const handlePlayAgain = () => {
     setButtonDisabled(true);
-    setButtonClicked(true); // Set buttonClicked to true when button is clicked
+    setButtonClicked(true);
     onSendChat(localStorage.getItem("token"), "Wants to play again!", "PLAY_AGAIN");
     onSendChat(localStorage.getItem("username"), "Wants to play again!", "CHAT");
     setPlayAgainButton(true);
@@ -63,7 +63,7 @@ function Endgame({ game, onSendChat, messages, players, playAgain }) {
 
   useEffect(() => {
     if (timer === 0) {
-      timerReachedZero.current = true; // Mark that the timer has reached 0
+      timerReachedZero.current = true;
     }
   }, [timer]);
 
