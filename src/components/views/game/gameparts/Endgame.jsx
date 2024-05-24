@@ -30,9 +30,7 @@ function Endgame({ game, onSendChat, messages, players, playAgain }) {
   };
 
   const handleLeaveGame = () => {
-    console.log("Handle leave triggered")
     if (game.creator === localStorage.getItem("token")) {
-      console.log("Creator left the game!")
       onSendChat(localStorage.getItem("username"), "Left the match!", "CHAT");
       onSendChat(localStorage.getItem("token"), "Left the match!", "LEAVE_CREATOR");
     } else {
@@ -73,7 +71,6 @@ function Endgame({ game, onSendChat, messages, players, playAgain }) {
       await new Promise(resolve => setTimeout(resolve, 3000));
       if (timerReachedZero.current) {
         if (!playAgainButton) {
-          console.log("----------------------------------------");
           handleLeaveGame();
         } else {
           playAgain();
