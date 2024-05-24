@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { Loader } from "@googlemaps/js-api-loader";
 import PropTypes from "prop-types";
 import config from "../../../../helpers/config";
- 
+
 const InGame = ({
                   round,
                   onSendChat,
@@ -26,26 +26,26 @@ const InGame = ({
   const [blackoutMap, setBlackoutMap] = useState(1);
   const chatContainerRef = useRef(null);
   const [safe, setSafe] = useState(false);
- 
- 
+
+
   const solution = game.gameType === "CITY" ? location.capital : location.name;
- 
+
   const updateLeaderboard = () => {
     const sortedPlayers = [...players].sort((a, b) => b.points - a.points);
     setLeaderboard(sortedPlayers);
   };
- 
+
   useEffect(() => {
     updateLeaderboard();
   }, [players]);
- 
+
   useEffect(() => {
-    if (players.length <=1) {
+    if (players.length <= 1) {
       onSendChat(localStorage.getItem("token"), "", "LEAVE_CREATOR");
     }
   }, [players]);
- 
- 
+
+
   useEffect(() => {
     let intervalId;
     if (timer > 0) {
@@ -60,19 +60,19 @@ const InGame = ({
     }
     return () => clearInterval(intervalId);
   }, [timer, players.length]);
- 
+
   useEffect(() => {
     if (timer % 10 === 0 && timer !== 0) {
       setRevealedLetters(prev => prev + 1);
     }
   }, [timer]);
- 
+
   useEffect(() => {
     setRevealedLetters(0);
     setBlackoutMap(1);
     setSafe(false);
   }, [round]);
- 
+
   useEffect(() => {
     if (correctGuesses === players.length) {
       updateRound(round + 1);
@@ -80,22 +80,22 @@ const InGame = ({
       setPointsAssigned(false);
     }
   }, [correctGuesses, players.length]);
- 
+
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
   }, [messagesGame]);
- 
+
   const handleSendMessageInGame = () => {
     if (!currentMessage.trim()) return;
- 
+
     if (currentMessage === "/test") {
       onSendChat(localStorage.getItem("username"), currentMessage, "JS");
- 
+
       return;
     }
- 
+
     if (location && !pointsAssigned) {
       const cityName = solution;
       if (currentMessage.toLowerCase() === cityName.toLowerCase()) {
@@ -106,10 +106,10 @@ const InGame = ({
         onSendChat(localStorage.getItem("username"), currentMessage, "CHAT_INGAME");
       }
     }
- 
+
     setCurrentMessage("");
   };
- 
+
   const addPoints = (points) => {
     const updatedPlayers = players.map(player => {
       if (player.token === localStorage.getItem("token")) {
@@ -123,7 +123,7 @@ const InGame = ({
     });
     updatePlayers(updatedPlayers);
   };
- 
+
   useEffect(() => {
     if (!safe) {
       const len = jokerGame.length - 1;
@@ -133,11 +133,11 @@ const InGame = ({
           const blackoutMessage = jokerGame[len].type === "JOKER" && jokerGame[len].from !== localStorage.getItem("token");
           if (blackoutMessage) {
             setBlackoutMap(0);
- 
+
             const timeoutId = setTimeout(() => {
               setBlackoutMap(1);
             }, 10000);
- 
+
             // return () => clearTimeout(timeoutId);
           }
         } else if (num === 2) {
@@ -150,25 +150,25 @@ const InGame = ({
     }
   }, [jokerGame]);
 
- 
+
   useEffect(() => {
     let isMounted = true;
- 
+
     const initializeMap = async () => {
       if (!game || !game.cities || game.cities.length < round) {
         return;
       }
       const newLocation = game.cities[round - 1];
       setLocation(newLocation);
- 
+
       if (!newLocation || !newLocation.latitude || !newLocation.longitude) {
         return;
       }
- 
+
       const apiOptions = {
         apiKey: config.googleMapsApiKey,
       };
- 
+
       const loader = new Loader(apiOptions);
       try {
         await loader.load();
@@ -192,17 +192,17 @@ const InGame = ({
         console.error("Error loading Google Maps API", error);
       }
     };
- 
+
     if (isMounted) {
       initializeMap();
     }
- 
+
     return () => {
       isMounted = false;
     };
   }, [round, blackoutMap]);
- 
- 
+
+
   const handleJoker = (jokerType) => {
     let number;
     if (jokerType === "delay") {
@@ -216,8 +216,8 @@ const InGame = ({
     onSendChat(localStorage.getItem("username"), "Used a Joker!", "CHAT_INGAME");
     onSendChat(localStorage.getItem("token"), number, "JOKER");
   };
- 
- 
+
+
   const hintLines = (
     <div className="hint-line">
       {solution.split("").map((letter, index) => (
@@ -227,31 +227,31 @@ const InGame = ({
       ))}
     </div>
   );
- 
- 
+
+
   return (
     <div className="row mt-5">
       <div className="col-md-3 rounded">
         <div className="card">
-          <div className="text-center card-header mt-2 mx-1 h3">Leaderboard</div>  
+          <div className="text-center card-header mt-2 mx-1 h3">Leaderboard</div>
           <div className="leaderboard-container text-center p-3">
             <table
               id="rankings"
               className="table leaderboard-results w-100"
             >
               <thead>
-                <tr>
-                  <th className="text-dark h5">Name</th>
-                  <th className="text-dark h5">Points</th>
-                </tr>
+              <tr>
+                <th className="text-dark h5">Name</th>
+                <th className="text-dark h5">Points</th>
+              </tr>
               </thead>
               <tbody>
-                {leaderboard.map((player, index) => (
-                  <tr key={index}>
-                    <td>{player.username}</td>
-                    <td>{player.points}</td>
-                  </tr>
-                ))}
+              {leaderboard.map((player, index) => (
+                <tr key={index}>
+                  <td>{player.username}</td>
+                  <td>{player.points}</td>
+                </tr>
+              ))}
               </tbody>
             </table>
           </div>
@@ -285,10 +285,12 @@ const InGame = ({
           </div>
           <div id="street-view" className="w-100" style={{ height: "400px", opacity: blackoutMap }}></div>
           <div className="button-wrapper mt-3 d-flex justify-content-center">
-            <button className="btn btn-success mx-2 mb-3" style={{ width: "175px" }} disabled={delayJoker} onClick={() => handleJoker("delay")}>
+            <button className="btn btn-success mx-2 mb-3" style={{ width: "175px" }} disabled={delayJoker}
+                    onClick={() => handleJoker("delay")}>
               Delay Joker
             </button>
-            <button className="btn btn-success mx-2 mb-3" style={{ width: "175px" }} disabled={hintRemoveJoker} onClick={() => handleJoker("hintRemove")}>
+            <button className="btn btn-success mx-2 mb-3" style={{ width: "175px" }} disabled={hintRemoveJoker}
+                    onClick={() => handleJoker("hintRemove")}>
               Hint remove Joker
             </button>
           </div>
@@ -297,7 +299,8 @@ const InGame = ({
       <div className="col-md-3 rounded">
         <div className="card">
           <div className="text-center card-header mt-2 mx-1 h3">Chat</div>
-          <div className="chat-container text-start mt-3 p-3 overflow-auto" ref={chatContainerRef} style={{ maxHeight: "175px" }}>
+          <div className="chat-container text-start mt-3 p-3 overflow-auto" ref={chatContainerRef}
+               style={{ maxHeight: "175px" }}>
             <ul className="list-unstyled">
               {messagesGame.filter(msg => msg.type !== "JOKER").map((msg, index) => (
                 <li key={index}>
@@ -322,14 +325,15 @@ const InGame = ({
               placeholder="Your guess..."
               disabled={pointsAssigned} // Disable input if points are already assigned
             />
-            <button className="btn btn-primary" onClick={handleSendMessageInGame} disabled={pointsAssigned}>Send</button>
+            <button className="btn btn-primary" onClick={handleSendMessageInGame} disabled={pointsAssigned}>Send
+            </button>
           </div>
         </div>
       </div>
     </div>
   );
 };
- 
+
 InGame.propTypes = {
   round: PropTypes.number.isRequired,
   correctGuesses: PropTypes.number.isRequired,
@@ -371,5 +375,5 @@ InGame.propTypes = {
     }),
   ).isRequired,
 };
- 
+
 export default InGame;
