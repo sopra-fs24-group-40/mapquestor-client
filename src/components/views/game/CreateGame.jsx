@@ -26,7 +26,6 @@ function CreateGame() {
  
     try {
       const response = await api.post("/games", gameData);
-      console.log("Game created successfully", response.data);
       localStorage.setItem("gameCode", response.data.gameCode);
       localStorage.setItem("gameState", "LOBBY");
       navigate(`/game/${response.data.gameCode}`, { state: { roundLength } });

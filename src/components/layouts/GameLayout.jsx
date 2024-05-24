@@ -75,6 +75,7 @@ function GameLayout(props) {
  
     const socket = new SockJS(getDomain() + "/ws");
     const localStompClient = Stomp.over(socket);
+    localStompClient.debug = null;
     localStompClient.connect({}, function (frame) {
       setStompClient(localStompClient);
  
