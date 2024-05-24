@@ -102,7 +102,6 @@ const InGame = ({
         addPoints(timer);
         setPointsAssigned(true);
         onSendChat(localStorage.getItem("username"), "Guessed the correct answer!", "CHAT_INGAME_CORRECT");
-        console.log("Correct guess received" + correctGuesses);
       } else {
         onSendChat(localStorage.getItem("username"), currentMessage, "CHAT_INGAME");
       }
@@ -127,7 +126,6 @@ const InGame = ({
  
   useEffect(() => {
     if (!safe) {
-      console.log(jokerGame); 
       const len = jokerGame.length - 1;
       if (jokerGame.length > 0 && jokerGame[len].type === "JOKER") { // Check if jokerGame is not empty
         const num = jokerGame[len].content;

@@ -30,7 +30,6 @@ function Login(props) {
       const response = await api.post("/login", requestBody);
 
       const user = new User(response.data);
-      console.log(user);
 
       localStorage.setItem("id", user.id);
       localStorage.setItem("token", user.token);

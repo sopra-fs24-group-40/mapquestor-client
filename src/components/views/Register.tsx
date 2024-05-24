@@ -58,7 +58,6 @@ function Register(props) {
       const response = await api.post("/users", requestBody);
 
       const new_user = new User(response.data);
-      console.log(new_user); 
 
       localStorage.setItem("id", new_user.id);
       localStorage.setItem("avatar", new_user.avatar);
@@ -70,7 +69,6 @@ function Register(props) {
       if (!err?.response) {
         setErrMsg("No Server Response");
       } else if (err.response?.status === 409) {
-        console.log(err.response);
         setErrMsg(err.response.data.message);
       } else {
         setErrMsg("Registration Failed!");
