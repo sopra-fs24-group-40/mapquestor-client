@@ -47,36 +47,26 @@ function Endgame({ game, onSendChat, messages, players, playAgain }) {
     setPlayAgainButton(true);
   };
 
-
-  const timerReachedZero = useRef(false);
-
   useEffect(() => {
     let intervalId;
     if (timer > 0) {
       intervalId = setInterval(() => {
         setTimer((prevTimer) => prevTimer - 1);
       }, 1000);
+    } else {
+      handleTimerZero();
     }
 
     return () => clearInterval(intervalId);
   }, [timer]);
 
-  useEffect(() => {
-    if (timer === 0) {
-      timerReachedZero.current = true;
+  const handleTimerZero = () => {
+    if (!playAgainButton) {
+      handleLeaveGame();
+    } else {
+      playAgain();
     }
-  }, [timer]);
-
-  useEffect(() => {
-    if (timerReachedZero.current) {
-      if (!playAgainButton) {
-        handleLeaveGame();
-      } else {
-        playAgain();
-      }
-    }
-  }, [timerReachedZero.current, playAgainButton]);
-
+  };
 
   return (
     <div className="row">
@@ -105,14 +95,13 @@ function Endgame({ game, onSendChat, messages, players, playAgain }) {
       </div>
       <div className="col-md-6 bg-transparent text-center mt-5">
         <div className="bg-gray mx-2 rounded-2 p-2 mb-5">
-          <div className="h2">One More Game? <span className = "fw-bolder">{timer} seconds </span></div>
+          <div className="h2">One More Game? <span className="fw-bolder">{timer} seconds </span></div>
         </div>
         <div className="button-wrapper justify-content-center">
           {buttonClicked &&
-            <p className="bg-gray mx-2 rounded-2 p-2 mb-4 h4">Please wait for the timer! <br /> You may join if the creator decides to
-              play again as well!</p>}
+            <p className="bg-gray mx-2 rounded-2 p-2 mb-4 h4">Please wait for the timer! <br /> You may join if the creator decides to play again as well!</p>}
           <div className="d-flex justify-content-center">
-            <button className="btn btn-success fs-3 rounded mx-2" onClick={() => handlePlayAgain()} disabled={buttonDisabled}>Play Again</button>
+            <button className="btn btn-success fs-3 rounded mx-2" onClick={handlePlayAgain} disabled={buttonDisabled}>Play Again</button>
             <button className="btn btn-danger fs-3 rounded mx-2" onClick={() => {
               handleLeaveGame();
               navigate("/game");
@@ -151,4 +140,3 @@ Endgame.propTypes = {
 };
 
 export default Endgame;
-
