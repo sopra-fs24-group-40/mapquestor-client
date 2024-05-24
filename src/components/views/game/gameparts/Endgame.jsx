@@ -49,14 +49,14 @@ function Endgame({ game, onSendChat, messages, players, playAgain }) {
     setPlayAgainButton(true);
   };
 
-  // Ref to track if the timer has reached 0
+
   const timerReachedZero = useRef(false);
 
   useEffect(() => {
     let intervalId;
     if (timer > 0) {
       intervalId = setInterval(() => {
-        setTimer(timer - 1);
+        setTimer((prevTimer) => prevTimer - 1);
       }, 1000);
     }
 
@@ -74,7 +74,6 @@ function Endgame({ game, onSendChat, messages, players, playAgain }) {
       if (!playAgainButton) {
         console.log("----------------------------------------");
         handleLeaveGame();
-        navigate("/game");
       } else {
         playAgain();
       }

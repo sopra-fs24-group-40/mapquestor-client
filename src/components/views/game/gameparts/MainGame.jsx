@@ -235,9 +235,9 @@ export default function Game() {
       setPlayers(prevPlayers => prevPlayers.filter(player => player.token !== payload.from));
       // setMessages(prevMessages => [...prevMessages, payload]);
     } else if (payload.type === "LEAVE_CREATOR") {
+      console.log("Received leave creator from backend ---->")
       localStorage.removeItem("gameCode");
-      navigate("/game");
-      // Add a delay to ensure the alert is triggered after navigation
+      navigate("/game")
     } else if (payload.type === "CHAT") {
       setMessages(prevMessages => [...prevMessages, payload]);
     } else if (payload.type === "CHAT_INGAME") {
