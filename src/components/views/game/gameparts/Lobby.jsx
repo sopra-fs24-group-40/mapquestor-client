@@ -25,6 +25,7 @@ function Lobby({
   const countdownRef = useRef(countdownDuration);
   const navigate = useNavigate();
   const intervalIdRef = useRef(null);
+  const [gamePlayers, setGamePlayers] = useState(players);
 
   useEffect(() => {
     const isCreator = localStorage.getItem("token") === game.creator;
@@ -108,14 +109,18 @@ function Lobby({
     onSendChat(localStorage.getItem("token"), game.cities, "START_COUNTDOWN");
   };
 
+  useEffect(() => {
+    setGamePlayers(players);
+  }, [players]);
+
   return (
     <div className="row justify-content-center mt-5">
       <div className="col-md-3 rounded">
         <div className="card">
-          <div className="card-header mt-2 mx-1 h3">Users in lobby: {players.length} / {game.maxPlayers}</div>
+          <div className="card-header mt-2 mx-1 h3">Users in lobby: {gamePlayers.length} / {game.maxPlayers}</div>
           <div className="user-container overflow-auto" style={{ maxHeight: "250px" }}>
             <ul className="list-group list-group-flush p-3">
-              {players.map((player, index) => (
+              {gamePlayers.map((player, index) => (
                 <li
                   key={index}
                   className={`list-group-item ${player.token === game.creator ? "text-danger" : ""}`}

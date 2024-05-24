@@ -2,21 +2,21 @@ import React, { useEffect, useState, useRef } from "react";
 import "../../../../styles/views/endgame.scss";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
- 
+
 function Endgame({ game, onSendChat, messages, players, playAgain }) {
- 
+
   const navigate = useNavigate();
   const [creator, setCreator] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const [timer, setTimer] = useState(10);
   const [playAgainButton, setPlayAgainButton] = useState(false);
   const [buttonClicked, setButtonClicked] = useState(false);
- 
+
   useEffect(() => {
     const isCreator = localStorage.getItem("token") === game.creator;
     setCreator(isCreator);
   }, [game.creator]);
- 
+
   const renderPlayerRow = (players) => {
     const playerArray = Object.values(players);
     const sortedPlayers = playerArray.sort((a, b) => b.points - a.points);
@@ -28,7 +28,7 @@ function Endgame({ game, onSendChat, messages, players, playAgain }) {
       </tr>
     ));
   };
- 
+
   const handleLeaveGame = () => {
     console.log("Handle leave triggered")
     if (game.creator === localStorage.getItem("token")) {
@@ -40,7 +40,7 @@ function Endgame({ game, onSendChat, messages, players, playAgain }) {
       onSendChat(localStorage.getItem("token"), "Left the game!", "LEAVE");
     }
   };
- 
+
   const handlePlayAgain = () => {
     setButtonDisabled(true);
     setButtonClicked(true);
@@ -48,10 +48,9 @@ function Endgame({ game, onSendChat, messages, players, playAgain }) {
     onSendChat(localStorage.getItem("username"), "Wants to play again!", "CHAT");
     setPlayAgainButton(true);
   };
- 
- 
+
   const timerReachedZero = useRef(false);
- 
+
   useEffect(() => {
     let intervalId;
     if (timer > 0) {
@@ -59,28 +58,31 @@ function Endgame({ game, onSendChat, messages, players, playAgain }) {
         setTimer((prevTimer) => prevTimer - 1);
       }, 1000);
     }
- 
+
     return () => clearInterval(intervalId);
   }, [timer]);
- 
+
   useEffect(() => {
     if (timer === 0) {
       timerReachedZero.current = true;
     }
   }, [timer]);
- 
+
   useEffect(() => {
-    if (timerReachedZero.current) {
-      if (!playAgainButton) {
-        console.log("----------------------------------------");
-        handleLeaveGame();
-      } else {
-        playAgain();
+    const handleAfterTimer = async () => {
+      await new Promise(resolve => setTimeout(resolve, 3000));
+      if (timerReachedZero.current) {
+        if (!playAgainButton) {
+          console.log("----------------------------------------");
+          handleLeaveGame();
+        } else {
+          playAgain();
+        }
       }
-    }
+    };
+    handleAfterTimer();
   }, [timerReachedZero.current, playAgainButton]);
- 
- 
+
   return (
     <div className="row">
       <div className="col-md-6 mt-5 bg-gray rounded">
@@ -101,14 +103,14 @@ function Endgame({ game, onSendChat, messages, players, playAgain }) {
         <div className="table-responsive mb-3 mx-1" style={{ maxHeight: "350px", overflowY: "auto" }}>
           <table id="rankings" className="table table-striped table-hover">
             <tbody className="text-center">
-            {renderPlayerRow(players)}
+              {renderPlayerRow(players)}
             </tbody>
           </table>
         </div>
       </div>
       <div className="col-md-6 bg-transparent text-center mt-5">
         <div className="bg-gray mx-2 rounded-2 p-2 mb-5">
-          <div className="h2">One More Game? <span className = "fw-bolder">{timer} seconds </span></div>
+          <div className="h2">One More Game? <span className="fw-bolder">{timer} seconds </span></div>
         </div>
         <div className="button-wrapper justify-content-center">
           {buttonClicked &&
@@ -126,7 +128,7 @@ function Endgame({ game, onSendChat, messages, players, playAgain }) {
     </div>
   );
 }
- 
+
 Endgame.propTypes = {
   onSendChat: PropTypes.func,
   playAgain: PropTypes.func,
@@ -152,5 +154,5 @@ Endgame.propTypes = {
     gameType: PropTypes.string.isRequired,
   }),
 };
- 
+
 export default Endgame;
