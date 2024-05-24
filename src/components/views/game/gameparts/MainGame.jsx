@@ -59,8 +59,6 @@ export default function Game() {
  
       stompClient.subscribe(`${gameTopic}/cities`, (message) => {
         const payload = JSON.parse(message.body);
-        console.log("--------------------", message);
-        console.log("payload", payload);
         handleMessage(payload);
       });
  
@@ -161,7 +159,6 @@ export default function Game() {
  
   const updatePlayers = (updatedPlayers) => {
     setPlayers(updatedPlayers);
-    console.log("updatedPlayers", updatedPlayers); // Log the updated players
     const message = { from: localStorage.getItem("token"), content: updatedPlayers, type: "POINTS" };
     stompClient && stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message));
   };
@@ -172,12 +169,10 @@ export default function Game() {
     const maxRounds = game.roundCount;
     if (round > maxRounds) {
       const sortedPlayers = [...players].sort((a, b) => b.points - a.points);
-      console.log("sortedPlayers ->", sortedPlayers);
       if (sortedPlayers[0].token === localStorage.getItem("token")) {
         const message2 = { from: localStorage.getItem("token"), content: "WON", type: "PLAYED" };
         stompClient && stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message2));
       } else {
-        console.log("sortedPlayers else ->", sortedPlayers);
         const message1 = { from: localStorage.getItem("token"), content: "FINISHED!", type: "PLAYED" };
         stompClient && stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message1));
       }
@@ -241,7 +236,6 @@ export default function Game() {
       // setMessages(prevMessages => [...prevMessages, payload]);
     } else if (payload.type === "LEAVE_CREATOR") {
       localStorage.removeItem("gameCode");
-      console.log("Creator has left the game!");
       navigate("/game");
       // Add a delay to ensure the alert is triggered after navigation
     } else if (payload.type === "CHAT") {
