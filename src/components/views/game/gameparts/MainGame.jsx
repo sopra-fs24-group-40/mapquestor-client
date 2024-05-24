@@ -223,15 +223,17 @@ export default function Game() {
         }
       });
     } else if (payload.type === "LEAVE") {
-      if (payload.from === localStorage.getItem("token")) {
-        localStorage.removeItem("gameCode");
-      }
+      
       if (payload.from === creator) {
         const message = { from: payload.from, content: {}, type: "LEAVE_CREATOR" };
         stompClient && stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(message));
       }
 
       setPlayers(prevPlayers => prevPlayers.filter(player => player.token !== payload.from));
+      if (payload.from === localStorage.getItem("token")) {
+        localStorage.removeItem("gameCode");
+        navigate("/game");
+      }
       // setMessages(prevMessages => [...prevMessages, payload]);
     } else if (payload.type === "LEAVE_CREATOR") {
       localStorage.removeItem("gameCode");
