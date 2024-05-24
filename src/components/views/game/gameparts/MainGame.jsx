@@ -66,6 +66,8 @@ export default function Game() {
       stompClient.subscribe(`${gameTopic}/gameState`, (message) => {
         const gameState = JSON.parse(message.body);
         if (gameState.status === "LOBBY") {
+          let playerMessage = { from: localStorage.getItem("token"), content: "", type: "PLAYERS" };
+          stompClient.send(`/app/${id}/chat`, {}, JSON.stringify(playerMessage));
           setCorrectGuesses(0);
           setRound(1);
           setCountdownDuration(null);
@@ -75,7 +77,7 @@ export default function Game() {
             content: localStorage.getItem("gameCode"),
             type: "CITY",
           };
- 
+          
           if (game.creator === localStorage.getItem("token")) {
             stompClient.send(`/app/${id}/cities`, {}, JSON.stringify(logoutMessage));
           }
@@ -241,6 +243,8 @@ export default function Game() {
       console.log("Received leave creator from backend ---->")
       localStorage.removeItem("gameCode");
       navigate("/game")
+    } else if (payload.type === "PLAYERS") {
+      setPlayers(payload.content);
     } else if (payload.type === "CHAT") {
       setMessages(prevMessages => [...prevMessages, payload]);
     } else if (payload.type === "CHAT_INGAME") {
