@@ -212,7 +212,7 @@ function GameLayout(props) {
                     Rules
                   </button>
                   {dropdownVisible && (
-                    <div className="dropdown-menu show p-3" style={{ maxHeight: "715px", minWidth: "617px", overflowY: "auto" }}>
+                    <div className="dropdown-menu show p-3" style={{ maxHeight: "550px", minWidth: "617px", overflowY: "auto" }}>
                                   <h2>Objective</h2>
             <p>The goal is to locate the country or city displayed on the map. You can walk around, zoom in and out, and use the hints provided to identify the location.</p>
 
