@@ -223,6 +223,9 @@ export default function Game() {
         }
       });
     } else if (payload.type === "LEAVE") {
+      if (payload.from === localStorage.getItem("token")) {
+        localStorage.removeItem("gameCode");
+      }
       
       if (payload.from === creator) {
         const message = { from: payload.from, content: {}, type: "LEAVE_CREATOR" };
